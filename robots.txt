@@ -1,0 +1,33 @@
+# robots.txt for Seagö Marine Mobility (https://seago.in)
+User-agent: *
+Allow: /
+
+# Dedicated LLM & AI Crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+# Sitemap Location
+Sitemap: https://seago.in/sitemap.xml
+
+# LLM Documentation & Machine Context
+# See https://seago.in/llms.txt for LLM-optimized summary
+# See https://seago.in/llms-full.txt for comprehensive technical specifications
+

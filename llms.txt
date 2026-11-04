@@ -1,0 +1,70 @@
+# Seagö
+
+> Seagö is an Indian marine mobility manufacturer engineering high-efficiency electric outboard motors (3–50 HP), marine LiFePO4 battery packs, and custom electric & solar watercraft for India's inland waterways and coastlines.
+
+Seagö operates an integrated design, engineering, and manufacturing facility in Chennai, Tamil Nadu, paired with a sales, support, and field-service headquarters in Kerala. Field-proven across 5 Indian states (Tamil Nadu, Karnataka, Kerala, Maharashtra, and Odisha), Seagö provides zero-emission, low-maintenance propulsion systems tailored for commercial fishing vessels, eco-tourism boats, passenger ferries, and custom institutional watercraft.
+
+## Core Pages
+
+- [Seagö Home](https://seago.in/index.html): Overview of zero-emission marine propulsion, key performance metrics, and complete fleet electrification systems.
+- [About Seagö & Leadership](https://seago.in/about.html): Company history, Chennai manufacturing facility, Kerala sales base, and executive leadership by Founder & CEO Gopish Kumar.G.
+- [Marine Propulsion Products](https://seago.in/products.html): Comprehensive catalog of 3 HP to 50 HP electric outboards, marine-grade LiFePO4 battery packs, and custom FRP solar/electric vessels.
+- [Case Studies & Deployments](https://seago.in/case-studies.html): Operational field reports including Vikalpika (India's 1st electric fishing vessel with ICAR-CIFT), Karnataka tourism fleets, Kerala public ferries, and IMU hydrogen fuel-cell research.
+- [Visual Gallery](https://seago.in/gallery.html): Field footage, video recordings of trial runs across backwaters and rivers, vessel walk-arounds, and motor photography.
+- [Contact & Quote Inquiries](https://seago.in/contact.html): Quote request form, direct email (sales@seago.in), WhatsApp hotline (+91 86063 66633), and office locations in Kerala and Chennai.
+
+## Electric Outboard Motors (3 HP to 50 HP)
+
+Seagö engineers 8 electric outboard models utilizing high-torque Permanent Magnet Synchronous Motors (PMSM) or brushless motor architectures, magnetic encoder precision sensing, and robust cooling systems:
+
+- [SEAGÖ 3 HP](https://seago.in/products.html#outboard): 2.2 kW rated power, 51.2V, 4500–5000 RPM, air-cooled, tiller control, suitable for 2–4 m boats. Paired with 51.2V 50Ah LiFePO4 battery.
+- [SEAGÖ 7 HP](https://seago.in/products.html#outboard): 5.1 kW rated power, 51.2V, 5000–5500 RPM, water-cooled, forward/neutral/reverse gear, tiller control, suitable for 2–4 m boats. Paired with 51.2V 105Ah LiFePO4 battery.
+- [SEAGÖ 10 HP](https://seago.in/products.html#outboard): 7.3 kW rated power, 73.6V, 4250 RPM, water-cooled, tiller or remote steering, suitable for 3–6 m boats. Paired with 73.6V 150Ah LiFePO4 battery.
+- [SEAGÖ 15 HP](https://seago.in/products.html#outboard): 11 kW rated power, 73.6V, 4650–4700 RPM, water-cooled, tiller or remote steering, suitable for 3.6–7 m boats. Paired with 73.6V 210Ah LiFePO4 battery.
+- [SEAGÖ 20 HP](https://seago.in/products.html#outboard): 15 kW rated power, 96V, 5800 RPM, water-cooled, tiller or remote steering, suitable for 3.6–7 m boats. Paired with 96V 210Ah LiFePO4 battery.
+- [SEAGÖ 30 HP](https://seago.in/products.html#outboard): 22 kW rated power, 96V, 5800 RPM, water-cooled PMSM, infinitely variable speed control, suitable for boats 4 m and above. Paired with 96V 230Ah LiFePO4 battery.
+- [SEAGÖ 40 HP](https://seago.in/products.html#outboard): 29.4 kW rated power, 144V, 5000–6000 RPM, water-cooled, steering grip or wheel controls, suitable for boats 4 m and above. Paired with 144V 200Ah LiFePO4 battery.
+- [SEAGÖ 50 HP](https://seago.in/products.html#outboard): 37.2 kW rated power, 144V, 5500 RPM, water-cooled brushless motor, steering grip or wheel controls, suitable for boats 4 m and above. Paired with 144V 300Ah LiFePO4 battery.
+
+## Marine LiFePO4 Battery Systems
+
+- [LiFePO4 Marine Battery Packs](https://seago.in/products.html#battery): Stable, high-cycle Lithium Iron Phosphate chemistry with integrated intelligent Battery Management System (BMS).
+- Voltage ratings: 51.2V, 73.6V, 96V, and 144V DC configurations.
+- Capacity range: 50 Ah to 400 Ah.
+- Enclosure: Marine-grade IP-rated sealed enclosures resistant to vibration, high humidity, and saltwater corrosion. Built for shore charging and solar-hybrid top-up.
+
+## Custom Electric & Solar-Powered Boats
+
+- [Custom Watercraft Builds](https://seago.in/products.html#boats): Built on high-grade Fibre-Reinforced Plastic (FRP) composite hulls tailored for specific commercial missions.
+- Applications: Eco-tourism boats, inland passenger ferries, artisanal and commercial fishing boats.
+- Solar Integration: Solar canopies for continuous auxiliary charging and extended operating range.
+- Full turnkey delivery: Manufactured, assembled, fitted with propulsion, and water-tested in Chennai prior to delivery.
+
+## Field Case Studies & Institutional Provenance
+
+- [Vikalpika Electric Fishing Vessel](https://seago.in/case-studies.html#vikalpika): India's first electric fishing vessel, developed in partnership with ICAR-CIFT Mumbai (launched May 2025 in Maharashtra), demonstrating heavy-duty commercial duty cycles without diesel exhaust or fuel expense.
+- [Public Water Transport Ferries](https://seago.in/case-studies.html#public-transport): Clean, near-silent passenger ferry propulsion operating on daily commuter routes across Kerala waterways.
+- [Karnataka Eco-Tourism Fleets](https://seago.in/case-studies.html#tourism): Electric passenger craft operating in eco-sensitive and heritage locations including Hampi, Hubli, Gadag, Bagalkot, and Honnavar.
+- [Hydrogen Fuel-Cell Research Vessel](https://seago.in/case-studies.html#hydrogen): Completed pioneering marine R&D programme in collaboration with Indian Maritime University (IMU) evaluating next-generation alternative marine energy carriers.
+
+## Company & Contact Details
+
+- Founder & CEO: Gopish Kumar.G
+- Sales & Support Base: GG Plaza, NH-66, Lalaji Junction, Karunagappally, Kollam – 690518, Kerala, India
+- Manufacturing Facility: Chennai, Tamil Nadu, India
+- Inquiries & Sales: sales@seago.in
+- Phone / WhatsApp: +91 86063 66633
+- Social Media: Facebook (https://www.facebook.com/profile.php?id=61595336871370), Instagram (https://www.instagram.com/seagowaters/), X / Twitter (https://x.com/Seagowaters)
+
+## Optional
+
+- [Full Site & Technical Spec Documentation](https://seago.in/llms-full.txt): Complete, consolidated plain-text dossier containing full specification tables for all motor models, battery systems, and boat platforms.
+- [SEAGO 3 HP Catalog PDF](https://seago.in/catalog/SEAGO%203%20HP%20Technical%20Specifications.pdf): Downloadable engineering datasheet for 3 HP motor.
+- [SEAGO 7 HP Catalog PDF](https://seago.in/catalog/SEAGO%207%20HP%20Technical%20Specifications.pdf): Downloadable engineering datasheet for 7 HP motor.
+- [SEAGO 10 HP Catalog PDF](https://seago.in/catalog/SEAGO%2010%20HP%20Technical%20Specifications.pdf): Downloadable engineering datasheet for 10 HP motor.
+- [SEAGO 15 HP Catalog PDF](https://seago.in/catalog/SEAGO%2015%20HP%20Technical%20Specifications.pdf): Downloadable engineering datasheet for 15 HP motor.
+- [SEAGO 20 HP Catalog PDF](https://seago.in/catalog/SEAGO%2020%20HP%20Technical%20Specifications.pdf): Downloadable engineering datasheet for 20 HP motor.
+- [SEAGO 30 HP Catalog PDF](https://seago.in/catalog/SEAGO%2030%20HP%20Technical%20Specifications.pdf): Downloadable engineering datasheet for 30 HP motor.
+- [SEAGO 40 HP Catalog PDF](https://seago.in/catalog/SEAGO%2040%20HP%20Technical%20Specifications.pdf): Downloadable engineering datasheet for 40 HP motor.
+- [SEAGO 50 HP Catalog PDF](https://seago.in/catalog/SEAGO%2050%20HP%20Technical%20Specifications.pdf): Downloadable engineering datasheet for 50 HP motor.
+

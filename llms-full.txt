@@ -1,0 +1,119 @@
+# Seagö — Comprehensive Technical Documentation & Company Reference
+
+> Complete documentation for Seagö electric marine propulsion systems, electric outboards (3 HP to 50 HP), marine LiFePO4 battery banks, composite vessels, and field deployments.
+
+Published by: Seagö Marine Mobility
+Website: https://seago.in
+Contact: sales@seago.in | Phone / WhatsApp: +91 86063 66633
+Headquarters / Sales & Support: GG Plaza, NH-66, Lalaji Junction, Karunagappally, Kollam – 690518, Kerala, India
+Manufacturing & Engineering Facility: Chennai, Tamil Nadu, India
+Founder & CEO: Gopish Kumar.G
+
+---
+
+## 1. Executive Summary
+
+Seagö is an Indian marine mobility pioneer designing and manufacturing zero-emission propulsion systems for inland waterways, backwaters, estuaries, and coastal waters. The company's engineering, assembly, and testing are conducted entirely in Chennai, Tamil Nadu, providing complete supply chain control, local parts availability, and rapid customization.
+
+Seagö propulsion is field-proven across 5 Indian states:
+- Kerala: Public transport commuter ferries and backwater tourism.
+- Maharashtra: Commercial fishing fleets, including "Vikalpika", India's first electric fishing vessel in partnership with ICAR-CIFT Mumbai.
+- Karnataka: Clean tourism fleets in sensitive heritage waters (Hampi, Hubli, Gadag, Bagalkot, Honnavar).
+- Tamil Nadu: Research and development operations, including the completed hydrogen fuel-cell vessel initiative with the Indian Maritime University (IMU).
+- Odisha: Eco-tourism and inland waterway operations.
+
+---
+
+## 2. Complete Technical Specifications — Electric Outboard Motors
+
+All Seagö outboards use brushless / Permanent Magnet Synchronous Motor (PMSM) technology, magnetic encoder feedback, high-grade water or air cooling, and precision gearing designed for continuous marine duty.
+
+| Specification | SEAGÖ 3 HP | SEAGÖ 7 HP | SEAGÖ 10 HP | SEAGÖ 15 HP |
+| :--- | :--- | :--- | :--- | :--- |
+| **Rated Power** | 2.2 kW | 5.1 kW | 7.3 kW | 11 kW |
+| **Rated Voltage** | 51.2 V | 51.2 V | 73.6 V | 73.6 V |
+| **Motor Type** | PMSM | PMSM | PMSM | PMSM |
+| **Sensor Type** | Magnetic Encoder | Magnetic Encoder | Magnetic Encoder | Magnetic Encoder |
+| **Cooling System** | Air Cooled | Water Cooled | Water Cooled | Water Cooled |
+| **Steering Control** | Tiller Control | Tiller Control | Tiller / Remote | Tiller / Remote |
+| **Maximum RPM** | 4500 – 5000 RPM | 5000 – 5500 RPM | 4250 RPM | 4650 – 4700 RPM |
+| **Gear Ratio** | 2.08 | 2.08 | 2.08 (27/13) | 2.08 (27/13) |
+| **Gear Position** | Forward | Forward / Neutral / Reverse | Forward / Neutral / Reverse | Forward / Neutral / Reverse |
+| **Transom Height** | 417 mm | Short: 440mm / Long: 568mm | Short: 440mm / Long: 567mm | Short: 440mm / Long: 567mm |
+| **Motor Weight** | 13.5 kg | Short: 30kg / Long: 31kg | Short: 37.5kg / Long: 38kg | Short: 38kg / Long: 39.5kg |
+| **Recommended Battery** | 51.2V 50Ah LiFePO4 | 51.2V 105Ah LiFePO4 | 73.6V 150Ah LiFePO4 | 73.6V 210Ah LiFePO4 |
+| **Target Vessel Length** | 2 – 4 metres | 2 – 4 metres | 3.0 – 6.0 metres | 3.6 – 7.0 metres |
+
+| Specification | SEAGÖ 20 HP | SEAGÖ 30 HP | SEAGÖ 40 HP | SEAGÖ 50 HP |
+| :--- | :--- | :--- | :--- | :--- |
+| **Rated Power** | 15 kW | 22 kW | 29.4 kW | 37.2 kW |
+| **Rated Voltage** | 96 V | 96 V | 144 V | 144 V |
+| **Motor Type** | PMSM | Water-Cooled PMSM | PMSM | Brushless Motor |
+| **Sensor Type** | Magnetic Encoder | — | Magnetic Encoder | Magnetic Encoder |
+| **Cooling System** | Water Cooled | Water Cooled | Water Cooled | Water Cooled |
+| **Steering Control** | Tiller / Remote | Infinitely Variable Speed | Steering Grip / Wheel | Steering Grip / Wheel |
+| **Maximum RPM** | 5800 RPM | 5800 RPM | 5000 – 6000 RPM | 5500 RPM |
+| **Gear Ratio** | 2.08 | — | 2.0 | 1.8 (24/13) |
+| **Gear Position** | Forward / Neutral / Reverse | Forward / Reverse Switch | Forward / Neutral / Reverse | Reverse / Drive (R/D) |
+| **Transom Height** | Short: 440mm / Long: 570mm | 550 mm | 508 mm (max) | Short: 440mm / Long: 570mm |
+| **Motor Weight** | Short: 45kg / Long: 48kg | 52.7 kg | 89 kg | 105 kg |
+| **Propeller Specs** | — | 9 7/8 × 12 | — | 11 3/8 × 12 |
+| **Recommended Battery** | 96V 210Ah LiFePO4 | 96V 230Ah LiFePO4 | 144V 200Ah LiFePO4 | 144V 300Ah LiFePO4 |
+| **Target Vessel Length** | 3.6 – 7.0 metres | 4 metres & above | 4 metres & above | 4 metres & above |
+
+---
+
+## 3. Marine LiFePO4 Battery Systems
+
+Seagö specifies Lithium Iron Phosphate (LiFePO4) chemistry for marine service due to superior thermal stability, immunity to thermal runaway under marine ambient temperatures, and exceptional cycle life (>3000 to 5000 cycles).
+
+Key Architecture:
+- Enclosures: Corrosion-resistant, marine-grade IP-rated casing designed to withstand salt fog, high humidity, vibration, and mechanical shock.
+- Battery Management System (BMS): Cell-level voltage balancing, over-charge, over-discharge, over-current, short-circuit, and high/low temperature protection.
+- Standard Voltages: 51.2V DC, 73.6V DC, 96V DC, 144V DC.
+- Capacities: 50 Ah to 400 Ah packs configured modularly to vessel displacement and run-time targets.
+- Charging: Supports standard 230V AC shore power chargers and integrated DC-DC solar charge controllers.
+
+---
+
+## 4. Custom FRP Electric & Solar Vessels
+
+Seagö designs and builds composite Fibre-Reinforced Plastic (FRP) boats at its Chennai shipyard, delivering fully integrated turn-key vessels:
+- Eco-Tourism Vessels: Quiet, exhaust-free cruising craft engineered for sanctuaries, lakes, backwaters, and heritage waterways.
+- Passenger Transport Ferries: High-efficiency hull profiles engineered for low wake and maximum passenger safety on high-frequency commuter routes.
+- Commercial Fishing Boats: Heavy-duty hulls engineered for net hauling, offshore stability, and harsh marine environments.
+- Solar Canopies: Monocrystalline rooftop PV arrays feeding the main battery bank via MPPT chargers to extend operational range and keep auxiliary systems active.
+
+---
+
+## 5. Field Provenance & Case Studies
+
+### 5.1 Vikalpika — India's First Electric Fishing Vessel (Maharashtra)
+- Partner: ICAR-CIFT Mumbai (Central Institute of Fisheries Technology).
+- Launch Date: May 2025.
+- Milestone: Proved that commercial fishing craft can transition to 100% electric propulsion with no loss in towing torque or reliability, eliminating recurring diesel expense and oil leaks in coastal habitats.
+
+### 5.2 Public Transport Waterways (Kerala)
+- Application: Daily commuter passenger ferries.
+- Impact: Substantially reduced operating cost per nautical mile, eliminating engine fumes for passengers and operators, with ultra-quiet operation on sensitive inland routes.
+
+### 5.3 Eco-Tourism Fleets (Karnataka)
+- Locations: Hampi, Hubli, Gadag, Bagalkot, and Honnavar.
+- Impact: Silent navigation in heritage waterways and bird sanctuaries where combustion engine noise and exhaust previously caused environmental disruption.
+
+### 5.4 Hydrogen Fuel-Cell Marine Research (Tamil Nadu)
+- Partner: Indian Maritime University (IMU).
+- Status: Successfully completed. Investigated advanced hydrogen fuel-cell integration with marine electric propulsion. Paved the way for ongoing secondary research on future-generation fishing technology.
+
+---
+
+## 6. Commercial Inquiries & Fleet Consultation
+
+Seagö welcomes inquiries from state water transport departments, tourism corporations, fishing cooperative societies, boat builders, and private vessel operators.
+
+- Inquiries Email: sales@seago.in
+- Direct Hotline / WhatsApp: +91 86063 66633
+- Sales Office: GG Plaza, NH-66, Lalaji Junction, Karunagappally, Kollam – 690518, Kerala, India
+- Factory & Works: Chennai, Tamil Nadu, India
+- Web Portal: https://seago.in
+
