@@ -271,17 +271,6 @@ a:hover {
   filter: drop-shadow(0 2px 8px rgba(40, 212, 200, 0.2));
 }
 
-.sidebar-env-badge {
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 4px;
-  background: rgba(40, 212, 200, 0.15);
-  color: var(--cyan);
-  border: 1px solid rgba(40, 212, 200, 0.3);
-  text-transform: uppercase;
-}
-
 /* Demo Banner */
 .demo-banner {
   margin: 14px 16px 8px;
