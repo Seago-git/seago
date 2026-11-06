@@ -788,6 +788,9 @@
       cloned.title = (item.title || ("Seagö " + item.hp + " HP")) + " (Copy)";
       cloned.slug = (item.slug || "motor") + "-copy";
       cloned.published = false;
+      if (item.custom_specs && item.custom_specs.length) {
+        cloned.custom_specs = JSON.parse(JSON.stringify(item.custom_specs));
+      }
 
       // Assign a temporary non-conflicting hp
       var maxHp = 0;
@@ -843,6 +846,45 @@
         "<div><strong>RPM:</strong> " + escapeHtml(motor.rpm || "—") + "</div>" +
         "<div><strong>Weight:</strong> " + escapeHtml(motor.weight || "—") + "</div>";
       card.appendChild(specGrid);
+
+      if (motor.custom_specs && motor.custom_specs.length > 0) {
+        var extraSection = createEl("div", {
+          style: {
+            marginTop: "16px",
+            paddingTop: "14px",
+            borderTop: "1px solid rgba(255,255,255,0.12)"
+          }
+        });
+        extraSection.appendChild(createEl("div", {
+          style: {
+            fontSize: "11px",
+            textTransform: "uppercase",
+            letterSpacing: "0.08em",
+            color: "var(--cyan)",
+            fontWeight: "700",
+            marginBottom: "8px"
+          }
+        }, "Additional Specifications"));
+        var extraGrid = createEl("div", {
+          style: {
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "8px",
+            fontSize: "12px",
+            color: "#CBD5E1"
+          }
+        });
+        for (var csi = 0; csi < motor.custom_specs.length; csi++) {
+          var cs = motor.custom_specs[csi];
+          if (cs && (cs.name || cs.value)) {
+            var csItem = createEl("div");
+            csItem.innerHTML = "<strong>" + escapeHtml(cs.name || "Parameter") + ":</strong> " + escapeHtml(cs.value || "—");
+            extraGrid.appendChild(csItem);
+          }
+        }
+        extraSection.appendChild(extraGrid);
+        card.appendChild(extraSection);
+      }
 
       pwrap.appendChild(card);
 
@@ -917,6 +959,230 @@
 
     searchInput.addEventListener("input", applyFilters);
     loadMotors();
+  }
+
+  // Catalog Presets Map for Seagö Electric Outboards (all 8 models)
+  var SEAGO_CATALOG_PRESETS = {
+    3: {
+      hp: 3, title: "Seagö 3 HP", slug: "seago-3hp", kw: "2.2 kW", voltage: "51.2 V",
+      battery: "51.2V 50 AH LiFePO4 – Lithium Ferrous Phosphate", motor: "Permanent Magnet Synchronous Motor (PMSM)",
+      control: "Tiller Control", cooling: "Air Cooled", rpm: "4500 - 5000 RPM", gear_ratio: "2.08",
+      transom: "417mm", weight: "13.5 Kg", boat_length: "2-4 metres", propeller: "—",
+      catalog_path: "catalog/SEAGO 3 HP Technical Specifications.pdf",
+      custom_specs: [{ name: "Sensor", value: "Magnetic Encoder" }, { name: "Gear Position", value: "Forward" }]
+    },
+    7: {
+      hp: 7, title: "Seagö 7 HP", slug: "seago-7hp", kw: "5.1 kW", voltage: "51.2 V",
+      battery: "51.2V 105 AH LiFePO4", motor: "Permanent Magnet Synchronous Motor (PMSM)",
+      control: "Tiller Control", cooling: "Water Cooled", rpm: "5000 - 5500 RPM", gear_ratio: "2.08",
+      transom: "S:440mm / L:568mm", weight: "S:30 Kg / L:31 Kg", boat_length: "3-5 metres", propeller: "—",
+      catalog_path: "catalog/SEAGO 7 HP Technical Specifications.pdf",
+      custom_specs: [{ name: "Sensor", value: "Magnetic Encoder" }, { name: "Gear Position", value: "Forward / Neutral / Reverse" }]
+    },
+    10: {
+      hp: 10, title: "Seagö 10 HP", slug: "seago-10hp", kw: "7.3 kW", voltage: "73.6 V",
+      battery: "73.6V 150 AH LiFePO4", motor: "Permanent Magnet Synchronous Motor (PMSM)",
+      control: "Tiller / Remote Control", cooling: "Water Cooled", rpm: "4250 RPM", gear_ratio: "2.08 (27/13)",
+      transom: "S:440mm / L:567mm", weight: "S:37.5 Kg / L:38 Kg", boat_length: "3-6 metres", propeller: "—",
+      catalog_path: "catalog/SEAGO 10 HP Technical Specifications.pdf",
+      custom_specs: [{ name: "Sensor", value: "Magnetic Encoder" }, { name: "Gear Position", value: "Forward / Neutral / Reverse" }]
+    },
+    15: {
+      hp: 15, title: "Seagö 15 HP", slug: "seago-15hp", kw: "11 kW", voltage: "73.6 V",
+      battery: "73.6V 210 AH LiFePO4", motor: "Permanent Magnet Synchronous Motor (PMSM)",
+      control: "Tiller / Remote Control", cooling: "Water Cooled", rpm: "4650 - 4700 RPM", gear_ratio: "2.08 (27/13)",
+      transom: "S:440mm / L:567mm", weight: "S:38 Kg / L:39.5 Kg", boat_length: "3.6-7.0 metres", propeller: "9 7/8 × 12",
+      catalog_path: "catalog/SEAGO 15 HP Technical Specifications.pdf",
+      custom_specs: [{ name: "Sensor", value: "Magnetic Encoder" }, { name: "Gear Position", value: "Forward / Neutral / Reverse" }]
+    },
+    20: {
+      hp: 20, title: "Seagö 20 HP", slug: "seago-20hp", kw: "15 kW", voltage: "96 V",
+      battery: "96V 210 AH LiFePO4", motor: "Permanent Magnet Synchronous Motor (PMSM)",
+      control: "Tiller / Remote Control", cooling: "Water Cooled", rpm: "5800 RPM", gear_ratio: "2.08",
+      transom: "S:440mm / L:570mm", weight: "S:45 Kg / L:48 Kg", boat_length: "4.5-8.0 metres", propeller: "—",
+      catalog_path: "catalog/SEAGO 20 HP Technical Specifications.pdf",
+      custom_specs: [{ name: "Sensor", value: "Magnetic Encoder" }, { name: "Gear Position", value: "Forward / Neutral / Reverse" }]
+    },
+    30: {
+      hp: 30, title: "Seagö 30 HP", slug: "seago-30hp", kw: "22 kW", voltage: "96 V",
+      battery: "96V 230 AH LiFePO4", motor: "Permanent Magnet Synchronous Motor (PMSM)",
+      control: "Remote / Steering Grip", cooling: "Water Cooling", rpm: "5800 RPM", gear_ratio: "2.08",
+      transom: "550mm", weight: "52.7 Kg", boat_length: "5.5-9.0 metres", propeller: "—",
+      catalog_path: "catalog/SEAGO 30 HP Technical Specifications.pdf",
+      custom_specs: [{ name: "Sensor", value: "Magnetic Encoder" }, { name: "Gear Position", value: "Forward / Neutral / Reverse" }]
+    },
+    40: {
+      hp: 40, title: "Seagö 40 HP", slug: "seago-40hp", kw: "29.4 kW", voltage: "144 V",
+      battery: "144V 200 AH LiFePO4", motor: "Permanent Magnet Synchronous Motor (PMSM)",
+      control: "Steering Grip / Remote", cooling: "Water Cooled", rpm: "5000 - 6000 RPM", gear_ratio: "2.08",
+      transom: "508mm", weight: "89 Kg", boat_length: "6.0-10.0 metres", propeller: "—",
+      catalog_path: "catalog/SEAGO 40 HP Technical Specifications.pdf",
+      custom_specs: [{ name: "Sensor", value: "Hall / Encoder" }, { name: "Gear Position", value: "Forward / Neutral / Reverse" }]
+    },
+    50: {
+      hp: 50, title: "Seagö 50 HP", slug: "seago-50hp", kw: "37.2 kW", voltage: "144 V",
+      battery: "144V 300 AH LiFePO4", motor: "Brushless DC / PMSM",
+      control: "Steering Grip / Remote", cooling: "Water Cooled", rpm: "5500 RPM", gear_ratio: "1.8",
+      transom: "508mm", weight: "105 Kg", boat_length: "7.0-12.0 metres", propeller: "—",
+      catalog_path: "catalog/SEAGO 50 HP Technical Specifications.pdf",
+      custom_specs: [{ name: "Sensor", value: "Hall / Encoder" }, { name: "Gear Position", value: "Forward / Neutral / Reverse" }]
+    }
+  };
+
+  function extractPdfTextSnippet(file, cb) {
+    if (!file || typeof FileReader === "undefined") {
+      cb(null, "");
+      return;
+    }
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        var str = "";
+        if (typeof e.target.result === "string") {
+          str = e.target.result;
+        } else if (e.target.result) {
+          var bytes = new Uint8Array(e.target.result);
+          var scanLen = Math.min(bytes.length, 131072);
+          var parts = [];
+          for (var i = 0; i < scanLen; i++) {
+            parts.push(String.fromCharCode(bytes[i]));
+          }
+          str = parts.join("");
+        }
+
+        var decodedAll = str;
+        var hexMatches = str.match(/<FEFF([0-9A-Fa-f]+)>/g);
+        if (hexMatches) {
+          for (var h = 0; h < hexMatches.length; h++) {
+            var rawHex = hexMatches[h].replace(/<FEFF|>/g, "");
+            var dec = "";
+            for (var c = 0; c < rawHex.length; c += 4) {
+              dec += String.fromCharCode(parseInt(rawHex.substr(c, 4), 16));
+            }
+            decodedAll += " " + dec;
+          }
+        }
+        cb(null, decodedAll);
+      } catch (err) {
+        cb(err, "");
+      }
+    };
+    reader.onerror = function() {
+      cb(null, "");
+    };
+
+    if (reader.readAsBinaryString) {
+      reader.readAsBinaryString(file.slice(0, 131072));
+    } else {
+      reader.readAsArrayBuffer(file.slice(0, 131072));
+    }
+  }
+
+  function detectCatalogSpecs(inputStr, textSnippet) {
+    var combined = (inputStr || "") + " " + (textSnippet || "");
+    if (!combined.trim()) return null;
+
+    var lower = combined.toLowerCase();
+
+    // Look for HP number (e.g. 15 HP, 15HP, 15 horsepower)
+    var hpMatch = lower.match(/(\d{1,3})\s*(?:hp|horsepower)\b/);
+    var hpNum = hpMatch ? parseInt(hpMatch[1], 10) : null;
+
+    // Check if filename has digits like 3hp, 15hp
+    if (!hpNum) {
+      var fnHp = lower.match(/(?:seago[_\s-]*)?(\d{1,3})\s*hp/);
+      if (fnHp) hpNum = parseInt(fnHp[1], 10);
+    }
+
+    var result = {};
+    if (hpNum && SEAGO_CATALOG_PRESETS[hpNum]) {
+      var p = SEAGO_CATALOG_PRESETS[hpNum];
+      for (var k in p) {
+        if (Object.prototype.hasOwnProperty.call(p, k)) {
+          if (k === "custom_specs") {
+            result.custom_specs = JSON.parse(JSON.stringify(p.custom_specs));
+          } else {
+            result[k] = p[k];
+          }
+        }
+      }
+    } else {
+      if (hpNum) {
+        result.hp = hpNum;
+        result.title = "Seagö " + hpNum + " HP";
+        result.slug = "seago-" + hpNum + "hp";
+      }
+      result.custom_specs = [];
+    }
+
+    // Generic extractions for custom or non-preset datasheets
+    var kwMatch = lower.match(/(\d{1,3}(?:\.\d{1,2})?)\s*kw\b/);
+    if (kwMatch && !result.kw) result.kw = kwMatch[1] + " kW";
+
+    var voltMatch = lower.match(/(\d{2,3}(?:\.\d{1,2})?)\s*v(?:olts?|dc)?\b/);
+    if (voltMatch && !result.voltage) result.voltage = voltMatch[1] + " V";
+
+    var rpmMatch = lower.match(/(\d{3,5}(?:\s*[-–]\s*\d{3,5})?)\s*rpm\b/);
+    if (rpmMatch && !result.rpm) result.rpm = rpmMatch[1] + " RPM";
+
+    var batMatch = lower.match(/(\d{2,3}(?:\.\d)?\s*v?\s*[-–/]\s*\d{2,3}\s*a[hH](?:\s*lifepo4)?)/);
+    if (batMatch && !result.battery) result.battery = batMatch[1].toUpperCase();
+
+    if (!result.cooling) {
+      if (lower.indexOf("water cool") !== -1) result.cooling = "Water Cooled";
+      else if (lower.indexOf("air cool") !== -1) result.cooling = "Air Cooled";
+    }
+
+    if (!result.control) {
+      if (lower.indexOf("tiller") !== -1 && lower.indexOf("remote") !== -1) result.control = "Tiller / Remote Control";
+      else if (lower.indexOf("tiller") !== -1) result.control = "Tiller Control";
+      else if (lower.indexOf("remote") !== -1) result.control = "Remote Control";
+      else if (lower.indexOf("steering") !== -1) result.control = "Steering Grip";
+    }
+
+    if (!result.motor) {
+      if (lower.indexOf("pmsm") !== -1 || lower.indexOf("permanent magnet") !== -1) {
+        result.motor = "Permanent Magnet Synchronous Motor (PMSM)";
+      } else if (lower.indexOf("brushless") !== -1 || lower.indexOf("bldc") !== -1) {
+        result.motor = "Brushless DC / PMSM";
+      }
+    }
+
+    var transomMatch = lower.match(/([sl]:\s*\d{3}\s*mm(?:\s*[\/|&]\s*[sl]:\s*\d{3}\s*mm)?|\d{3}\s*mm)/);
+    if (transomMatch && !result.transom) result.transom = transomMatch[1].toUpperCase();
+
+    var weightMatch = lower.match(/([sl]:\s*\d{2,3}(?:\.\d)?\s*kg(?:\s*[\/|&]\s*[sl]:\s*\d{2,3}(?:\.\d)?\s*kg)?|\d{2,3}(?:\.\d)?\s*kg)/);
+    if (weightMatch && !result.weight) result.weight = weightMatch[1].toUpperCase();
+
+    var boatLenMatch = lower.match(/(\d+(?:\.\d)?\s*[-–]\s*\d+(?:\.\d)?\s*m(?:etres?|s)?)/);
+    if (boatLenMatch && !result.boat_length) result.boat_length = boatLenMatch[1];
+
+    var propMatch = lower.match(/(\d+(?:\s+\d+\/\d+)?\s*[×x*]\s*\d+)/);
+    if (propMatch && !result.propeller) result.propeller = propMatch[1];
+
+    var ipMatch = lower.match(/\b(ip(?:67|68|65))\b/);
+    if (ipMatch) {
+      var hasIp = false;
+      for (var i = 0; i < result.custom_specs.length; i++) {
+        if (result.custom_specs[i].name.toLowerCase() === "ingress protection") hasIp = true;
+      }
+      if (!hasIp) {
+        result.custom_specs.push({ name: "Ingress Protection", value: ipMatch[1].toUpperCase() });
+      }
+    }
+
+    var torqueMatch = lower.match(/(\d{2,4}\s*nm)\b/);
+    if (torqueMatch) {
+      var hasTorque = false;
+      for (var t = 0; t < result.custom_specs.length; t++) {
+        if (result.custom_specs[t].name.toLowerCase() === "peak torque") hasTorque = true;
+      }
+      if (!hasTorque) {
+        result.custom_specs.push({ name: "Peak Torque", value: torqueMatch[1].toUpperCase() });
+      }
+    }
+
+    return (result.hp || result.kw || result.voltage) ? result : null;
   }
 
   function renderMotorForm(motorId) {
@@ -1142,6 +1408,86 @@
     var filePdfInput = createEl("input", { type: "file", accept: "application/pdf", style: { display: "none" } });
     var uploadPdfBtn = createEl("button", { type: "button", className: "btn btn-sm btn-secondary", style: { marginTop: "6px" } }, "Upload PDF Datasheet");
 
+    // Auto-detection Box
+    var detectBox = createEl("div", { className: "catalog-detect-box" });
+    var detectHeader = createEl("div", { className: "catalog-detect-header" });
+    var detectTitle = createEl("div", { className: "catalog-detect-title" });
+    detectTitle.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Technical Specifications Detected from Catalog';
+    var autoFillBtn = createEl("button", { type: "button", className: "btn btn-sm btn-primary", id: "btnAutoFillSpecs" }, "✨ Auto-Fill Detected Specifications");
+    detectHeader.appendChild(detectTitle);
+    detectHeader.appendChild(autoFillBtn);
+
+    var detectChips = createEl("div", { className: "catalog-detect-chips" });
+    var detectFooter = createEl("div", { style: { fontSize: "12px", color: "#047857", marginTop: "4px" } }, "Clicking 'Auto-Fill' will populate matching form fields and extra parameters. You can adjust any value or add custom parameters below.");
+
+    detectBox.appendChild(detectHeader);
+    detectBox.appendChild(detectChips);
+    detectBox.appendChild(detectFooter);
+
+    var detectedSpecsData = null;
+
+    function renderDetectedSpecs(specs) {
+      if (!specs) {
+        detectBox.classList.remove("show");
+        detectedSpecsData = null;
+        return;
+      }
+      detectedSpecsData = specs;
+      detectChips.innerHTML = "";
+
+      var specLabels = [
+        { key: "hp", label: "HP", fmt: function(v){ return v + " HP"; } },
+        { key: "kw", label: "Rated Power", fmt: function(v){ return v; } },
+        { key: "voltage", label: "Voltage", fmt: function(v){ return v; } },
+        { key: "motor", label: "Motor", fmt: function(v){ return v; } },
+        { key: "cooling", label: "Cooling", fmt: function(v){ return v; } },
+        { key: "control", label: "Control", fmt: function(v){ return v; } },
+        { key: "rpm", label: "RPM", fmt: function(v){ return v; } },
+        { key: "transom", label: "Transom", fmt: function(v){ return v; } },
+        { key: "weight", label: "Weight", fmt: function(v){ return v; } },
+        { key: "battery", label: "Battery", fmt: function(v){ return v; } }
+      ];
+
+      for (var sli = 0; sli < specLabels.length; sli++) {
+        var sl = specLabels[sli];
+        if (specs[sl.key]) {
+          var chip = createEl("span", { className: "catalog-chip" });
+          chip.innerHTML = "<strong>" + escapeHtml(sl.label) + ":</strong> " + escapeHtml(sl.fmt(specs[sl.key]));
+          detectChips.appendChild(chip);
+        }
+      }
+
+      if (specs.custom_specs && specs.custom_specs.length > 0) {
+        for (var csi = 0; csi < specs.custom_specs.length; csi++) {
+          var csItem = specs.custom_specs[csi];
+          if (csItem.name && csItem.value) {
+            var cChip = createEl("span", { className: "catalog-chip" });
+            cChip.innerHTML = "<strong>" + escapeHtml(csItem.name) + ":</strong> " + escapeHtml(csItem.value);
+            detectChips.appendChild(cChip);
+          }
+        }
+      }
+
+      detectBox.classList.add("show");
+    }
+
+    function checkCatalogDetection(sourceStr, fileObj) {
+      if (fileObj) {
+        extractPdfTextSnippet(fileObj, function(err, textSnippet){
+          var specs = detectCatalogSpecs(sourceStr, textSnippet);
+          if (specs) {
+            renderDetectedSpecs(specs);
+            showToast("Detected specifications for Seagö " + (specs.hp || "") + " HP catalog!", "info");
+          }
+        });
+      } else if (sourceStr) {
+        var specs = detectCatalogSpecs(sourceStr, "");
+        if (specs) {
+          renderDetectedSpecs(specs);
+        }
+      }
+    }
+
     uploadPdfBtn.addEventListener("click", function(){ filePdfInput.click(); });
     filePdfInput.addEventListener("change", function(){
       if (filePdfInput.files && filePdfInput.files[0]) {
@@ -1152,6 +1498,7 @@
             inpCatalog.value = pres.url;
             isDirty = true;
             showToast("PDF uploaded", "success");
+            checkCatalogDetection(pf.name, pf);
           } else {
             showToast(err ? err.message : "PDF upload failed", "error");
           }
@@ -1159,19 +1506,103 @@
       }
     });
 
+    inpCatalog.addEventListener("blur", function(){
+      if (inpCatalog.value && !detectedSpecsData) {
+        checkCatalogDetection(inpCatalog.value, null);
+      }
+    });
+
+    autoFillBtn.addEventListener("click", function(){
+      if (!detectedSpecsData) return;
+      var s = detectedSpecsData;
+      if (s.hp) inpHp.value = s.hp;
+      if (s.title && (!inpTitle.value || isNew)) inpTitle.value = s.title;
+      if (s.slug && (!inpSlug.value || isNew)) inpSlug.value = s.slug;
+      if (s.kw) inpKw.value = s.kw;
+      if (s.voltage) inpVolt.value = s.voltage;
+      if (s.battery) inpBat.value = s.battery;
+      if (s.motor) inpMotor.value = s.motor;
+      if (s.control) inpControl.value = s.control;
+      if (s.cooling) inpCooling.value = s.cooling;
+      if (s.rpm) inpRpm.value = s.rpm;
+      if (s.gear_ratio) inpGear.value = s.gear_ratio;
+      if (s.transom) inpTransom.value = s.transom;
+      if (s.weight) inpWeight.value = s.weight;
+      if (s.boat_length) inpBoatLen.value = s.boat_length;
+      if (s.propeller) inpPropeller.value = s.propeller;
+
+      if (s.custom_specs && s.custom_specs.length > 0) {
+        for (var csi = 0; csi < s.custom_specs.length; csi++) {
+          var cs = s.custom_specs[csi];
+          var existingRows = customSpecsContainer.querySelectorAll(".repeatable-item");
+          var alreadyExists = false;
+          for (var eri = 0; eri < existingRows.length; eri++) {
+            var kInp = existingRows[eri].querySelector("input");
+            if (kInp && kInp.value.toLowerCase() === cs.name.toLowerCase()) {
+              alreadyExists = true;
+              break;
+            }
+          }
+          if (!alreadyExists) {
+            addCustomSpecRow(cs.name, cs.value);
+          }
+        }
+      }
+
+      isDirty = true;
+      showToast("Auto-filled specifications for " + (s.title || (s.hp + " HP motor")) + "!", "success");
+    });
+
     gPdf.appendChild(inpCatalog);
     gPdf.appendChild(filePdfInput);
     gPdf.appendChild(uploadPdfBtn);
+    gPdf.appendChild(detectBox);
     s4.appendChild(gPdf);
 
-    // Section 5: Publication Status
+    // Section 5: Additional Technical Parameters
     var s5 = createEl("div", { className: "form-section" });
+    var h5Wrap = createEl("div", { className: "form-section__header" });
+    h5Wrap.appendChild(createEl("span", { className: "form-section__badge" }, "5"));
+    h5Wrap.appendChild(createEl("h3", { className: "form-section__title" }, "Additional Technical Parameters"));
+    s5.appendChild(h5Wrap);
+    s5.appendChild(createEl("p", { className: "form-section__desc" }, "Add custom engineering parameters or new datasheet specifications not covered in standard fields (e.g. Ingress Protection, Peak Torque, Warranty)."));
+
+    var customSpecsContainer = createEl("div", { id: "customSpecsContainer" });
+    var addParamBtn = createEl("button", { type: "button", className: "btn btn-sm btn-secondary", style: { marginTop: "10px" } }, "+ Add New Parameter");
+
+    function addCustomSpecRow(key, val) {
+      var row = createEl("div", { className: "repeatable-item" });
+      var kInp = createEl("input", { type: "text", placeholder: "Parameter (e.g. Ingress Protection)", value: key || "" });
+      var vInp = createEl("input", { type: "text", placeholder: "Value (e.g. IP67 Submersible)", value: val || "" });
+      var del = createEl("button", { type: "button", className: "btn-icon", style: { color: "var(--danger)" }, title: "Remove Parameter" }, "×");
+      del.addEventListener("click", function(){
+        if (row.parentNode) {
+          row.parentNode.removeChild(row);
+          isDirty = true;
+        }
+      });
+      row.appendChild(kInp);
+      row.appendChild(vInp);
+      row.appendChild(del);
+      customSpecsContainer.appendChild(row);
+      isDirty = true;
+    }
+
+    addParamBtn.addEventListener("click", function(){
+      addCustomSpecRow("", "");
+    });
+
+    s5.appendChild(customSpecsContainer);
+    s5.appendChild(addParamBtn);
+
+    // Section 6: Publication Status
+    var s6 = createEl("div", { className: "form-section" });
     var chkPub = createEl("div", { className: "form-check" });
     var inpPub = createEl("input", { type: "checkbox", id: "f_pub", checked: true });
     var lblPub = createEl("label", { for: "f_pub" }, "Publish this model on public website catalog");
     chkPub.appendChild(inpPub);
     chkPub.appendChild(lblPub);
-    s5.appendChild(chkPub);
+    s6.appendChild(chkPub);
 
     // Form Actions
     var formActions = createEl("div", { className: "form-actions" });
@@ -1185,6 +1616,7 @@
     form.appendChild(s3);
     form.appendChild(s4);
     form.appendChild(s5);
+    form.appendChild(s6);
     form.appendChild(formActions);
     formCard.appendChild(form);
     pageRoot.appendChild(formCard);
@@ -1230,6 +1662,22 @@
         inpPropeller.value = motor.propeller || "";
         inpCatalog.value = motor.catalog_path || "";
         inpPub.checked = !!motor.published;
+
+        if (motor.custom_specs && motor.custom_specs.length > 0) {
+          for (var ci = 0; ci < motor.custom_specs.length; ci++) {
+            var cs = motor.custom_specs[ci];
+            addCustomSpecRow(cs.name || cs.key, cs.value);
+          }
+        } else {
+          if (motor.sensor) addCustomSpecRow("Sensor", motor.sensor);
+          if (motor.gear_pos) addCustomSpecRow("Gear Position", motor.gear_pos);
+          if (motor.display && motor.display !== "—") addCustomSpecRow("Display", motor.display);
+          if (motor.notes) addCustomSpecRow("Notes", motor.notes);
+        }
+
+        if (motor.catalog_path) {
+          checkCatalogDetection(motor.catalog_path, null);
+        }
 
         if (motor.image_url) {
           currentImageUrl = motor.image_url;
@@ -1286,6 +1734,19 @@
           return;
         }
 
+        var customSpecs = [];
+        var cRows = customSpecsContainer.querySelectorAll(".repeatable-item");
+        for (var cri = 0; cri < cRows.length; cri++) {
+          var inps = cRows[cri].querySelectorAll("input");
+          if (inps.length >= 2) {
+            var paramKey = inps[0].value.trim();
+            var paramVal = inps[1].value.trim();
+            if (paramKey || paramVal) {
+              customSpecs.push({ name: paramKey, value: paramVal });
+            }
+          }
+        }
+
         var record = existingMotor || {};
         record.hp = hpVal;
         record.title = titleVal;
@@ -1305,6 +1766,7 @@
         record.catalog_path = inpCatalog.value.trim();
         record.image_url = currentImageUrl;
         record.image_id = currentImageId;
+        record.custom_specs = customSpecs;
         record.published = inpPub.checked;
 
         window.SeagoStore.save("motors", record, function(saveErr){
