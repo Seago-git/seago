@@ -349,16 +349,70 @@
     reader.readAsDataURL(file);
   }
 
+  function processCatalogFile(file, cb) {
+    if (!file) {
+      cb(new Error("Please select a catalog file."));
+      return;
+    }
+    var isPdf = file.type === "application/pdf" || (file.name && /\.pdf$/i.test(file.name));
+    var isImg = file.type.indexOf("image/") === 0 || (file.name && /\.(png|jpe?g|webp|avif|bmp)$/i.test(file.name));
+
+    if (!isPdf && !isImg) {
+      cb(new Error("Please select a valid PDF datasheet or photo (JPG, PNG, WebP)."));
+      return;
+    }
+
+    if (file.size > 20 * 1024 * 1024) {
+      cb(new Error("Catalog file size must be less than 20MB."));
+      return;
+    }
+
+    var kind = isPdf ? "pdf" : "image";
+    window.SeagoStore.uploadFile(kind, file, cb);
+  }
+
   function processPdfFile(file, cb) {
-    if (!file || file.type !== "application/pdf") {
-      cb(new Error("Please select a valid PDF file."));
+    processCatalogFile(file, cb);
+  }
+
+  function runImageOcr(file, cb) {
+    if (!file || typeof FileReader === "undefined") {
+      cb(new Error("File reader unavailable"));
       return;
     }
-    if (file.size > 10 * 1024 * 1024) {
-      cb(new Error("PDF file size must be less than 10MB."));
-      return;
+
+    function doRecognize() {
+      if (!window.Tesseract) {
+        cb(new Error("OCR engine unavailable"));
+        return;
+      }
+      try {
+        window.Tesseract.recognize(file, "eng", {
+          logger: function(m) {}
+        }).then(function(res){
+          var txt = (res && res.data && res.data.text) ? res.data.text : "";
+          cb(null, txt);
+        })["catch"](function(err){
+          cb(err);
+        });
+      } catch (ex) {
+        cb(ex);
+      }
     }
-    window.SeagoStore.uploadFile("pdf", file, cb);
+
+    if (window.Tesseract) {
+      doRecognize();
+    } else {
+      var s = document.createElement("script");
+      s.src = "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
+      s.onload = function(){
+        doRecognize();
+      };
+      s.onerror = function(){
+        cb(new Error("OCR library could not be loaded from CDN"));
+      };
+      document.head.appendChild(s);
+    }
   }
 
   // ================= 5. ROUTING & CONTROLLER DISPATCH =================
@@ -1386,6 +1440,9 @@
             imgPreview.style.display = "flex";
             isDirty = true;
             showToast("Photo ready", "success");
+            if (f.name && (/catalog|spec|datasheet|\bhp\b/i.test(f.name))) {
+              checkCatalogDetection(f.name, f);
+            }
           } else {
             showToast(err ? err.message : "Image processing failed", "error");
           }
@@ -1401,12 +1458,13 @@
       isDirty = true;
     });
 
-    // Catalog PDF
+    // Catalog PDF or Photo Datasheet
     var gPdf = createEl("div", { className: "form-group" });
-    gPdf.appendChild(createEl("label", { for: "f_catalog" }, "Technical Specification Catalog (PDF)"));
-    var inpCatalog = createEl("input", { type: "text", id: "f_catalog", placeholder: "e.g. catalog/SEAGO 15 HP Technical Specifications.pdf" });
-    var filePdfInput = createEl("input", { type: "file", accept: "application/pdf", style: { display: "none" } });
-    var uploadPdfBtn = createEl("button", { type: "button", className: "btn btn-sm btn-secondary", style: { marginTop: "6px" } }, "Upload PDF Datasheet");
+    gPdf.appendChild(createEl("label", { for: "f_catalog" }, "Technical Specification Catalog (PDF or Photo Datasheet)"));
+    var inpCatalog = createEl("input", { type: "text", id: "f_catalog", placeholder: "e.g. catalog/SEAGO 15 HP Technical Specifications.pdf or photo URL" });
+    var filePdfInput = createEl("input", { type: "file", accept: "application/pdf,image/png,image/jpeg,image/webp,image/avif", style: { display: "none" } });
+    var uploadPdfBtn = createEl("button", { type: "button", className: "btn btn-sm btn-secondary", style: { marginTop: "6px" } }, "Upload Catalog (PDF / Photo)");
+    var catalogPreview = createEl("div", { className: "catalog-preview-thumb", style: { display: "none" } });
 
     // High-Tech Executive Auto-detection Panel
     var detectBox = createEl("div", { className: "catalog-detect-box" });
@@ -1414,9 +1472,9 @@
     var detectTop = createEl("div", { className: "catalog-detect-topbar" });
     var metaWrap = createEl("div", { className: "catalog-detect-meta" });
     var tagEl = createEl("div", { className: "catalog-detect-tag" });
-    tagEl.innerHTML = '<span class="catalog-detect-pulse"></span> AI DATASHEET PARSER';
+    tagEl.innerHTML = '<span class="catalog-detect-pulse"></span> AI DATASHEET & PHOTO PARSER';
     var titleEl = createEl("h4", { className: "catalog-detect-title" }, "Technical Specifications Extracted");
-    var subEl = createEl("p", { className: "catalog-detect-sub", id: "catalogDetectSub" }, "Specifications detected from catalog datasheet.");
+    var subEl = createEl("p", { className: "catalog-detect-sub", id: "catalogDetectSub" }, "Specifications detected from catalog datasheet or photo.");
     metaWrap.appendChild(tagEl);
     metaWrap.appendChild(titleEl);
     metaWrap.appendChild(subEl);
@@ -1430,11 +1488,41 @@
     detectTop.appendChild(actWrap);
 
     var detectGrid = createEl("div", { className: "catalog-spec-grid" });
+
+    // Quick Model Presets Bar
+    var presetsBar = createEl("div", { className: "catalog-detect-presets" });
+    var presetsLbl = createEl("span", { className: "catalog-detect-presets-label" }, "⚡ Quick Match Model:");
+    presetsBar.appendChild(presetsLbl);
+
+    var hpOptions = [3, 7, 10, 15, 20, 30, 40, 50];
+    for (var hi = 0; hi < hpOptions.length; hi++) {
+      (function(hpNum){
+        var pBtn = createEl("button", {
+          type: "button",
+          className: "preset-pill",
+          "data-hp": String(hpNum)
+        }, hpNum + " HP");
+        pBtn.addEventListener("click", function(){
+          if (SEAGO_CATALOG_PRESETS[hpNum]) {
+            renderDetectedSpecs(SEAGO_CATALOG_PRESETS[hpNum]);
+            showToast("Loaded specifications for Seagö " + hpNum + " HP!", "info");
+            var allPills = presetsBar.querySelectorAll(".preset-pill");
+            for (var pi = 0; pi < allPills.length; pi++) {
+              allPills[pi].classList.remove("active");
+            }
+            pBtn.classList.add("active");
+          }
+        });
+        presetsBar.appendChild(pBtn);
+      })(hpOptions[hi]);
+    }
+
     var detectFooter = createEl("div", { className: "catalog-detect-footer" });
-    detectFooter.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>Parameters extracted directly from PDF catalog. Click <strong>Auto-Fill Form Fields</strong> to populate matching specifications and custom parameters below.</span>';
+    detectFooter.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>Parameters extracted directly from PDF or photo datasheet. Click <strong>Auto-Fill Form Fields</strong> to populate matching specifications and custom parameters below.</span>';
 
     detectBox.appendChild(detectTop);
     detectBox.appendChild(detectGrid);
+    detectBox.appendChild(presetsBar);
     detectBox.appendChild(detectFooter);
 
     var detectedSpecsData = null;
@@ -1496,20 +1584,135 @@
       detectBox.classList.add("show");
     }
 
-    function checkCatalogDetection(sourceStr, fileObj) {
-      if (fileObj) {
-        extractPdfTextSnippet(fileObj, function(err, textSnippet){
-          var specs = detectCatalogSpecs(sourceStr, textSnippet);
-          if (specs) {
-            renderDetectedSpecs(specs);
-            showToast("Detected specifications for Seagö " + (specs.hp || "") + " HP catalog!", "info");
+    function updateCatalogPreview(url, fileName) {
+      if (!url) {
+        catalogPreview.style.display = "none";
+        catalogPreview.innerHTML = "";
+        return;
+      }
+      var isImg = (url.indexOf("data:image/") === 0) || /\.(png|jpe?g|webp|avif|bmp)$/i.test(url) || (fileName && /\.(png|jpe?g|webp|avif|bmp)$/i.test(fileName));
+      catalogPreview.innerHTML = "";
+      var wrap = createEl("div", {
+        style: {
+          display: "flex",
+          alignItems: "center",
+          gap: "12px",
+          padding: "10px 14px",
+          background: "#F8FAFC",
+          border: "1px solid var(--line)",
+          borderRadius: "8px",
+          marginTop: "10px"
+        }
+      });
+
+      if (isImg) {
+        var thumb = createEl("img", {
+          src: url,
+          alt: "Catalog Photo",
+          style: {
+            width: "50px",
+            height: "50px",
+            objectFit: "cover",
+            borderRadius: "6px",
+            border: "1px solid var(--line)",
+            background: "#FFFFFF"
           }
         });
-      } else if (sourceStr) {
-        var specs = detectCatalogSpecs(sourceStr, "");
-        if (specs) {
-          renderDetectedSpecs(specs);
-        }
+        wrap.appendChild(thumb);
+        var info = createEl("div", { style: { flex: "1", minWidth: "0" } });
+        info.appendChild(createEl("div", { style: { fontSize: "13px", fontWeight: "600", color: "var(--navy)" } }, "Catalog Photo Attached"));
+        info.appendChild(createEl("div", { style: { fontSize: "11.5px", color: "var(--slate)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" } }, fileName || "Photo Datasheet"));
+        wrap.appendChild(info);
+
+        var viewBtn = createEl("a", { href: url, target: "_blank", className: "btn btn-sm btn-secondary", style: { fontSize: "12px" } }, "View Photo");
+        wrap.appendChild(viewBtn);
+      } else {
+        var pdfIcon = createEl("div", {
+          style: {
+            width: "38px",
+            height: "38px",
+            borderRadius: "6px",
+            background: "#FEE2E2",
+            color: "#DC2626",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontWeight: "700",
+            fontSize: "12px"
+          }
+        }, "PDF");
+        wrap.appendChild(pdfIcon);
+        var pInfo = createEl("div", { style: { flex: "1", minWidth: "0" } });
+        pInfo.appendChild(createEl("div", { style: { fontSize: "13px", fontWeight: "600", color: "var(--navy)" } }, "PDF Datasheet Attached"));
+        pInfo.appendChild(createEl("div", { style: { fontSize: "11.5px", color: "var(--slate)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" } }, fileName || url));
+        wrap.appendChild(pInfo);
+
+        var openBtn = createEl("a", { href: url, target: "_blank", className: "btn btn-sm btn-secondary", style: { fontSize: "12px" } }, "Open PDF");
+        wrap.appendChild(openBtn);
+      }
+
+      var removeBtn = createEl("button", {
+        type: "button",
+        className: "btn btn-sm btn-secondary",
+        style: { color: "var(--danger)", fontSize: "12px" }
+      }, "Remove");
+      removeBtn.addEventListener("click", function(){
+        inpCatalog.value = "";
+        catalogPreview.style.display = "none";
+        catalogPreview.innerHTML = "";
+        detectBox.classList.remove("show");
+        isDirty = true;
+      });
+      wrap.appendChild(removeBtn);
+
+      catalogPreview.appendChild(wrap);
+      catalogPreview.style.display = "block";
+    }
+
+    function checkCatalogDetection(sourceStr, fileObj) {
+      if (!fileObj && !sourceStr) return;
+
+      var fName = fileObj ? fileObj.name : sourceStr;
+      var isImg = (fileObj && fileObj.type && fileObj.type.indexOf("image/") === 0) || /\.(png|jpe?g|webp|avif|bmp)$/i.test(fName);
+      var isPdf = (fileObj && fileObj.type === "application/pdf") || /\.pdf$/i.test(fName);
+
+      // Check if filename / source string matches any Seagö model or specs
+      var specs = detectCatalogSpecs(fName, "");
+      if (specs) {
+        renderDetectedSpecs(specs);
+        showToast("Detected specifications for Seagö " + (specs.hp || "") + " HP!", "info");
+      }
+
+      if (fileObj && isPdf) {
+        extractPdfTextSnippet(fileObj, function(err, textSnippet){
+          var pdfSpecs = detectCatalogSpecs(fName, textSnippet);
+          if (pdfSpecs) {
+            renderDetectedSpecs(pdfSpecs);
+            showToast("Parsed specifications from PDF datasheet!", "info");
+          }
+        });
+      }
+
+      if (fileObj && isImg) {
+        // Run AI OCR on photo
+        subEl.innerHTML = '<span class="catalog-detect-pulse" style="display:inline-block; vertical-align:middle; margin-right:6px;"></span> Optical AI scanning photo datasheet for specifications…';
+        detectBox.classList.add("show");
+
+        runImageOcr(fileObj, function(err, ocrText){
+          if (!err && ocrText) {
+            var ocrSpecs = detectCatalogSpecs(fName + " " + ocrText, ocrText);
+            if (ocrSpecs) {
+              renderDetectedSpecs(ocrSpecs);
+              showToast("AI OCR extracted specifications from catalog photo!", "success");
+            } else if (!specs) {
+              subEl.innerHTML = "Photo scanned. Tap a quick model preset below to auto-fill specifications.";
+            }
+          } else {
+            if (!specs) {
+              subEl.innerHTML = "Photo uploaded. Tap a quick model preset below to auto-fill specifications.";
+            }
+          }
+        });
       }
     }
 
@@ -1517,23 +1720,28 @@
     filePdfInput.addEventListener("change", function(){
       if (filePdfInput.files && filePdfInput.files[0]) {
         var pf = filePdfInput.files[0];
-        showToast("Uploading PDF document…", "info");
-        processPdfFile(pf, function(err, pres){
+        var isImg = pf.type.indexOf("image/") === 0 || /\.(png|jpe?g|webp|avif|bmp)$/i.test(pf.name);
+        showToast(isImg ? "Uploading catalog photo…" : "Uploading PDF datasheet…", "info");
+        processCatalogFile(pf, function(err, pres){
           if (!err && pres) {
             inpCatalog.value = pres.url;
             isDirty = true;
-            showToast("PDF uploaded", "success");
+            updateCatalogPreview(pres.url, pf.name);
+            showToast(isImg ? "Catalog photo uploaded" : "PDF uploaded", "success");
             checkCatalogDetection(pf.name, pf);
           } else {
-            showToast(err ? err.message : "PDF upload failed", "error");
+            showToast(err ? err.message : "Upload failed", "error");
           }
         });
       }
     });
 
     inpCatalog.addEventListener("blur", function(){
-      if (inpCatalog.value && !detectedSpecsData) {
-        checkCatalogDetection(inpCatalog.value, null);
+      if (inpCatalog.value) {
+        updateCatalogPreview(inpCatalog.value, inpCatalog.value);
+        if (!detectedSpecsData) {
+          checkCatalogDetection(inpCatalog.value, null);
+        }
       }
     });
 
@@ -1704,6 +1912,7 @@
         }
 
         if (motor.catalog_path) {
+          updateCatalogPreview(motor.catalog_path, motor.catalog_path);
           checkCatalogDetection(motor.catalog_path, null);
         }
 
