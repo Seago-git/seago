@@ -1408,20 +1408,33 @@
     var filePdfInput = createEl("input", { type: "file", accept: "application/pdf", style: { display: "none" } });
     var uploadPdfBtn = createEl("button", { type: "button", className: "btn btn-sm btn-secondary", style: { marginTop: "6px" } }, "Upload PDF Datasheet");
 
-    // Auto-detection Box
+    // High-Tech Executive Auto-detection Panel
     var detectBox = createEl("div", { className: "catalog-detect-box" });
-    var detectHeader = createEl("div", { className: "catalog-detect-header" });
-    var detectTitle = createEl("div", { className: "catalog-detect-title" });
-    detectTitle.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Technical Specifications Detected from Catalog';
-    var autoFillBtn = createEl("button", { type: "button", className: "btn btn-sm btn-primary", id: "btnAutoFillSpecs" }, "✨ Auto-Fill Detected Specifications");
-    detectHeader.appendChild(detectTitle);
-    detectHeader.appendChild(autoFillBtn);
+    
+    var detectTop = createEl("div", { className: "catalog-detect-topbar" });
+    var metaWrap = createEl("div", { className: "catalog-detect-meta" });
+    var tagEl = createEl("div", { className: "catalog-detect-tag" });
+    tagEl.innerHTML = '<span class="catalog-detect-pulse"></span> AI DATASHEET PARSER';
+    var titleEl = createEl("h4", { className: "catalog-detect-title" }, "Technical Specifications Extracted");
+    var subEl = createEl("p", { className: "catalog-detect-sub", id: "catalogDetectSub" }, "Specifications detected from catalog datasheet.");
+    metaWrap.appendChild(tagEl);
+    metaWrap.appendChild(titleEl);
+    metaWrap.appendChild(subEl);
 
-    var detectChips = createEl("div", { className: "catalog-detect-chips" });
-    var detectFooter = createEl("div", { style: { fontSize: "12px", color: "#047857", marginTop: "4px" } }, "Clicking 'Auto-Fill' will populate matching form fields and extra parameters. You can adjust any value or add custom parameters below.");
+    var actWrap = createEl("div", { className: "catalog-detect-action" });
+    var autoFillBtn = createEl("button", { type: "button", className: "btn-autofill", id: "btnAutoFillSpecs" });
+    autoFillBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg><span>Auto-Fill Form Fields</span>';
+    actWrap.appendChild(autoFillBtn);
 
-    detectBox.appendChild(detectHeader);
-    detectBox.appendChild(detectChips);
+    detectTop.appendChild(metaWrap);
+    detectTop.appendChild(actWrap);
+
+    var detectGrid = createEl("div", { className: "catalog-spec-grid" });
+    var detectFooter = createEl("div", { className: "catalog-detect-footer" });
+    detectFooter.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>Parameters extracted directly from PDF catalog. Click <strong>Auto-Fill Form Fields</strong> to populate matching specifications and custom parameters below.</span>';
+
+    detectBox.appendChild(detectTop);
+    detectBox.appendChild(detectGrid);
     detectBox.appendChild(detectFooter);
 
     var detectedSpecsData = null;
@@ -1433,27 +1446,34 @@
         return;
       }
       detectedSpecsData = specs;
-      detectChips.innerHTML = "";
+      detectGrid.innerHTML = "";
 
       var specLabels = [
-        { key: "hp", label: "HP", fmt: function(v){ return v + " HP"; } },
+        { key: "hp", label: "Horsepower", fmt: function(v){ return v + " HP"; } },
         { key: "kw", label: "Rated Power", fmt: function(v){ return v; } },
-        { key: "voltage", label: "Voltage", fmt: function(v){ return v; } },
-        { key: "motor", label: "Motor", fmt: function(v){ return v; } },
-        { key: "cooling", label: "Cooling", fmt: function(v){ return v; } },
-        { key: "control", label: "Control", fmt: function(v){ return v; } },
-        { key: "rpm", label: "RPM", fmt: function(v){ return v; } },
-        { key: "transom", label: "Transom", fmt: function(v){ return v; } },
-        { key: "weight", label: "Weight", fmt: function(v){ return v; } },
-        { key: "battery", label: "Battery", fmt: function(v){ return v; } }
+        { key: "voltage", label: "Operating Voltage", fmt: function(v){ return v; } },
+        { key: "motor", label: "Motor Type", fmt: function(v){ return v; } },
+        { key: "cooling", label: "Cooling Method", fmt: function(v){ return v; } },
+        { key: "control", label: "Control System", fmt: function(v){ return v; } },
+        { key: "rpm", label: "Rated RPM", fmt: function(v){ return v; } },
+        { key: "transom", label: "Transom Height", fmt: function(v){ return v; } },
+        { key: "weight", label: "Dry Weight", fmt: function(v){ return v; } },
+        { key: "boat_length", label: "Recommended Vessel", fmt: function(v){ return v; } },
+        { key: "gear_ratio", label: "Gear Ratio", fmt: function(v){ return v; } },
+        { key: "battery", label: "Recommended Marine Battery", wide: true, fmt: function(v){ return v; } }
       ];
 
+      var specCount = 0;
       for (var sli = 0; sli < specLabels.length; sli++) {
         var sl = specLabels[sli];
         if (specs[sl.key]) {
-          var chip = createEl("span", { className: "catalog-chip" });
-          chip.innerHTML = "<strong>" + escapeHtml(sl.label) + ":</strong> " + escapeHtml(sl.fmt(specs[sl.key]));
-          detectChips.appendChild(chip);
+          specCount++;
+          var card = createEl("div", { className: "catalog-spec-card" + (sl.wide ? " catalog-spec-card--wide" : "") });
+          var kEl = createEl("span", { className: "catalog-spec-k" }, sl.label);
+          var vEl = createEl("span", { className: "catalog-spec-v" }, sl.fmt(specs[sl.key]));
+          card.appendChild(kEl);
+          card.appendChild(vEl);
+          detectGrid.appendChild(card);
         }
       }
 
@@ -1461,13 +1481,18 @@
         for (var csi = 0; csi < specs.custom_specs.length; csi++) {
           var csItem = specs.custom_specs[csi];
           if (csItem.name && csItem.value) {
-            var cChip = createEl("span", { className: "catalog-chip" });
-            cChip.innerHTML = "<strong>" + escapeHtml(csItem.name) + ":</strong> " + escapeHtml(csItem.value);
-            detectChips.appendChild(cChip);
+            specCount++;
+            var cCard = createEl("div", { className: "catalog-spec-card" });
+            var ckEl = createEl("span", { className: "catalog-spec-k" }, csItem.name);
+            var cvEl = createEl("span", { className: "catalog-spec-v" }, csItem.value);
+            cCard.appendChild(ckEl);
+            cCard.appendChild(cvEl);
+            detectGrid.appendChild(cCard);
           }
         }
       }
 
+      subEl.innerHTML = "Matched <strong>" + escapeHtml(specs.title || ("Seagö " + specs.hp + " HP")) + "</strong> engineering datasheet · <strong>" + specCount + " parameters verified</strong>";
       detectBox.classList.add("show");
     }
 
@@ -1568,6 +1593,9 @@
     s5.appendChild(createEl("p", { className: "form-section__desc" }, "Add custom engineering parameters or new datasheet specifications not covered in standard fields (e.g. Ingress Protection, Peak Torque, Warranty)."));
 
     var customSpecsContainer = createEl("div", { id: "customSpecsContainer" });
+    var s5Header = createEl("div", { className: "repeatable-header" });
+    s5Header.innerHTML = "<span>Specification Parameter</span><span>Assigned Value</span><span></span>";
+    customSpecsContainer.appendChild(s5Header);
     var addParamBtn = createEl("button", { type: "button", className: "btn btn-sm btn-secondary", style: { marginTop: "10px" } }, "+ Add New Parameter");
 
     function addCustomSpecRow(key, val) {
