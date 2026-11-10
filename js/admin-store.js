@@ -338,7 +338,9 @@
     "boats",
     "case_studies",
     "gallery_items",
-    "site_settings"
+    "site_settings",
+    "pages",
+    "assets"
   ];
 
   function exportAll(cb) {

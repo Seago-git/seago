@@ -171,6 +171,163 @@
     });
   }
 
+  // Preview Drawer (Slide-Over) Helpers
+  var previewDrawer = document.getElementById("preview-drawer");
+  var previewDrawerBackdrop = document.getElementById("preview-drawer-backdrop");
+  var previewDrawerClose = document.getElementById("previewDrawerClose");
+
+  function openPreviewDrawer() {
+    if (previewDrawer) previewDrawer.classList.add("is-open");
+    if (previewDrawerBackdrop) previewDrawerBackdrop.classList.add("is-open");
+  }
+
+  function closePreviewDrawer() {
+    if (previewDrawer) previewDrawer.classList.remove("is-open");
+    if (previewDrawerBackdrop) previewDrawerBackdrop.classList.remove("is-open");
+  }
+
+  function isPreviewDrawerOpen() {
+    return previewDrawer && previewDrawer.classList.contains("is-open");
+  }
+
+  if (previewDrawerClose) {
+    previewDrawerClose.addEventListener("click", closePreviewDrawer);
+  }
+  if (previewDrawerBackdrop) {
+    previewDrawerBackdrop.addEventListener("click", closePreviewDrawer);
+  }
+
+  // Asset Picker Modal Helper
+  function openAssetPicker(filterKind, onSelect) {
+    window.SeagoStore.list("assets", function(err, assets){
+      var list = assets || [];
+      if (list.length === 0 && window.SEAGO_FACTORY_SEED && window.SEAGO_FACTORY_SEED.assets) {
+        list = window.SEAGO_FACTORY_SEED.assets;
+      }
+      var filtered = list.filter(function(a){
+        if (!filterKind) return true;
+        if (filterKind === "image") return a.kind === "image" || /\.(png|jpe?g|webp|avif)$/i.test(a.url);
+        if (filterKind === "pdf") return a.kind === "pdf" || /\.pdf$/i.test(a.url);
+        return true;
+      });
+
+      var pickerGrid = createEl("div", {
+        style: {
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(130px, 1fr))",
+          gap: "12px",
+          maxHeight: "360px",
+          overflowY: "auto",
+          padding: "4px"
+        }
+      });
+
+      if (filtered.length === 0) {
+        pickerGrid.appendChild(createEl("div", { style: { gridColumn: "1/-1", padding: "20px", textAlign: "center", color: "var(--text-muted)" } }, "No matching assets found in Asset Manager."));
+      }
+
+      filtered.forEach(function(ast){
+        var itemCard = createEl("div", {
+          style: {
+            border: "1px solid var(--line)",
+            borderRadius: "6px",
+            padding: "8px",
+            cursor: "pointer",
+            textAlign: "center",
+            background: "#FFFFFF",
+            transition: "all 0.15s ease"
+          }
+        });
+        itemCard.addEventListener("mouseenter", function(){
+          itemCard.style.borderColor = "var(--cyan)";
+          itemCard.style.boxShadow = "0 4px 12px rgba(40,212,200,0.2)";
+        });
+        itemCard.addEventListener("mouseleave", function(){
+          itemCard.style.borderColor = "var(--line)";
+          itemCard.style.boxShadow = "none";
+        });
+
+        if (ast.kind === "image" || /\.(png|jpe?g|webp|avif)$/i.test(ast.url)) {
+          var img = createEl("img", {
+            src: ast.url,
+            style: { width: "100%", height: "70px", objectFit: "cover", borderRadius: "4px", marginBottom: "6px" }
+          });
+          itemCard.appendChild(img);
+        } else {
+          var pIcon = createEl("div", {
+            style: {
+              height: "70px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "#FEE2E2",
+              color: "#DC2626",
+              fontWeight: "700",
+              fontSize: "12px",
+              borderRadius: "4px",
+              marginBottom: "6px"
+            }
+          }, "PDF");
+          itemCard.appendChild(pIcon);
+        }
+
+        var lbl = createEl("div", {
+          style: {
+            fontSize: "11px",
+            fontWeight: "600",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap"
+          }
+        }, ast.name);
+        itemCard.appendChild(lbl);
+
+        itemCard.addEventListener("click", function(){
+          closeModal();
+          if (typeof onSelect === "function") {
+            onSelect(ast);
+          }
+        });
+
+        pickerGrid.appendChild(itemCard);
+      });
+
+      openModal({
+        title: "Select from Asset Manager",
+        bodyEl: pickerGrid,
+        hideConfirm: true,
+        cancelLabel: "Close",
+        maxWidth: "600px"
+      });
+    });
+  }
+
+  // Clipboard Copy Helper
+  function copyToClipboard(text, cb) {
+    if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function(){
+        if (typeof cb === "function") cb(true);
+      })["catch"](function(){
+        if (typeof cb === "function") cb(false);
+      });
+    } else {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        var ok = document.execCommand("copy");
+        document.body.removeChild(ta);
+        if (typeof cb === "function") cb(ok);
+      } catch (err) {
+        document.body.removeChild(ta);
+        if (typeof cb === "function") cb(false);
+      }
+    }
+  }
+
   // ================= 3. AUTHENTICATION & SIDEBAR SYNC =================
   function isAuthenticated() {
     return sessionStorage.getItem(SESSION_KEY) === "1";
@@ -190,7 +347,7 @@
   }
 
   function updateSidebarBadges() {
-    var cols = ["motors", "battery_packs", "boats", "case_studies", "gallery_items"];
+    var cols = ["motors", "battery_packs", "boats", "case_studies", "gallery_items", "pages", "assets"];
     cols.forEach(function(col){
       var badge = document.getElementById("badge_" + col);
       if (badge && window.SeagoStore) {
@@ -515,6 +672,17 @@
         pageTitle.textContent = "Photo & Video Gallery";
         renderGalleryGrid();
       }
+    } else if (root === "pages") {
+      if (action === "edit" && id) {
+        pageTitle.textContent = "Edit Page: " + id;
+        renderPageEdit(id);
+      } else {
+        pageTitle.textContent = "Website Pages CMS";
+        renderPagesList();
+      }
+    } else if (root === "media") {
+      pageTitle.textContent = "Digital Asset Manager (DAM)";
+      renderMediaLibrary();
     } else if (root === "site-settings") {
       pageTitle.textContent = "Site Settings";
       renderSiteSettings();
@@ -539,7 +707,9 @@
       { key: "motors", name: "Outboard Motors", route: "#/motors", icon: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z", subText: "3 to 50 HP Lineup" },
       { key: "battery_packs", name: "Battery Packs", route: "#/battery-packs", icon: "M2 7h20v14H2z", subText: "51.2V to 144V Systems" },
       { key: "boats", name: "Custom Vessels", route: "#/boats", icon: "M2 20h20M5 20V8l7-5 7 5v12", subText: "Electric & Solar Hybrid" },
-      { key: "case_studies", name: "Field Deployments", route: "#/case-studies", icon: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z", subText: "Commercial & Govt fleets" }
+      { key: "pages", name: "Website Pages", route: "#/pages", icon: "M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z", subText: "Home, About, Contact CMS" },
+      { key: "case_studies", name: "Field Deployments", route: "#/case-studies", icon: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z", subText: "Commercial & Govt fleets" },
+      { key: "assets", name: "Digital Assets", route: "#/media", icon: "M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z", subText: "PDF Datasheets & Photos" }
     ];
 
     statItems.forEach(function(col){
@@ -630,10 +800,11 @@
 
     var quickLinks = [
       { label: "+ New Outboard Motor", href: "#/motors/new" },
+      { label: "✎ Edit Home Page Copy", href: "#/pages/edit/home" },
+      { label: "📁 Digital Asset Manager", href: "#/media" },
       { label: "+ New Battery Pack", href: "#/battery-packs/new" },
-      { label: "+ New Custom Boat", href: "#/boats/new" },
       { label: "+ New Field Case Study", href: "#/case-studies/new" },
-      { label: "+ Upload Media Item", href: "#/gallery/new" }
+      { label: "⤓ Export JSON Backup", href: "#/data" }
     ];
 
     quickLinks.forEach(function(ql){
@@ -1249,12 +1420,107 @@
     info.appendChild(createEl("p", { className: "page-header-sub" }, "Configure engineering parameters, cooling system, and documentation."));
     header.appendChild(info);
 
+    var headerActions = createEl("div", { className: "page-header-actions" });
+    var previewBtn = createEl("button", { type: "button", className: "btn btn-secondary", id: "btnTogglePreview" });
+    previewBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span>Live Card Preview (Ctrl+P)</span>';
     var backBtn = createEl("a", { className: "btn btn-secondary", href: "#/motors" }, "← Back to Motors");
-    header.appendChild(backBtn);
+    var topSaveBtn = createEl("button", { type: "button", className: "btn btn-primary" }, "Save Motor (Ctrl+S)");
+    headerActions.appendChild(previewBtn);
+    headerActions.appendChild(backBtn);
+    headerActions.appendChild(topSaveBtn);
+    header.appendChild(headerActions);
     pageRoot.appendChild(header);
+
+    // Studio Section Tabs Bar
+    var tabsBar = createEl("div", { className: "studio-tabs-bar" });
+    var tabDefs = [
+      { id: "all", label: "All Parameters" },
+      { id: "core", label: "Model & Electrical" },
+      { id: "mech", label: "Mechanical Specs" },
+      { id: "datasheet", label: "Datasheet & AI Auto-Detect" },
+      { id: "custom", label: "Custom Parameters" },
+      { id: "media", label: "Photos & Publishing" }
+    ];
+    var tabBtns = [];
+
+    function applyTabFilter(tabId) {
+      for (var ti = 0; ti < tabBtns.length; ti++) {
+        if (tabBtns[ti].getAttribute("data-tab") === tabId) {
+          tabBtns[ti].classList.add("is-active");
+        } else {
+          tabBtns[ti].classList.remove("is-active");
+        }
+      }
+      if (tabId === "all") {
+        s1.style.display = "block";
+        s2.style.display = "block";
+        s3.style.display = "block";
+        s4.style.display = "block";
+        s5.style.display = "block";
+        s6.style.display = "block";
+      } else if (tabId === "core") {
+        s1.style.display = "block";
+        s2.style.display = "block";
+        s3.style.display = "none";
+        s4.style.display = "none";
+        s5.style.display = "none";
+        s6.style.display = "none";
+      } else if (tabId === "mech") {
+        s1.style.display = "none";
+        s2.style.display = "none";
+        s3.style.display = "block";
+        s4.style.display = "none";
+        s5.style.display = "none";
+        s6.style.display = "none";
+      } else if (tabId === "datasheet") {
+        s1.style.display = "none";
+        s2.style.display = "none";
+        s3.style.display = "none";
+        s4.style.display = "block";
+        s5.style.display = "none";
+        s6.style.display = "none";
+      } else if (tabId === "custom") {
+        s1.style.display = "none";
+        s2.style.display = "none";
+        s3.style.display = "none";
+        s4.style.display = "none";
+        s5.style.display = "block";
+        s6.style.display = "none";
+      } else if (tabId === "media") {
+        s1.style.display = "none";
+        s2.style.display = "none";
+        s3.style.display = "none";
+        s4.style.display = "block";
+        s5.style.display = "none";
+        s6.style.display = "block";
+      }
+    }
+
+    tabDefs.forEach(function(tDef){
+      var tBtn = createEl("button", {
+        type: "button",
+        className: "studio-tab-btn" + (tDef.id === "all" ? " is-active" : ""),
+        "data-tab": tDef.id
+      }, tDef.label);
+      tBtn.addEventListener("click", function(){
+        applyTabFilter(tDef.id);
+      });
+      tabBtns.push(tBtn);
+      tabsBar.appendChild(tBtn);
+    });
+
+    pageRoot.appendChild(tabsBar);
 
     var formCard = createEl("div", { className: "form-card" });
     var form = createEl("form", { id: "motorEditForm", novalidate: "novalidate" });
+
+    topSaveBtn.addEventListener("click", function(){
+      if (typeof form.requestSubmit === "function") {
+        form.requestSubmit();
+      } else {
+        form.dispatchEvent(new Event("submit", { cancelable: true }));
+      }
+    });
 
     // Section 1: Basics
     var s1 = createEl("div", { className: "form-section" });
@@ -1417,8 +1683,23 @@
     imgPreview.appendChild(imgMetaEl);
     imgPreview.appendChild(removeImgBtn);
 
+    var chooseAssetImgBtn = createEl("button", { type: "button", className: "btn btn-sm btn-secondary", style: { marginTop: "6px" } }, "📁 Choose from Asset Manager");
+    chooseAssetImgBtn.addEventListener("click", function(){
+      openAssetPicker("image", function(selected){
+        currentImageUrl = selected.url;
+        currentImageId = selected.id;
+        imgThumbEl.src = selected.url;
+        imgNameEl.textContent = selected.name;
+        imgSizeEl.textContent = Math.round(selected.size / 1024) + " KB";
+        imgPreview.style.display = "flex";
+        isDirty = true;
+        showToast("Attached photo from Asset Manager", "success");
+      });
+    });
+
     dropImg.appendChild(fileImgInput);
     gImg.appendChild(dropImg);
+    gImg.appendChild(chooseAssetImgBtn);
     gImg.appendChild(imgPreview);
     s4.appendChild(gImg);
 
@@ -1463,7 +1744,22 @@
     gPdf.appendChild(createEl("label", { for: "f_catalog" }, "Technical Specification Catalog (PDF or Photo Datasheet)"));
     var inpCatalog = createEl("input", { type: "text", id: "f_catalog", placeholder: "e.g. catalog/SEAGO 15 HP Technical Specifications.pdf or photo URL" });
     var filePdfInput = createEl("input", { type: "file", accept: "application/pdf,image/png,image/jpeg,image/webp,image/avif", style: { display: "none" } });
-    var uploadPdfBtn = createEl("button", { type: "button", className: "btn btn-sm btn-secondary", style: { marginTop: "6px" } }, "Upload Catalog (PDF / Photo)");
+    var pdfActionsRow = createEl("div", { style: { display: "flex", gap: "8px", marginTop: "6px" } });
+    var uploadPdfBtn = createEl("button", { type: "button", className: "btn btn-sm btn-secondary" }, "Upload Catalog (PDF / Photo)");
+    var chooseAssetPdfBtn = createEl("button", { type: "button", className: "btn btn-sm btn-secondary" }, "📁 Choose from Asset Manager");
+    pdfActionsRow.appendChild(uploadPdfBtn);
+    pdfActionsRow.appendChild(chooseAssetPdfBtn);
+
+    chooseAssetPdfBtn.addEventListener("click", function(){
+      openAssetPicker("pdf", function(selected){
+        inpCatalog.value = selected.url;
+        isDirty = true;
+        updateCatalogPreview(selected.url, selected.name);
+        showToast("Attached datasheet from Asset Manager", "success");
+        checkCatalogDetection(selected.name, null);
+      });
+    });
+
     var catalogPreview = createEl("div", { className: "catalog-preview-thumb", style: { display: "none" } });
 
     // High-Tech Executive Auto-detection Panel
@@ -1788,7 +2084,8 @@
 
     gPdf.appendChild(inpCatalog);
     gPdf.appendChild(filePdfInput);
-    gPdf.appendChild(uploadPdfBtn);
+    gPdf.appendChild(pdfActionsRow);
+    gPdf.appendChild(catalogPreview);
     gPdf.appendChild(detectBox);
     s4.appendChild(gPdf);
 
@@ -1868,8 +2165,80 @@
       }
     });
 
+    function updateLivePreviewDrawer() {
+      var dBody = document.getElementById("previewDrawerBody");
+      if (!dBody) return;
+      dBody.innerHTML = "";
+      
+      var mockCard = createEl("div", { className: "mock-public-card" });
+      var cardHeader = createEl("div", { className: "mock-card-header" });
+      var hpBadge = createEl("span", { className: "mock-card-hp" }, (inpHp.value ? inpHp.value + " HP" : "3–50 HP") + " Electric Outboard");
+      var cardTitle = createEl("h3", { className: "mock-card-title" }, inpTitle.value || "Seagö Outboard Motor");
+      var cardCooling = createEl("div", { className: "mock-card-cooling" }, (inpCooling.value || "Water Cooled") + " · " + (inpMotor.value || "PMSM Motor"));
+      
+      var hLeft = createEl("div");
+      hLeft.appendChild(hpBadge);
+      hLeft.appendChild(cardTitle);
+      hLeft.appendChild(cardCooling);
+      cardHeader.appendChild(hLeft);
+      mockCard.appendChild(cardHeader);
+
+      var imgWrap = createEl("div", { className: "mock-card-img-wrap" });
+      var imgEl = createEl("img", {
+        className: "mock-card-img",
+        src: currentImageUrl || "assets/photos/Outboard Motors.webp",
+        alt: inpTitle.value || "Motor Preview"
+      });
+      imgWrap.appendChild(imgEl);
+      mockCard.appendChild(imgWrap);
+
+      var specsGrid = createEl("div", { className: "mock-specs-grid" });
+      var liveSpecs = [
+        { k: "Rated Power", v: inpKw.value || "—" },
+        { k: "Operating Voltage", v: inpVolt.value || "—" },
+        { k: "Rated RPM", v: inpRpm.value || "—" },
+        { k: "Dry Weight", v: inpWeight.value || "—" },
+        { k: "Transom Height", v: inpTransom.value || "—" },
+        { k: "Control Method", v: inpControl.value || "—" }
+      ];
+      liveSpecs.forEach(function(sp){
+        var b = createEl("div", { className: "mock-spec-box" });
+        b.appendChild(createEl("div", { className: "mock-spec-lbl" }, sp.k));
+        b.appendChild(createEl("div", { className: "mock-spec-val" }, sp.v));
+        specsGrid.appendChild(b);
+      });
+      mockCard.appendChild(specsGrid);
+
+      if (inpBat.value) {
+        var batBox = createEl("div", { className: "mock-spec-box", style: { marginBottom: "14px" } });
+        batBox.appendChild(createEl("div", { className: "mock-spec-lbl" }, "Recommended Marine Battery"));
+        batBox.appendChild(createEl("div", { className: "mock-spec-val" }, inpBat.value));
+        mockCard.appendChild(batBox);
+      }
+
+      if (inpCatalog.value) {
+        var catLink = createEl("a", {
+          href: inpCatalog.value,
+          target: "_blank",
+          className: "btn btn-primary btn-full",
+          style: { textAlign: "center", textDecoration: "none", marginTop: "10px" }
+        }, "Download Technical Datasheet");
+        mockCard.appendChild(catLink);
+      }
+
+      dBody.appendChild(mockCard);
+    }
+
+    previewBtn.addEventListener("click", function(){
+      updateLivePreviewDrawer();
+      openPreviewDrawer();
+    });
+
     form.addEventListener("input", function(){
       isDirty = true;
+      if (isPreviewDrawerOpen()) {
+        updateLivePreviewDrawer();
+      }
     });
 
     var existingMotor = null;
@@ -3104,11 +3473,783 @@
     pageRoot.appendChild(card);
   }
 
+  // ================= 13.5 SCREEN: WEBSITE PAGES CMS =================
+  function renderPagesList() {
+    pageRoot.innerHTML = "";
+    var wrap = createEl("div");
+
+    var header = createEl("div", { className: "page-header" });
+    var info = createEl("div", { className: "page-header-info" });
+    info.appendChild(createEl("h1", { className: "page-header-title" }, "Website Pages CMS"));
+    info.appendChild(createEl("p", { className: "page-header-sub" }, "Edit public-facing website copy, hero announcements, engineering credentials, and sales contacts."));
+    header.appendChild(info);
+
+    var headerActions = createEl("div", { className: "page-header-actions" });
+    var liveBtn = createEl("a", { className: "btn btn-secondary", href: "index.html", target: "_blank", rel: "noopener" }, "↗ View Public Website");
+    headerActions.appendChild(liveBtn);
+    header.appendChild(headerActions);
+    wrap.appendChild(header);
+
+    var grid = createEl("div", { className: "pages-grid" });
+
+    window.SeagoStore.list("pages", function(err, pages){
+      var pageItems = pages || [];
+      if (pageItems.length === 0 && window.SEAGO_FACTORY_SEED && window.SEAGO_FACTORY_SEED.pages) {
+        pageItems = window.SEAGO_FACTORY_SEED.pages;
+      }
+
+      pageItems.forEach(function(p){
+        var card = createEl("div", { className: "page-hub-card" });
+        
+        var cardTop = createEl("div");
+        var hWrap = createEl("div", { className: "page-hub-header" });
+        var title = createEl("h3", { className: "page-hub-title" }, p.title || p.id);
+        var badge = createEl("span", { className: "badge badge-success" }, "Published");
+        hWrap.appendChild(title);
+        hWrap.appendChild(badge);
+        cardTop.appendChild(hWrap);
+
+        var descText = "";
+        if (p.id === "home") {
+          descText = "Hero headline, mission tagline, performance stats (3–50 HP, 80% fuel savings, 100% zero emissions), and call-to-actions.";
+        } else if (p.id === "about") {
+          descText = "Company engineering mission, manufacturing and testing facilities (Chennai & Kollam), and PMSM motor technology.";
+        } else if (p.id === "contact") {
+          descText = "Sales inquiry email, Kerala showroom phone, WhatsApp hotline, showroom address, and operating hours.";
+        } else {
+          descText = p.meta_desc || "Manage page content, copy, and layout parameters.";
+        }
+        var desc = createEl("p", { className: "page-hub-desc" }, descText);
+        cardTop.appendChild(desc);
+        card.appendChild(cardTop);
+
+        var cardBottom = createEl("div");
+        var meta = createEl("div", { className: "page-hub-meta" });
+        meta.appendChild(createEl("span", null, "Route: " + (p.slug === "home" ? "index.html" : p.slug + ".html")));
+        var editBtn = createEl("a", { className: "btn btn-primary btn-sm", href: "#/pages/edit/" + p.id }, "Edit Page Content →");
+        meta.appendChild(editBtn);
+        cardBottom.appendChild(meta);
+        card.appendChild(cardBottom);
+
+        grid.appendChild(card);
+      });
+
+      wrap.appendChild(grid);
+      pageRoot.appendChild(wrap);
+    });
+  }
+
+  function renderPageEdit(pageId) {
+    pageRoot.innerHTML = "";
+    
+    window.SeagoStore.get("pages", pageId, function(err, page){
+      if (!page) {
+        if (window.SEAGO_FACTORY_SEED && window.SEAGO_FACTORY_SEED.pages) {
+          for (var i = 0; i < window.SEAGO_FACTORY_SEED.pages.length; i++) {
+            if (window.SEAGO_FACTORY_SEED.pages[i].id === pageId) {
+              page = window.SEAGO_FACTORY_SEED.pages[i];
+              break;
+            }
+          }
+        }
+      }
+
+      if (!page) {
+        showToast("Page not found", "error");
+        window.location.hash = "#/pages";
+        return;
+      }
+
+      var header = createEl("div", { className: "page-header" });
+      var info = createEl("div", { className: "page-header-info" });
+      info.appendChild(createEl("h1", { className: "page-header-title" }, page.title || ("Edit Page: " + pageId)));
+      info.appendChild(createEl("p", { className: "page-header-sub" }, "Modify public website copy, call-to-actions, and metadata."));
+      header.appendChild(info);
+
+      var headerActions = createEl("div", { className: "page-header-actions" });
+      var backBtn = createEl("a", { className: "btn btn-secondary", href: "#/pages" }, "← Back to Pages");
+      var topSaveBtn = createEl("button", { type: "button", className: "btn btn-primary" }, "Save Page (Ctrl+S)");
+      headerActions.appendChild(backBtn);
+      headerActions.appendChild(topSaveBtn);
+      header.appendChild(headerActions);
+      pageRoot.appendChild(header);
+
+      var formCard = createEl("div", { className: "form-card" });
+      var form = createEl("form", { novalidate: "novalidate" });
+
+      topSaveBtn.addEventListener("click", function(){
+        if (typeof form.requestSubmit === "function") {
+          form.requestSubmit();
+        } else {
+          form.dispatchEvent(new Event("submit", { cancelable: true }));
+        }
+      });
+
+      if (pageId === "home") {
+        // Hero Section Copy
+        var sHero = createEl("div", { className: "form-section" });
+        var hHero = createEl("div", { className: "form-section__header" });
+        hHero.appendChild(createEl("span", { className: "form-section__badge" }, "1"));
+        hHero.appendChild(createEl("h3", { className: "form-section__title" }, "Hero Section Copy"));
+        sHero.appendChild(hHero);
+
+        var gBadge = createEl("div", { className: "form-group" });
+        gBadge.appendChild(createEl("label", null, "Hero Top Badge"));
+        var inpBadge = createEl("input", { type: "text", value: page.badge || "" });
+        gBadge.appendChild(inpBadge);
+        sHero.appendChild(gBadge);
+
+        var gHead = createEl("div", { className: "form-group" });
+        gHead.appendChild(createEl("label", null, "Main Headline"));
+        var inpHead = createEl("input", { type: "text", value: page.headline || "" });
+        gHead.appendChild(inpHead);
+        sHero.appendChild(gHead);
+
+        var gSub = createEl("div", { className: "form-group" });
+        gSub.appendChild(createEl("label", null, "Hero Subheadline & Value Proposition"));
+        var inpSub = createEl("textarea", { rows: "3" }, page.subheadline || "");
+        gSub.appendChild(inpSub);
+        sHero.appendChild(gSub);
+
+        var rCta = createEl("div", { className: "form-row" });
+        var gCta1 = createEl("div", { className: "form-group" });
+        gCta1.appendChild(createEl("label", null, "Primary CTA Button Text"));
+        var inpCta1 = createEl("input", { type: "text", value: page.cta_primary || "" });
+        gCta1.appendChild(inpCta1);
+        var gCta2 = createEl("div", { className: "form-group" });
+        gCta2.appendChild(createEl("label", null, "Secondary CTA Button Text"));
+        var inpCta2 = createEl("input", { type: "text", value: page.cta_secondary || "" });
+        gCta2.appendChild(inpCta2);
+        rCta.appendChild(gCta1);
+        rCta.appendChild(gCta2);
+        sHero.appendChild(rCta);
+        form.appendChild(sHero);
+
+        // Headline Statistics
+        var sStats = createEl("div", { className: "form-section" });
+        var hStats = createEl("div", { className: "form-section__header" });
+        hStats.appendChild(createEl("span", { className: "form-section__badge" }, "2"));
+        hStats.appendChild(createEl("h3", { className: "form-section__title" }, "Headline Metrics"));
+        sStats.appendChild(hStats);
+        sStats.appendChild(createEl("p", { className: "form-section__desc" }, "The 4 headline statistics displayed on the home page."));
+
+        var rStats1 = createEl("div", { className: "form-row" });
+        var gS1Val = createEl("div", { className: "form-group" });
+        gS1Val.appendChild(createEl("label", null, "Stat 1 Value"));
+        var inpS1Val = createEl("input", { type: "text", value: page.stat_1_val || "3–50 HP" });
+        gS1Val.appendChild(inpS1Val);
+        var gS1Lbl = createEl("div", { className: "form-group" });
+        gS1Lbl.appendChild(createEl("label", null, "Stat 1 Label"));
+        var inpS1Lbl = createEl("input", { type: "text", value: page.stat_1_lbl || "Power Spectrum" });
+        gS1Lbl.appendChild(inpS1Lbl);
+        rStats1.appendChild(gS1Val);
+        rStats1.appendChild(gS1Lbl);
+        sStats.appendChild(rStats1);
+
+        var rStats2 = createEl("div", { className: "form-row" });
+        var gS2Val = createEl("div", { className: "form-group" });
+        gS2Val.appendChild(createEl("label", null, "Stat 2 Value"));
+        var inpS2Val = createEl("input", { type: "text", value: page.stat_2_val || "80%" });
+        gS2Val.appendChild(inpS2Val);
+        var gS2Lbl = createEl("div", { className: "form-group" });
+        gS2Lbl.appendChild(createEl("label", null, "Stat 2 Label"));
+        var inpS2Lbl = createEl("input", { type: "text", value: page.stat_2_lbl || "Fuel & Lube Savings" });
+        gS2Lbl.appendChild(inpS2Lbl);
+        rStats2.appendChild(gS2Val);
+        rStats2.appendChild(gS2Lbl);
+        sStats.appendChild(rStats2);
+
+        var rStats3 = createEl("div", { className: "form-row" });
+        var gS3Val = createEl("div", { className: "form-group" });
+        gS3Val.appendChild(createEl("label", null, "Stat 3 Value"));
+        var inpS3Val = createEl("input", { type: "text", value: page.stat_3_val || "100%" });
+        gS3Val.appendChild(inpS3Val);
+        var gS3Lbl = createEl("div", { className: "form-group" });
+        gS3Lbl.appendChild(createEl("label", null, "Stat 3 Label"));
+        var inpS3Lbl = createEl("input", { type: "text", value: page.stat_3_lbl || "Zero Emissions" });
+        gS3Lbl.appendChild(inpS3Lbl);
+        rStats3.appendChild(gS3Val);
+        rStats3.appendChild(gS3Lbl);
+        sStats.appendChild(rStats3);
+
+        var rStats4 = createEl("div", { className: "form-row" });
+        var gS4Val = createEl("div", { className: "form-group" });
+        gS4Val.appendChild(createEl("label", null, "Stat 4 Value"));
+        var inpS4Val = createEl("input", { type: "text", value: page.stat_4_val || "5+ States" });
+        gS4Val.appendChild(inpS4Val);
+        var gS4Lbl = createEl("div", { className: "form-group" });
+        gS4Lbl.appendChild(createEl("label", null, "Stat 4 Label"));
+        var inpS4Lbl = createEl("input", { type: "text", value: page.stat_4_lbl || "Active Deployments" });
+        gS4Lbl.appendChild(inpS4Lbl);
+        rStats4.appendChild(gS4Val);
+        rStats4.appendChild(gS4Lbl);
+        sStats.appendChild(rStats4);
+        form.appendChild(sStats);
+
+        // SEO
+        var sSeo = createEl("div", { className: "form-section" });
+        var gMeta = createEl("div", { className: "form-group" });
+        gMeta.appendChild(createEl("label", null, "Meta Search Description"));
+        var inpMeta = createEl("textarea", { rows: "2" }, page.meta_desc || "");
+        gMeta.appendChild(inpMeta);
+        sSeo.appendChild(gMeta);
+        form.appendChild(sSeo);
+
+        form.addEventListener("submit", function(e){
+          e.preventDefault();
+          page.badge = inpBadge.value.trim();
+          page.headline = inpHead.value.trim();
+          page.subheadline = inpSub.value.trim();
+          page.cta_primary = inpCta1.value.trim();
+          page.cta_secondary = inpCta2.value.trim();
+          page.stat_1_val = inpS1Val.value.trim();
+          page.stat_1_lbl = inpS1Lbl.value.trim();
+          page.stat_2_val = inpS2Val.value.trim();
+          page.stat_2_lbl = inpS2Lbl.value.trim();
+          page.stat_3_val = inpS3Val.value.trim();
+          page.stat_3_lbl = inpS3Lbl.value.trim();
+          page.stat_4_val = inpS4Val.value.trim();
+          page.stat_4_lbl = inpS4Lbl.value.trim();
+          page.meta_desc = inpMeta.value.trim();
+          page.updated_at = new Date().toISOString();
+
+          window.SeagoStore.save("pages", page, function(sErr){
+            if (!sErr) {
+              isDirty = false;
+              showToast("Home Page copy saved successfully!", "success");
+            } else {
+              showToast("Error saving page: " + sErr.message, "error");
+            }
+          });
+        });
+
+      } else if (pageId === "about") {
+        var sAbout = createEl("div", { className: "form-section" });
+        var hAbout = createEl("div", { className: "form-section__header" });
+        hAbout.appendChild(createEl("span", { className: "form-section__badge" }, "1"));
+        hAbout.appendChild(createEl("h3", { className: "form-section__title" }, "Mission & Company Narrative"));
+        sAbout.appendChild(hAbout);
+
+        var gMissTitle = createEl("div", { className: "form-group" });
+        gMissTitle.appendChild(createEl("label", null, "Mission Title"));
+        var inpMissTitle = createEl("input", { type: "text", value: page.mission_title || "" });
+        gMissTitle.appendChild(inpMissTitle);
+        sAbout.appendChild(gMissTitle);
+
+        var gMissBody = createEl("div", { className: "form-group" });
+        gMissBody.appendChild(createEl("label", null, "Mission Statement & Story"));
+        var inpMissBody = createEl("textarea", { rows: "5" }, page.mission_body || "");
+        gMissBody.appendChild(inpMissBody);
+        sAbout.appendChild(gMissBody);
+
+        var gFac = createEl("div", { className: "form-group" });
+        gFac.appendChild(createEl("label", null, "Manufacturing & Testing Facilities"));
+        var inpFac = createEl("textarea", { rows: "3" }, page.manufacturing_location || "");
+        gFac.appendChild(inpFac);
+        sAbout.appendChild(gFac);
+
+        var gHigh = createEl("div", { className: "form-group" });
+        gHigh.appendChild(createEl("label", null, "Engineering & Technology Highlights"));
+        var inpHigh = createEl("textarea", { rows: "3" }, page.engineering_highlights || "");
+        gHigh.appendChild(inpHigh);
+        sAbout.appendChild(gHigh);
+        form.appendChild(sAbout);
+
+        form.addEventListener("submit", function(e){
+          e.preventDefault();
+          page.mission_title = inpMissTitle.value.trim();
+          page.mission_body = inpMissBody.value.trim();
+          page.manufacturing_location = inpFac.value.trim();
+          page.engineering_highlights = inpHigh.value.trim();
+          page.updated_at = new Date().toISOString();
+
+          window.SeagoStore.save("pages", page, function(sErr){
+            if (!sErr) {
+              isDirty = false;
+              showToast("About Seagö content saved successfully!", "success");
+            } else {
+              showToast("Error saving page: " + sErr.message, "error");
+            }
+          });
+        });
+
+      } else if (pageId === "contact") {
+        var sContact = createEl("div", { className: "form-section" });
+        var hContact = createEl("div", { className: "form-section__header" });
+        hContact.appendChild(createEl("span", { className: "form-section__badge" }, "1"));
+        hContact.appendChild(createEl("h3", { className: "form-section__title" }, "Direct Channels & Showroom"));
+        sContact.appendChild(hContact);
+
+        var rComms = createEl("div", { className: "form-row" });
+        var gEmail = createEl("div", { className: "form-group" });
+        gEmail.appendChild(createEl("label", null, "Sales Email Address"));
+        var inpEmail = createEl("input", { type: "email", value: page.sales_email || "" });
+        gEmail.appendChild(inpEmail);
+        var gPhone = createEl("div", { className: "form-group" });
+        gPhone.appendChild(createEl("label", null, "Direct Phone Hotline"));
+        var inpPhone = createEl("input", { type: "text", value: page.support_phone || "" });
+        gPhone.appendChild(inpPhone);
+        var gWa = createEl("div", { className: "form-group" });
+        gWa.appendChild(createEl("label", null, "WhatsApp Hotline"));
+        var inpWa = createEl("input", { type: "text", value: page.whatsapp_number || "" });
+        gWa.appendChild(inpWa);
+        rComms.appendChild(gEmail);
+        rComms.appendChild(gPhone);
+        rComms.appendChild(gWa);
+        sContact.appendChild(rComms);
+
+        var gAddr1 = createEl("div", { className: "form-group" });
+        gAddr1.appendChild(createEl("label", null, "Sales & Experience Center Address (Kerala)"));
+        var inpAddr1 = createEl("textarea", { rows: "2" }, page.sales_address || "");
+        gAddr1.appendChild(inpAddr1);
+        sContact.appendChild(gAddr1);
+
+        var gAddr2 = createEl("div", { className: "form-group" });
+        gAddr2.appendChild(createEl("label", null, "Manufacturing Facility (Chennai)"));
+        var inpAddr2 = createEl("textarea", { rows: "2" }, page.manufacturing_address || "");
+        gAddr2.appendChild(inpAddr2);
+        sContact.appendChild(gAddr2);
+
+        var gHours = createEl("div", { className: "form-group" });
+        gHours.appendChild(createEl("label", null, "Working Hours"));
+        var inpHours = createEl("input", { type: "text", value: page.hours || "" });
+        gHours.appendChild(inpHours);
+        sContact.appendChild(gHours);
+        form.appendChild(sContact);
+
+        form.addEventListener("submit", function(e){
+          e.preventDefault();
+          page.sales_email = inpEmail.value.trim();
+          page.support_phone = inpPhone.value.trim();
+          page.whatsapp_number = inpWa.value.trim();
+          page.sales_address = inpAddr1.value.trim();
+          page.manufacturing_address = inpAddr2.value.trim();
+          page.hours = inpHours.value.trim();
+          page.updated_at = new Date().toISOString();
+
+          window.SeagoStore.save("pages", page, function(sErr){
+            if (!sErr) {
+              isDirty = false;
+              showToast("Contact channels updated successfully!", "success");
+            } else {
+              showToast("Error saving contact: " + sErr.message, "error");
+            }
+          });
+        });
+      }
+
+      var formActions = createEl("div", { className: "form-actions" });
+      var cancelBtn = createEl("a", { className: "btn btn-secondary", href: "#/pages" }, "Cancel");
+      var saveBtn = createEl("button", { type: "submit", className: "btn btn-primary" }, "Save Page Changes");
+      formActions.appendChild(cancelBtn);
+      formActions.appendChild(saveBtn);
+      form.appendChild(formActions);
+
+      form.addEventListener("input", function(){
+        isDirty = true;
+      });
+
+      formCard.appendChild(form);
+      pageRoot.appendChild(formCard);
+    });
+  }
+
+  // ================= 13.6 SCREEN: DIGITAL ASSET MANAGER (DAM) =================
+  function renderMediaLibrary() {
+    pageRoot.innerHTML = "";
+    var wrap = createEl("div");
+
+    var header = createEl("div", { className: "page-header" });
+    var info = createEl("div", { className: "page-header-info" });
+    info.appendChild(createEl("h1", { className: "page-header-title" }, "Digital Asset Manager (DAM)"));
+    info.appendChild(createEl("p", { className: "page-header-sub" }, "Browse, upload, and copy URLs for catalog PDFs, product imagery, and diagrams."));
+    header.appendChild(info);
+
+    var headerActions = createEl("div", { className: "page-header-actions" });
+    var uploadFileBtn = createEl("button", { type: "button", className: "btn btn-primary" }, "+ Upload New File");
+    headerActions.appendChild(uploadFileBtn);
+    header.appendChild(headerActions);
+    wrap.appendChild(header);
+
+    // Hidden file input for header upload button
+    var damFileInput = createEl("input", { type: "file", accept: "application/pdf,image/*", style: { display: "none" } });
+    wrap.appendChild(damFileInput);
+    uploadFileBtn.addEventListener("click", function(){ damFileInput.click(); });
+
+    // Drag-and-drop dropzone
+    var dropzone = createEl("div", { className: "dam-upload-dropzone" });
+    dropzone.innerHTML = '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>' +
+      '<div style="font-size:14px;font-weight:600;margin-top:8px;color:var(--navy);">Drop PDF Datasheets or Imagery to Upload</div>' +
+      '<p>Files are stored in local browser database and ready for 1-click URL copying</p>';
+    dropzone.addEventListener("click", function(){ damFileInput.click(); });
+    wrap.appendChild(dropzone);
+
+    // Toolbar (Search + Category Filter Chips)
+    var toolbar = createEl("div", { className: "dam-toolbar" });
+    var filtersWrap = createEl("div", { className: "dam-filters" });
+    var filterCategories = ["All", "Datasheets", "Imagery", "Case Studies", "Branding"];
+    var currentCat = "All";
+    var currentSearch = "";
+
+    var searchBox = createEl("div", { className: "search-box", style: { maxWidth: "260px" } });
+    var searchIcon = createEl("span", { className: "search-box-icon" });
+    searchIcon.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
+    var searchInp = createEl("input", { type: "text", placeholder: "Search assets…" });
+    searchBox.appendChild(searchIcon);
+    searchBox.appendChild(searchInp);
+
+    var assetGrid = createEl("div", { className: "asset-grid" });
+
+    function loadAndRenderAssets() {
+      window.SeagoStore.list("assets", function(err, assets){
+        var list = assets || [];
+        if (list.length === 0 && window.SEAGO_FACTORY_SEED && window.SEAGO_FACTORY_SEED.assets) {
+          list = window.SEAGO_FACTORY_SEED.assets;
+        }
+
+        var filtered = list.filter(function(a){
+          var matchesCat = (currentCat === "All") || (a.category === currentCat);
+          var matchesSearch = !currentSearch || (a.name.toLowerCase().indexOf(currentSearch.toLowerCase()) !== -1) || (a.url.toLowerCase().indexOf(currentSearch.toLowerCase()) !== -1);
+          return matchesCat && matchesSearch;
+        });
+
+        assetGrid.innerHTML = "";
+        if (filtered.length === 0) {
+          var empty = createEl("div", { style: { gridColumn: "1/-1", textAlign: "center", padding: "40px", color: "var(--text-muted)" } }, "No digital assets found matching filters.");
+          assetGrid.appendChild(empty);
+          return;
+        }
+
+        filtered.forEach(function(asset){
+          var card = createEl("div", { className: "asset-card" });
+          
+          var thumbWrap = createEl("div", { className: "asset-card-thumb-wrap" });
+          if (asset.kind === "image" || /\.(png|jpe?g|webp|avif)$/i.test(asset.url)) {
+            var img = createEl("img", { className: "asset-card-img", src: asset.url, alt: asset.name });
+            thumbWrap.appendChild(img);
+          } else {
+            var pdfIcon = createEl("div", { className: "asset-card-icon-pdf" });
+            pdfIcon.innerHTML = '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
+            thumbWrap.appendChild(pdfIcon);
+          }
+          var badge = createEl("span", { className: "asset-card-badge" }, asset.category || (asset.kind === "pdf" ? "PDF" : "Image"));
+          thumbWrap.appendChild(badge);
+          card.appendChild(thumbWrap);
+
+          var body = createEl("div", { className: "asset-card-body" });
+          var name = createEl("h4", { className: "asset-card-name", title: asset.name }, asset.name);
+          var meta = createEl("div", { className: "asset-card-meta" });
+          var sizeStr = asset.size ? (Math.round(asset.size / 1024) + " KB") : "Standard";
+          meta.textContent = sizeStr + " · " + (asset.url.indexOf("data:") === 0 ? "Uploaded File" : asset.url);
+          body.appendChild(name);
+          body.appendChild(meta);
+
+          var actions = createEl("div", { className: "asset-card-actions" });
+          var copyBtn = createEl("button", { type: "button", className: "btn btn-secondary btn-sm", style: { flex: "1" } }, "Copy URL");
+          copyBtn.addEventListener("click", function(){
+            copyToClipboard(asset.url, function(ok){
+              if (ok) {
+                showToast("Copied to clipboard: " + asset.url, "success");
+              } else {
+                prompt("Copy file URL:", asset.url);
+              }
+            });
+          });
+
+          var openBtn = createEl("a", { className: "btn btn-outline-topbar btn-sm", href: asset.url, target: "_blank", rel: "noopener" }, "↗");
+          
+          var delBtn = createEl("button", { type: "button", className: "btn btn-secondary btn-sm", style: { color: "var(--danger)" }, title: "Delete Asset" }, "×");
+          delBtn.addEventListener("click", function(){
+            openModal({
+              title: "Delete Asset",
+              bodyText: "Are you sure you want to remove '" + asset.name + "' from the Asset Manager?",
+              danger: true,
+              confirmLabel: "Delete File",
+              onConfirm: function(){
+                window.SeagoStore.remove("assets", asset.id, function(err2){
+                  if (!err2) {
+                    showToast("Asset removed", "info");
+                    loadAndRenderAssets();
+                    updateSidebarBadges();
+                  }
+                });
+              }
+            });
+          });
+
+          actions.appendChild(copyBtn);
+          actions.appendChild(openBtn);
+          actions.appendChild(delBtn);
+          body.appendChild(actions);
+          card.appendChild(body);
+
+          assetGrid.appendChild(card);
+        });
+      });
+    }
+
+    filterCategories.forEach(function(cat){
+      var chip = createEl("button", {
+        type: "button",
+        className: "dam-filter-chip" + (cat === currentCat ? " is-active" : "")
+      }, cat);
+      chip.addEventListener("click", function(){
+        currentCat = cat;
+        var allChips = filtersWrap.querySelectorAll(".dam-filter-chip");
+        for (var ci = 0; ci < allChips.length; ci++) {
+          allChips[ci].classList.remove("is-active");
+        }
+        chip.classList.add("is-active");
+        loadAndRenderAssets();
+      });
+      filtersWrap.appendChild(chip);
+    });
+
+    toolbar.appendChild(filtersWrap);
+    toolbar.appendChild(searchBox);
+    wrap.appendChild(toolbar);
+    wrap.appendChild(assetGrid);
+    pageRoot.appendChild(wrap);
+
+    searchInp.addEventListener("input", function(){
+      currentSearch = searchInp.value.trim();
+      loadAndRenderAssets();
+    });
+
+    function handleFileUpload(file) {
+      if (!file) return;
+      var isPdf = (file.type === "application/pdf") || /\.pdf$/i.test(file.name);
+      var category = isPdf ? "Datasheets" : (/case/i.test(file.name) ? "Case Studies" : "Imagery");
+      
+      showToast("Uploading " + file.name + "…", "info");
+      var reader = new FileReader();
+      reader.onload = function(e){
+        var newAsset = {
+          id: "ast-" + Date.now(),
+          name: file.name,
+          url: e.target.result,
+          kind: isPdf ? "pdf" : "image",
+          size: file.size,
+          category: category,
+          updated_at: new Date().toISOString()
+        };
+        window.SeagoStore.save("assets", newAsset, function(err){
+          if (!err) {
+            showToast("Asset uploaded: " + file.name, "success");
+            loadAndRenderAssets();
+            updateSidebarBadges();
+          } else {
+            showToast("Upload error: " + err.message, "error");
+          }
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+
+    damFileInput.addEventListener("change", function(){
+      if (damFileInput.files && damFileInput.files[0]) {
+        handleFileUpload(damFileInput.files[0]);
+      }
+    });
+
+    dropzone.addEventListener("dragover", function(e){
+      e.preventDefault();
+      dropzone.style.borderColor = "var(--cyan)";
+    });
+    dropzone.addEventListener("dragleave", function(){
+      dropzone.style.borderColor = "";
+    });
+    dropzone.addEventListener("drop", function(e){
+      e.preventDefault();
+      dropzone.style.borderColor = "";
+      if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
+        handleFileUpload(e.dataTransfer.files[0]);
+      }
+    });
+
+    loadAndRenderAssets();
+  }
+
+  // ================= 13.7 COMMAND PALETTE (CTRL+K) =================
+  function initCommandPalette() {
+    var dialog = document.getElementById("command-dialog");
+    var backdrop = document.getElementById("commandBackdrop");
+    var input = document.getElementById("commandInput");
+    var results = document.getElementById("commandResults");
+    var searchBtn = document.getElementById("topbarSearchBtn");
+    var selectedIdx = 0;
+    var matchedItems = [];
+
+    function openPalette() {
+      if (!dialog) return;
+      dialog.style.display = "flex";
+      selectedIdx = 0;
+      if (input) {
+        input.value = "";
+        input.focus();
+      }
+      filterAndRender("");
+    }
+
+    function closePalette() {
+      if (!dialog) return;
+      dialog.style.display = "none";
+    }
+
+    if (backdrop) backdrop.addEventListener("click", closePalette);
+    if (searchBtn) searchBtn.addEventListener("click", openPalette);
+
+    function filterAndRender(query) {
+      if (!results) return;
+      var q = (query || "").toLowerCase();
+      matchedItems = [];
+
+      var staticCommands = [
+        { title: "Dashboard Overview", group: "Studio", tag: "Nav", route: "#/dashboard" },
+        { title: "Outboard Motors (3–50 HP)", group: "Catalog", tag: "Fleet", route: "#/motors" },
+        { title: "+ Add New Outboard Motor", group: "Actions", tag: "Create", route: "#/motors/new" },
+        { title: "Marine Battery Packs", group: "Catalog", tag: "Fleet", route: "#/battery-packs" },
+        { title: "+ Add New Battery Pack", group: "Actions", tag: "Create", route: "#/battery-packs/new" },
+        { title: "Electric & Solar Boats", group: "Catalog", tag: "Fleet", route: "#/boats" },
+        { title: "Website Pages CMS", group: "Pages", tag: "CMS", route: "#/pages" },
+        { title: "Home Page Copy & Hero", group: "Pages", tag: "Page", route: "#/pages/edit/home" },
+        { title: "About Us & Engineering", group: "Pages", tag: "Page", route: "#/pages/edit/about" },
+        { title: "Contact & Showrooms", group: "Pages", tag: "Page", route: "#/pages/edit/contact" },
+        { title: "Digital Asset Manager (DAM)", group: "Assets", tag: "Files", route: "#/media" },
+        { title: "Field Deployments (Case Studies)", group: "Media", tag: "Proof", route: "#/case-studies" },
+        { title: "Photo & Video Gallery", group: "Media", tag: "Proof", route: "#/gallery" },
+        { title: "Site Settings", group: "System", tag: "Config", route: "#/site-settings" },
+        { title: "Backups & Data Management", group: "System", tag: "Data", route: "#/data" }
+      ];
+
+      staticCommands.forEach(function(cmd){
+        if (!q || cmd.title.toLowerCase().indexOf(q) !== -1 || cmd.group.toLowerCase().indexOf(q) !== -1 || cmd.tag.toLowerCase().indexOf(q) !== -1) {
+          matchedItems.push(cmd);
+        }
+      });
+
+      if (window.SeagoStore) {
+        window.SeagoStore.list("motors", function(err, motors){
+          if (!err && motors) {
+            motors.forEach(function(m){
+              var mTitle = m.title || ("Seagö " + m.hp + " HP Motor");
+              if (!q || mTitle.toLowerCase().indexOf(q) !== -1 || (m.hp && String(m.hp).indexOf(q) !== -1) || (m.kw && m.kw.toLowerCase().indexOf(q) !== -1)) {
+                matchedItems.push({
+                  title: mTitle,
+                  group: "Motors Catalog",
+                  tag: m.hp + " HP",
+                  route: "#/motors/edit/" + m.id
+                });
+              }
+            });
+          }
+          renderMatchedList();
+        });
+      } else {
+        renderMatchedList();
+      }
+    }
+
+    function renderMatchedList() {
+      results.innerHTML = "";
+      if (matchedItems.length === 0) {
+        results.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:13px;">No commands or records found.</div>';
+        return;
+      }
+
+      if (selectedIdx >= matchedItems.length) selectedIdx = 0;
+      if (selectedIdx < 0) selectedIdx = matchedItems.length - 1;
+
+      matchedItems.forEach(function(item, idx){
+        var row = createEl("div", {
+          className: "command-item" + (idx === selectedIdx ? " is-selected" : "")
+        });
+
+        var left = createEl("div", { className: "command-item-left" });
+        var icon = createEl("span", null, "→");
+        var title = createEl("span", { style: { fontWeight: "600" } }, item.title);
+        left.appendChild(icon);
+        left.appendChild(title);
+
+        var tag = createEl("span", { className: "command-item-tag" }, item.group + " · " + item.tag);
+        row.appendChild(left);
+        row.appendChild(tag);
+
+        row.addEventListener("click", function(){
+          window.location.hash = item.route;
+          closePalette();
+        });
+
+        results.appendChild(row);
+      });
+    }
+
+    if (input) {
+      input.addEventListener("input", function(){
+        selectedIdx = 0;
+        filterAndRender(input.value.trim());
+      });
+
+      input.addEventListener("keydown", function(e){
+        if (e.key === "ArrowDown") {
+          e.preventDefault();
+          selectedIdx++;
+          renderMatchedList();
+        } else if (e.key === "ArrowUp") {
+          e.preventDefault();
+          selectedIdx--;
+          renderMatchedList();
+        } else if (e.key === "Enter") {
+          e.preventDefault();
+          if (matchedItems[selectedIdx]) {
+            window.location.hash = matchedItems[selectedIdx].route;
+            closePalette();
+          }
+        } else if (e.key === "Escape") {
+          closePalette();
+        }
+      });
+    }
+  }
+
+  // Global Keyboard Shortcuts (Ctrl+K, Ctrl+S, Ctrl+P, Escape)
+  window.addEventListener("keydown", function(e){
+    if ((e.ctrlKey || e.metaKey) && (e.key === "k" || e.keyCode === 75)) {
+      e.preventDefault();
+      var cDlg = document.getElementById("command-dialog");
+      if (cDlg && cDlg.style.display === "flex") {
+        cDlg.style.display = "none";
+      } else {
+        var sBtn = document.getElementById("topbarSearchBtn");
+        if (sBtn) sBtn.click();
+      }
+    } else if ((e.ctrlKey || e.metaKey) && (e.key === "p" || e.keyCode === 80)) {
+      var pBtn = document.getElementById("btnTogglePreview");
+      if (pBtn) {
+        e.preventDefault();
+        pBtn.click();
+      }
+    } else if ((e.ctrlKey || e.metaKey) && (e.key === "s" || e.keyCode === 83)) {
+      var saveBtn = document.querySelector(".btn-primary[type='submit']") || document.getElementById("btnSaveMotor");
+      if (saveBtn) {
+        e.preventDefault();
+        saveBtn.click();
+      }
+    } else if (e.key === "Escape") {
+      var d = document.getElementById("command-dialog");
+      if (d) d.style.display = "none";
+      closePreviewDrawer();
+      closeModal();
+    }
+  });
+
   // ================= 14. BOOTSTRAP =================
   function init() {
+    initCommandPalette();
     checkAuth();
     if (isAuthenticated()) {
       handleRouting();
+      updateSidebarBadges();
     }
   }
 

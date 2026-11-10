@@ -54,6 +54,7 @@
       <div class="sidebar-header">
         <a href="#/dashboard" class="sidebar-brand">
           <img src="assets/seago-logo.png" alt="Seagö" class="sidebar-logo">
+          <span class="sidebar-brand-badge">STUDIO</span>
         </a>
       </div>
 
@@ -125,8 +126,20 @@
             </a>
           </li>
 
-          <li class="sidebar-group-title">Media &amp; Proof</li>
+          <li class="sidebar-group-title">Pages &amp; Content</li>
 
+          <li>
+            <a href="#/pages" class="nav-link" data-route="/pages">
+              <div class="nav-link-left">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+                <span>Website Pages</span>
+              </div>
+              <span class="nav-count-badge" id="badge_pages">3</span>
+            </a>
+          </li>
           <li>
             <a href="#/case-studies" class="nav-link" data-route="/case-studies">
               <div class="nav-link-left">
@@ -152,6 +165,21 @@
                 <span>Media Gallery</span>
               </div>
               <span class="nav-count-badge" id="badge_gallery_items">4</span>
+            </a>
+          </li>
+
+          <li class="sidebar-group-title">Digital Assets</li>
+
+          <li>
+            <a href="#/media" class="nav-link" data-route="/media">
+              <div class="nav-link-left">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                  <polygon points="12 11 12 17 17 14"></polygon>
+                </svg>
+                <span>Asset Manager</span>
+              </div>
+              <span class="nav-count-badge" id="badge_assets">14</span>
             </a>
           </li>
 
@@ -205,6 +233,18 @@
         </button>
         <h2 id="pageTitle" class="topbar-title">Dashboard</h2>
       </div>
+
+      <div class="topbar-center">
+        <button class="topbar-search-btn" id="topbarSearchBtn" type="button" aria-label="Open command palette">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <span class="topbar-search-label">Quick Search catalog, pages, specs...</span>
+          <kbd class="topbar-kbd">Ctrl K</kbd>
+        </button>
+      </div>
+
       <div class="topbar-actions">
         <a href="index.html" target="_blank" rel="noopener" class="btn btn-sm btn-outline-topbar">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -212,7 +252,7 @@
             <polyline points="15 3 21 3 21 9"></polyline>
             <line x1="10" y1="14" x2="21" y2="3"></line>
           </svg>
-          <span>View Public Site</span>
+          <span>Live Site</span>
         </a>
       </div>
     </header>
@@ -221,6 +261,44 @@
     <main id="main-content" class="admin-main" aria-label="Content area">
       <div id="page-root" class="page-root"></div>
     </main>
+
+    <!-- LIVE PREVIEW DRAWER (SLIDE-OVER) -->
+    <div id="preview-drawer" class="preview-drawer" aria-hidden="true">
+      <div class="preview-drawer__header">
+        <div class="preview-drawer__title-wrap">
+          <span class="preview-live-dot"></span>
+          <h3 class="preview-drawer__title">Live Card Inspector</h3>
+        </div>
+        <button type="button" class="preview-drawer__close" id="previewDrawerClose" aria-label="Close Preview">&times;</button>
+      </div>
+      <div class="preview-drawer__body" id="previewDrawerBody">
+        <!-- Rendered live component -->
+      </div>
+    </div>
+    <div id="preview-drawer-backdrop" class="preview-drawer-backdrop" aria-hidden="true"></div>
+
+    <!-- COMMAND PALETTE (CTRL+K) -->
+    <div id="command-dialog" class="command-dialog" aria-hidden="true" style="display:none;">
+      <div class="command-backdrop" id="commandBackdrop"></div>
+      <div class="command-box" role="dialog" aria-modal="true" aria-label="Command search palette">
+        <div class="command-input-wrap">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="commandInput" class="command-input" placeholder="Type a motor, page, asset, or action..." autocomplete="off">
+          <kbd class="command-esc-hint">ESC</kbd>
+        </div>
+        <div class="command-results" id="commandResults">
+          <!-- Populated dynamically -->
+        </div>
+        <div class="command-footer">
+          <span>Navigate with <kbd>↑</kbd> <kbd>↓</kbd></span>
+          <span>Open with <kbd>↵</kbd></span>
+          <span>Close with <kbd>esc</kbd></span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- TOAST NOTIFICATION CONTAINER -->

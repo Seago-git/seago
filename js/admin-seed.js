@@ -445,7 +445,67 @@
       founder_name: "Gopish Kumar.G",
       founder_title: "Founder & CEO",
       updated_at: "2024-01-01T00:00:00.000Z"
-    }
+    },
+    pages: [
+      {
+        id: "home",
+        slug: "home",
+        title: "Home Page Copy & Hero",
+        badge: "Leading Electric Marine Mobility in India",
+        headline: "Electric Outboard Motors for India's Waters",
+        subheadline: "High-torque, zero-emission marine propulsion systems engineered for commercial fishing, eco-tourism, and inland waterways.",
+        cta_primary: "Explore Outboard Motors",
+        cta_secondary: "Commercial Inquiries",
+        stat_1_val: "3–50 HP",
+        stat_1_lbl: "Power Spectrum",
+        stat_2_val: "80%",
+        stat_2_lbl: "Fuel & Lube Savings",
+        stat_3_val: "100%",
+        stat_3_lbl: "Zero Emissions",
+        stat_4_val: "5+ States",
+        stat_4_lbl: "Active Deployments",
+        meta_desc: "High-efficiency electric outboard motors and marine LiFePO4 batteries designed and assembled in India.",
+        updated_at: "2024-01-01T00:00:00.000Z"
+      },
+      {
+        id: "about",
+        slug: "about",
+        title: "About Seagö & Engineering",
+        mission_title: "Pioneering Sustainable Water Mobility",
+        mission_body: "Seagö designs and builds high-performance marine electric outboards, high-density modular battery systems, and electric vessel powertrains to replace polluting two-stroke combustion engines across India's coastlines and inland waterways.",
+        manufacturing_location: "Propulsion manufacturing and testing facility based in Chennai, Tamil Nadu, with watercraft trial operations in Kollam, Kerala.",
+        engineering_highlights: "Heavy-duty permanent magnet synchronous motors (PMSM), closed/open liquid cooling, intelligent dual CAN-bus BMS telemetry.",
+        updated_at: "2024-01-01T00:00:00.000Z"
+      },
+      {
+        id: "contact",
+        slug: "contact",
+        title: "Contact, Showroom & Sales",
+        sales_email: "sales@seago.in",
+        support_phone: "+91 86063 66633",
+        whatsapp_number: "+91 86063 66633",
+        sales_address: "GG Plaza, NH-66, Lalaji Junction, Karunagappally, Kollam 690518, Kerala, India",
+        manufacturing_address: "Chennai Manufacturing Facility, Tamil Nadu, India",
+        hours: "Monday – Saturday: 9:00 AM – 6:00 PM IST",
+        updated_at: "2024-01-01T00:00:00.000Z"
+      }
+    ],
+    assets: [
+      { id: "ast-3hp", name: "SEAGO 3 HP Technical Specifications.pdf", url: "catalog/SEAGO 3 HP Technical Specifications.pdf", kind: "pdf", size: 452000, category: "Datasheets", updated_at: "2024-01-01T00:00:00.000Z" },
+      { id: "ast-7hp", name: "SEAGO 7 HP Technical Specifications.pdf", url: "catalog/SEAGO 7 HP Technical Specifications.pdf", kind: "pdf", size: 489000, category: "Datasheets", updated_at: "2024-01-01T00:00:00.000Z" },
+      { id: "ast-10hp", name: "SEAGO 10 HP Technical Specifications.pdf", url: "catalog/SEAGO 10 HP Technical Specifications.pdf", kind: "pdf", size: 512000, category: "Datasheets", updated_at: "2024-01-01T00:00:00.000Z" },
+      { id: "ast-15hp", name: "SEAGO 15 HP Technical Specifications.pdf", url: "catalog/SEAGO 15 HP Technical Specifications.pdf", kind: "pdf", size: 528000, category: "Datasheets", updated_at: "2024-01-01T00:00:00.000Z" },
+      { id: "ast-20hp", name: "SEAGO 20 HP Technical Specifications.pdf", url: "catalog/SEAGO 20 HP Technical Specifications.pdf", kind: "pdf", size: 541000, category: "Datasheets", updated_at: "2024-01-01T00:00:00.000Z" },
+      { id: "ast-30hp", name: "SEAGO 30 HP Technical Specifications.pdf", url: "catalog/SEAGO 30 HP Technical Specifications.pdf", kind: "pdf", size: 560000, category: "Datasheets", updated_at: "2024-01-01T00:00:00.000Z" },
+      { id: "ast-40hp", name: "SEAGO 40 HP Technical Specifications.pdf", url: "catalog/SEAGO 40 HP Technical Specifications.pdf", kind: "pdf", size: 585000, category: "Datasheets", updated_at: "2024-01-01T00:00:00.000Z" },
+      { id: "ast-50hp", name: "SEAGO 50 HP Technical Specifications.pdf", url: "catalog/SEAGO 50 HP Technical Specifications.pdf", kind: "pdf", size: 610000, category: "Datasheets", updated_at: "2024-01-01T00:00:00.000Z" },
+      { id: "ast-motor-photo", name: "Outboard Motors Product Photo.webp", url: "assets/photos/Outboard Motors.webp", kind: "image", size: 148000, category: "Imagery", updated_at: "2024-01-01T00:00:00.000Z" },
+      { id: "ast-vikalpika", name: "ICAR-CIFT Vikalpika Solar Boat.webp", url: "assets/photos/case-vikalpika.webp", kind: "image", size: 210000, category: "Case Studies", updated_at: "2024-01-01T00:00:00.000Z" },
+      { id: "ast-water-trans", name: "Kerala Public Water Transport.webp", url: "assets/photos/case-water-transport.webp", kind: "image", size: 198000, category: "Case Studies", updated_at: "2024-01-01T00:00:00.000Z" },
+      { id: "ast-tourism", name: "Karnataka Eco-Tourism Vessel.webp", url: "assets/photos/case-tourism-boat.webp", kind: "image", size: 224000, category: "Case Studies", updated_at: "2024-01-01T00:00:00.000Z" },
+      { id: "ast-fuel-cell", name: "Hydrogen Fuel Cell Integration.webp", url: "assets/photos/case-fuel-cell.webp", kind: "image", size: 245000, category: "Case Studies", updated_at: "2024-01-01T00:00:00.000Z" },
+      { id: "ast-brand-logo", name: "Seagö Official High-Res Logo.png", url: "assets/seago-logo.png", kind: "image", size: 76000, category: "Branding", updated_at: "2024-01-01T00:00:00.000Z" }
+    ]
   };
 
   if (window.SeagoStore && typeof window.SeagoStore._seedIfEmpty === "function") {
