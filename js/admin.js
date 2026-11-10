@@ -682,149 +682,154 @@
     pageRoot.innerHTML = "";
     var wrap = createEl("div");
 
-    var header = createEl("div", { className: "page-header" });
+    var header = createEl("div", { className: "page-header", style: { marginBottom: "12px" } });
     var info = createEl("div", { className: "page-header-info" });
     info.appendChild(createEl("h1", { className: "page-header-title" }, "Seagö CMS Studio · Website Pages"));
-    info.appendChild(createEl("p", { className: "page-header-sub" }, "Live content management for all 7 public website pages. Edit headlines, copy, propulsion parameters, photos, or hotlines."));
+    info.appendChild(createEl("p", { className: "page-header-sub" }, "Select any website page below to visually edit headlines, copy, specs, and media."));
     header.appendChild(info);
 
     var headerActions = createEl("div", { className: "page-header-actions" });
-    var liveBtn = createEl("a", { className: "btn btn-outline-topbar", href: "index.html", target: "_blank", rel: "noopener" }, "↗ View Public Website");
-    var backupBtn = createEl("a", { className: "btn btn-secondary", href: "#/data" }, "💾 Backups");
+    var liveBtn = createEl("a", { className: "btn btn-outline-topbar btn-sm", href: "index.html", target: "_blank", rel: "noopener" });
+    liveBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px; vertical-align:middle;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg><span>Public Website</span>';
+    var backupBtn = createEl("a", { className: "btn btn-secondary btn-sm", href: "#/data" });
+    backupBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px; vertical-align:middle;"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg><span>Backup JSON</span>';
     headerActions.appendChild(liveBtn);
     headerActions.appendChild(backupBtn);
     header.appendChild(headerActions);
     wrap.appendChild(header);
 
-    // All 7 Pages CMS Grid
+    // Quick Stats Ribbon
+    var statsRow = createEl("div", { className: "cms-hub-stats-row" });
+
+    var chip1 = createEl("div", { className: "cms-hub-stat-chip" });
+    chip1.innerHTML = '<span class="cms-hub-stat-dot"></span><span><strong>7</strong> Live Website Pages</span>';
+
+    var chip2 = createEl("div", { className: "cms-hub-stat-chip" });
+    chip2.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#00D4AA" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span><strong>8</strong> Motors (3–50 HP)</span>';
+
+    var chip3 = createEl("div", { className: "cms-hub-stat-chip" });
+    chip3.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span>Storage Synced</span>';
+
+    statsRow.appendChild(chip1);
+    statsRow.appendChild(chip2);
+    statsRow.appendChild(chip3);
+    wrap.appendChild(statsRow);
+
+    // All 7 Pages Compact Grid
     var hubGrid = createEl("div", { className: "cms-page-hub" });
 
     var websitePages = [
       {
-        icon: "🏠",
+        svg: '<svg class="cms-svg-icon icon-anim-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="anim-roof" d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline class="anim-door" points="9 22 9 12 15 12 15 22"></polyline></svg>',
         title: "Home Page",
         file: "index.html",
         route: "#/pages/home",
-        desc: "Hero announcement banner, 4 headline metrics (3–50 HP, 80% fuel savings, zero emissions), deployment partners ticker, and commercial fleet CTA."
+        desc: "Hero announcement · 4 impact metrics · Partners ticker"
       },
       {
-        icon: "⚡",
+        svg: '<svg class="cms-svg-icon icon-anim-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon class="anim-lightning" points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>',
         title: "Products & Motors",
         file: "products.html",
         route: "#/pages/products",
-        desc: "Outboard Motors catalog (3–50 HP models, power kW, RPM, cooling, PDF datasheets), marine LiFePO4 battery packs, and custom electric boats."
+        desc: "3–50 HP outboards · Battery systems · Electric boats"
       },
       {
-        icon: "ℹ️",
+        svg: '<svg class="cms-svg-icon icon-anim-compass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon class="anim-needle" points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>',
         title: "About & Leadership",
         file: "about.html",
         route: "#/pages/about",
-        desc: "Decarbonization mission, Chennai manufacturing plant credentials, Kollam watercraft trial operations, PMSM motors, and Founder profile."
+        desc: "Mission · Manufacturing plant · Founder profile"
       },
       {
-        icon: "🚢",
+        svg: '<svg class="cms-svg-icon icon-anim-ship" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="anim-hull" d="M3 15l2 4h14l2-4H3z M12 3v12 M8 8l4-5 4 5"></path><path class="anim-water" d="M2 21c3-1 5 1 8 0s5-1 8 0 4 1 4 0"></path></svg>',
         title: "Field Case Studies",
         file: "case-studies.html",
         route: "#/pages/case-studies",
-        desc: "ICAR-CIFT Vikalpika solar fishing boat, Kerala SWTD passenger ferries, Karnataka eco-tourism safari, and hydrogen fuel cell prototypes."
+        desc: "ICAR-CIFT · Kerala SWTD · Karnataka eco-safari"
       },
       {
-        icon: "📸",
+        svg: '<svg class="cms-svg-icon icon-anim-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle class="anim-lens" cx="12" cy="13" r="4"></circle></svg>',
         title: "Media Gallery",
         file: "gallery.html",
         route: "#/pages/gallery",
-        desc: "High-resolution sea trials footage, factory component assembly photos, and YouTube video embed links."
+        desc: "Featured video player · Sea trials & photo library"
       },
       {
-        icon: "💡",
+        svg: '<svg class="cms-svg-icon icon-anim-bulb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="anim-filament" d="M9 18h6 M10 22h4 M12 2a7 7 0 0 0-7 7c0 2.5 1.5 4.5 3 6h8c1.5-1.5 3-3.5 3-6a7 7 0 0 0-7-7z"></path><line x1="12" y1="9" x2="12" y2="13"></line></svg>',
         title: "Tech & Economics",
         file: "know-more.html",
         route: "#/pages/know-more",
-        desc: "Total Cost of Ownership (TCO) calculator, commercial fuel savings vs. 2-stroke petrol engines, and Indian maritime environmental metrics."
+        desc: "TCO calculator · Fuel savings & environmental metrics"
       },
       {
-        icon: "📞",
+        svg: '<svg class="cms-svg-icon icon-anim-contact" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path><circle class="anim-signal-ping" cx="18" cy="6" r="3"></circle></svg>',
         title: "Contact & Showroom",
         file: "contact.html",
         route: "#/pages/contact",
-        desc: "Direct sales inquiries, Kerala showroom address, Chennai manufacturing plant details, WhatsApp chat hotline, and workshop hours."
+        desc: "Kollam showroom · Chennai plant · WhatsApp hotline"
       }
     ];
 
     websitePages.forEach(function(p){
       var card = createEl("div", { className: "cms-page-card" });
 
-      var cardTop = createEl("div");
-      var headWrap = createEl("div", { className: "cms-page-header" });
-      var titleWrap = createEl("div", { className: "cms-page-title-wrap" });
-      var iconEl = createEl("span", { className: "cms-page-icon-lg" }, p.icon);
-      var titleBox = createEl("div");
-      var titleEl = createEl("h3", { className: "cms-page-title" }, p.title);
-      var slugEl = createEl("div", { className: "cms-page-slug" }, p.file);
-      titleBox.appendChild(titleEl);
-      titleBox.appendChild(slugEl);
-      titleWrap.appendChild(iconEl);
-      titleWrap.appendChild(titleBox);
+      var left = createEl("div", { className: "cms-page-header" });
+      var iconEl = createEl("span", { className: "cms-page-icon-lg" });
+      iconEl.innerHTML = p.svg;
 
-      var statusPill = createEl("div", { className: "cms-status-pill" });
-      var dot = createEl("span", { className: "cms-status-dot" });
-      var statusTxt = createEl("span", null, "Live & Published");
-      statusPill.appendChild(dot);
-      statusPill.appendChild(statusTxt);
-
-      headWrap.appendChild(titleWrap);
-      headWrap.appendChild(statusPill);
-      cardTop.appendChild(headWrap);
+      var titleBox = createEl("div", { style: { minWidth: "0", flex: "1" } });
+      var titleRow = createEl("div", { className: "cms-page-title" });
+      titleRow.appendChild(createEl("span", null, p.title));
+      titleRow.appendChild(createEl("span", { className: "cms-page-slug" }, p.file));
+      titleBox.appendChild(titleRow);
 
       var descEl = createEl("p", { className: "cms-page-desc" }, p.desc);
-      cardTop.appendChild(descEl);
-      card.appendChild(cardTop);
+      titleBox.appendChild(descEl);
 
-      var cardFooter = createEl("div", { className: "cms-page-footer" });
-      var viewLink = createEl("a", { className: "btn btn-secondary btn-sm", href: p.file, target: "_blank", rel: "noopener" }, "↗ View Page");
-      var editLink = createEl("a", { className: "btn btn-primary btn-sm", href: p.route }, "✎ Edit Page Content →");
-      cardFooter.appendChild(viewLink);
-      cardFooter.appendChild(editLink);
-      card.appendChild(cardFooter);
+      left.appendChild(iconEl);
+      left.appendChild(titleBox);
+      card.appendChild(left);
+
+      var footer = createEl("div", { className: "cms-page-footer" });
+      var viewLink = createEl("a", { className: "btn btn-secondary btn-sm", href: p.file, target: "_blank", rel: "noopener", title: "View live page in new tab" });
+      viewLink.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
+
+      var editLink = createEl("a", { className: "btn btn-primary btn-sm", href: p.route });
+      editLink.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px; vertical-align:middle;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg><span>Edit</span>';
+
+      footer.appendChild(viewLink);
+      footer.appendChild(editLink);
+      card.appendChild(footer);
 
       hubGrid.appendChild(card);
     });
 
     wrap.appendChild(hubGrid);
 
-    // Bottom Two Columns: Global Settings Card + Quick Links
-    var bottomCols = createEl("div", { className: "dash-columns", style: { marginTop: "28px" } });
+    // Bottom Utility Strip: Global Settings & Motor Presets
+    var bottomStrip = createEl("div", { className: "cms-hub-bottom-strip" });
 
-    var globalCard = createEl("div", { className: "form-card" });
-    globalCard.appendChild(createEl("h3", { className: "form-section__title" }, "Global Site Elements"));
-    globalCard.appendChild(createEl("p", { className: "form-section__desc" }, "Configure sitewide navigation menus, footer legal notices, and official brand assets."));
+    var stripLeft = createEl("div", { className: "cms-hub-strip-left" });
+    var setBtn = createEl("a", { className: "btn btn-secondary btn-sm", href: "#/site-settings" });
+    setBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px; vertical-align:middle;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Global Header &amp; Footer</span>';
+    stripLeft.appendChild(setBtn);
+    bottomStrip.appendChild(stripLeft);
 
-    var globalBtns = createEl("div", { style: { display: "flex", gap: "10px", marginTop: "16px", flexWrap: "wrap" } });
-    var setBtn = createEl("a", { className: "btn btn-secondary", href: "#/site-settings" }, "⚙ Edit Header, Footer & Social Links");
-    var backupBtn2 = createEl("a", { className: "btn btn-secondary", href: "#/data" }, "💾 Export JSON Catalog Backup");
-    globalBtns.appendChild(setBtn);
-    globalBtns.appendChild(backupBtn2);
-    globalCard.appendChild(globalBtns);
+    var stripRight = createEl("div", { className: "cms-hub-strip-right" });
+    var motorLabel = createEl("span", { style: { fontSize: "12px", color: "var(--text-muted)", marginRight: "4px", fontWeight: "600" } }, "Motors:");
+    stripRight.appendChild(motorLabel);
 
-    var activityCard = createEl("div", { className: "form-card" });
-    activityCard.appendChild(createEl("h3", { className: "form-section__title" }, "Propulsion Lineup Status"));
-    activityCard.appendChild(createEl("p", { className: "form-section__desc" }, "Active engineering models deployed in the Products & Motors page."));
-
-    var motorSummary = createEl("div", { style: { display: "flex", gap: "6px", flexWrap: "wrap", marginTop: "16px" } });
     var hps = [3, 7, 10, 15, 20, 30, 40, 50];
     hps.forEach(function(hp){
       var pill = createEl("a", {
-        className: "badge badge-success",
-        style: { textDecoration: "none", padding: "6px 12px", fontSize: "12px" },
+        className: "preset-pill",
+        style: { textDecoration: "none", padding: "3px 8px", fontSize: "11px" },
         href: "#/motors/edit/motor-" + hp + "hp"
-      }, "Seagö " + hp + " HP");
-      motorSummary.appendChild(pill);
+      }, hp + " HP");
+      stripRight.appendChild(pill);
     });
-    activityCard.appendChild(motorSummary);
-
-    bottomCols.appendChild(globalCard);
-    bottomCols.appendChild(activityCard);
-    wrap.appendChild(bottomCols);
+    bottomStrip.appendChild(stripRight);
+    wrap.appendChild(bottomStrip);
 
     pageRoot.appendChild(wrap);
   }
@@ -1446,7 +1451,7 @@
       { id: "all", label: "All Parameters" },
       { id: "core", label: "Model & Electrical" },
       { id: "mech", label: "Mechanical Specs" },
-      { id: "datasheet", label: "Datasheet & AI Auto-Detect" },
+      { id: "datasheet", label: "Datasheet & Auto-Detect" },
       { id: "custom", label: "Custom Parameters" },
       { id: "media", label: "Photos & Publishing" }
     ];
@@ -1692,7 +1697,8 @@
     imgPreview.appendChild(imgMetaEl);
     imgPreview.appendChild(removeImgBtn);
 
-    var chooseAssetImgBtn = createEl("button", { type: "button", className: "btn btn-sm btn-secondary", style: { marginTop: "6px" } }, "📁 Choose from Asset Manager");
+    var chooseAssetImgBtn = createEl("button", { type: "button", className: "btn btn-sm btn-secondary", style: { marginTop: "6px" } });
+    chooseAssetImgBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px; vertical-align:middle;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg><span>Choose from Asset Manager</span>';
     chooseAssetImgBtn.addEventListener("click", function(){
       openAssetPicker("image", function(selected){
         currentImageUrl = selected.url;
@@ -1755,7 +1761,8 @@
     var filePdfInput = createEl("input", { type: "file", accept: "application/pdf,image/png,image/jpeg,image/webp,image/avif", style: { display: "none" } });
     var pdfActionsRow = createEl("div", { style: { display: "flex", gap: "8px", marginTop: "6px" } });
     var uploadPdfBtn = createEl("button", { type: "button", className: "btn btn-sm btn-secondary" }, "Upload Catalog (PDF / Photo)");
-    var chooseAssetPdfBtn = createEl("button", { type: "button", className: "btn btn-sm btn-secondary" }, "📁 Choose from Asset Manager");
+    var chooseAssetPdfBtn = createEl("button", { type: "button", className: "btn btn-sm btn-secondary" });
+    chooseAssetPdfBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px; vertical-align:middle;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg><span>Choose from Asset Manager</span>';
     pdfActionsRow.appendChild(uploadPdfBtn);
     pdfActionsRow.appendChild(chooseAssetPdfBtn);
 
@@ -1777,8 +1784,8 @@
     var detectTop = createEl("div", { className: "catalog-detect-topbar" });
     var metaWrap = createEl("div", { className: "catalog-detect-meta" });
     var tagEl = createEl("div", { className: "catalog-detect-tag" });
-    tagEl.innerHTML = '<span class="catalog-detect-pulse"></span> AI DATASHEET & PHOTO PARSER';
-    var titleEl = createEl("h4", { className: "catalog-detect-title" }, "Technical Specifications Extracted");
+    tagEl.innerHTML = '<span class="catalog-detect-pulse"></span> AUTOMATIC SPEC DETECTOR';
+    var titleEl = createEl("h4", { className: "catalog-detect-title" }, "Detected Motor Specifications");
     var subEl = createEl("p", { className: "catalog-detect-sub", id: "catalogDetectSub" }, "Specifications detected from catalog datasheet or photo.");
     metaWrap.appendChild(tagEl);
     metaWrap.appendChild(titleEl);
@@ -1796,7 +1803,8 @@
 
     // Quick Model Presets Bar
     var presetsBar = createEl("div", { className: "catalog-detect-presets" });
-    var presetsLbl = createEl("span", { className: "catalog-detect-presets-label" }, "⚡ Quick Match Model:");
+    var presetsLbl = createEl("span", { className: "catalog-detect-presets-label" });
+    presetsLbl.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px; vertical-align:middle;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span>Quick Presets:</span>';
     presetsBar.appendChild(presetsLbl);
 
     var hpOptions = [3, 7, 10, 15, 20, 30, 40, 50];
@@ -1999,8 +2007,8 @@
       }
 
       if (fileObj && isImg) {
-        // Run AI OCR on photo
-        subEl.innerHTML = '<span class="catalog-detect-pulse" style="display:inline-block; vertical-align:middle; margin-right:6px;"></span> Optical AI scanning photo datasheet for specifications…';
+        // Run OCR on photo
+        subEl.innerHTML = '<span class="catalog-detect-pulse" style="display:inline-block; vertical-align:middle; margin-right:6px;"></span> Scanning photo datasheet for specifications…';
         detectBox.classList.add("show");
 
         runImageOcr(fileObj, function(err, ocrText){
@@ -2008,7 +2016,7 @@
             var ocrSpecs = detectCatalogSpecs(fName + " " + ocrText, ocrText);
             if (ocrSpecs) {
               renderDetectedSpecs(ocrSpecs);
-              showToast("AI OCR extracted specifications from catalog photo!", "success");
+              showToast("Specifications detected from catalog photo!", "success");
             } else if (!specs) {
               subEl.innerHTML = "Photo scanned. Tap a quick model preset below to auto-fill specifications.";
             }
@@ -3530,9 +3538,12 @@
     header.appendChild(info);
 
     var headerActions = createEl("div", { className: "page-header-actions" });
-    var backBtn = createEl("a", { className: "btn btn-secondary", href: "#/dashboard" }, "← CMS Hub");
-    var liveBtn = createEl("a", { className: "btn btn-outline-topbar", href: slugName, target: "_blank", rel: "noopener" }, "↗ View Live Page");
-    var saveBtn = createEl("button", { type: "button", className: "btn btn-primary" }, "Save Page (Ctrl+S)");
+    var backBtn = createEl("a", { className: "btn btn-secondary", href: "#/dashboard" });
+    backBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px; vertical-align:middle;"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg><span>CMS Hub</span>';
+    var liveBtn = createEl("a", { className: "btn btn-outline-topbar", href: slugName, target: "_blank", rel: "noopener" });
+    liveBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px; vertical-align:middle;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg><span>View Live Page</span>';
+    var saveBtn = createEl("button", { type: "button", className: "btn btn-primary" });
+    saveBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px; vertical-align:middle;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg><span>Save Page (Ctrl+S)</span>';
     if (typeof onSave === "function") {
       saveBtn.addEventListener("click", onSave);
     }
@@ -3892,8 +3903,10 @@
             mCard.appendChild(mTop);
 
             var mFooter = createEl("div", { style: { marginTop: "12px", display: "flex", justifyContent: "space-between", alignItems: "center" } });
-            var editBtn = createEl("a", { className: "btn btn-secondary btn-sm", href: "#/motors/edit/" + m.id }, "✎ Edit Specs");
-            var previewLink = createEl("a", { className: "btn btn-outline-topbar btn-sm", href: m.catalog_path || "products.html", target: "_blank", rel: "noopener" }, "Datasheet ↗");
+            var editBtn = createEl("a", { className: "btn btn-secondary btn-sm", href: "#/motors/edit/" + m.id });
+            editBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px; vertical-align:middle;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg><span>Edit Specs</span>';
+            var previewLink = createEl("a", { className: "btn btn-outline-topbar btn-sm", href: m.catalog_path || "products.html", target: "_blank", rel: "noopener" });
+            previewLink.innerHTML = '<span>Datasheet</span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:4px; vertical-align:middle;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
             mFooter.appendChild(editBtn);
             mFooter.appendChild(previewLink);
             mCard.appendChild(mFooter);
@@ -4798,7 +4811,8 @@
             });
           });
 
-          var openBtn = createEl("a", { className: "btn btn-outline-topbar btn-sm", href: asset.url, target: "_blank", rel: "noopener" }, "↗");
+          var openBtn = createEl("a", { className: "btn btn-outline-topbar btn-sm", href: asset.url, target: "_blank", rel: "noopener", title: "Open in new tab" });
+          openBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
           
           var delBtn = createEl("button", { type: "button", className: "btn btn-secondary btn-sm", style: { color: "var(--danger)" }, title: "Delete Asset" }, "×");
           delBtn.addEventListener("click", function(){
