@@ -702,7 +702,7 @@
     var statsRow = createEl("div", { className: "cms-hub-stats-row" });
 
     var chip1 = createEl("div", { className: "cms-hub-stat-chip" });
-    chip1.innerHTML = '<span class="cms-hub-stat-dot"></span><span><strong>7</strong> Live Website Pages</span>';
+    chip1.innerHTML = '<span class="cms-hub-stat-dot"></span><span><strong>6</strong> Live Website Pages</span>';
 
     var chip2 = createEl("div", { className: "cms-hub-stat-chip" });
     chip2.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#00D4AA" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span><strong>8</strong> Motors (3–50 HP)</span>';
@@ -715,7 +715,7 @@
     statsRow.appendChild(chip3);
     wrap.appendChild(statsRow);
 
-    // All 7 Pages Compact Grid
+    // All 6 Live Website Pages Compact Grid
     var hubGrid = createEl("div", { className: "cms-page-hub" });
 
     var websitePages = [
@@ -724,49 +724,42 @@
         title: "Home Page",
         file: "index.html",
         route: "#/pages/home",
-        desc: "Hero announcement · 4 impact metrics · Partners ticker"
+        desc: "Hero video & banner · 3 range cards · 3 case teasers · 3 pillars"
       },
       {
         svg: '<svg class="cms-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>',
         title: "Products & Motors",
         file: "products.html",
         route: "#/pages/products",
-        desc: "3–50 HP outboards · Battery systems · Electric boats"
+        desc: "3–50 HP outboards · Battery specs · Electric & solar boats"
       },
       {
         svg: '<svg class="cms-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>',
         title: "About & Leadership",
         file: "about.html",
         route: "#/pages/about",
-        desc: "Mission · Manufacturing plant · Founder profile"
+        desc: "Our story · 2 facilities · 3 priorities · Founder portrait & quote"
       },
       {
         svg: '<svg class="cms-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>',
         title: "Field Case Studies",
         file: "case-studies.html",
         route: "#/pages/case-studies",
-        desc: "ICAR-CIFT · Kerala SWTD · Karnataka eco-safari"
+        desc: "Vikalpika · Kerala transit · Karnataka tourism · Hydrogen vessel"
       },
       {
         svg: '<svg class="cms-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>',
         title: "Media Gallery",
         file: "gallery.html",
         route: "#/pages/gallery",
-        desc: "Featured video player · Sea trials & photo library"
-      },
-      {
-        svg: '<svg class="cms-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>',
-        title: "Tech & Economics",
-        file: "know-more.html",
-        route: "#/pages/know-more",
-        desc: "TCO calculator · Fuel savings & environmental metrics"
+        desc: "Sea trials footage · Tourism runs · 10 fleet gallery photos"
       },
       {
         svg: '<svg class="cms-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>',
         title: "Contact & Showroom",
         file: "contact.html",
         route: "#/pages/contact",
-        desc: "Kollam showroom · Chennai plant · WhatsApp hotline"
+        desc: "Kollam showroom · Chennai plant · Web3Forms quote setup"
       }
     ];
 
@@ -3243,7 +3236,7 @@
     gMail.appendChild(inpMail);
 
     var gPhone = createEl("div", { className: "form-group" });
-    gPhone.appendChild(createEl("label", null, "WhatsApp & Telephone"));
+    gPhone.appendChild(createEl("label", null, "WhatsApp & Telephone Number"));
     var inpPhone = createEl("input", { type: "text" });
     gPhone.appendChild(inpPhone);
 
@@ -3251,14 +3244,20 @@
     r1.appendChild(gPhone);
     s1.appendChild(r1);
 
+    var gWaTip = createEl("div", { className: "form-group" });
+    gWaTip.appendChild(createEl("label", null, "WhatsApp Floating Button Tooltip"));
+    var inpWaTip = createEl("input", { type: "text", placeholder: "e.g. Chat with us" });
+    gWaTip.appendChild(inpWaTip);
+    s1.appendChild(gWaTip);
+
     var gAddrSales = createEl("div", { className: "form-group" });
-    gAddrSales.appendChild(createEl("label", null, "Sales & Registered HQ"));
+    gAddrSales.appendChild(createEl("label", null, "Sales & Registered HQ (Kollam Showroom)"));
     var inpAddrSales = createEl("textarea");
     gAddrSales.appendChild(inpAddrSales);
     s1.appendChild(gAddrSales);
 
     var gAddrMfg = createEl("div", { className: "form-group" });
-    gAddrMfg.appendChild(createEl("label", null, "Manufacturing Facility"));
+    gAddrMfg.appendChild(createEl("label", null, "Manufacturing Facility (Chennai Plant)"));
     var inpAddrMfg = createEl("input", { type: "text" });
     gAddrMfg.appendChild(inpAddrMfg);
     s1.appendChild(gAddrMfg);
@@ -3266,28 +3265,51 @@
 
     // Social Links
     var s2 = createEl("div", { className: "form-section" });
-    s2.appendChild(createEl("h3", { className: "form-section__title" }, "Official Channels"));
-    var r2 = createEl("div", { className: "form-row-3" });
+    s2.appendChild(createEl("h3", { className: "form-section__title" }, "Official Channels & Social Links"));
+    var r2 = createEl("div", { className: "form-row" });
     var gFb = createEl("div", { className: "form-group" });
-    gFb.appendChild(createEl("label", null, "Facebook"));
+    gFb.appendChild(createEl("label", null, "Facebook URL"));
     var inpFb = createEl("input", { type: "text" });
     gFb.appendChild(inpFb);
 
     var gInsta = createEl("div", { className: "form-group" });
-    gInsta.appendChild(createEl("label", null, "Instagram"));
+    gInsta.appendChild(createEl("label", null, "Instagram URL"));
     var inpInsta = createEl("input", { type: "text" });
     gInsta.appendChild(inpInsta);
+    r2.appendChild(gFb);
+    r2.appendChild(gInsta);
+    s2.appendChild(r2);
 
+    var r2b = createEl("div", { className: "form-row" });
     var gX = createEl("div", { className: "form-group" });
-    gX.appendChild(createEl("label", null, "X (Twitter)"));
+    gX.appendChild(createEl("label", null, "X (Twitter) URL"));
     var inpX = createEl("input", { type: "text" });
     gX.appendChild(inpX);
 
-    r2.appendChild(gFb);
-    r2.appendChild(gInsta);
-    r2.appendChild(gX);
-    s2.appendChild(r2);
+    var gLi = createEl("div", { className: "form-group" });
+    gLi.appendChild(createEl("label", null, "LinkedIn URL"));
+    var inpLi = createEl("input", { type: "text" });
+    gLi.appendChild(inpLi);
+    r2b.appendChild(gX);
+    r2b.appendChild(gLi);
+    s2.appendChild(r2b);
     form.appendChild(s2);
+
+    // Floating Quote Request Modal
+    var sModal = createEl("div", { className: "form-section" });
+    sModal.appendChild(createEl("h3", { className: "form-section__title" }, "Floating 'Request Quote' Modal Settings"));
+    var gQTitle = createEl("div", { className: "form-group" });
+    gQTitle.appendChild(createEl("label", null, "Modal Heading"));
+    var inpQTitle = createEl("input", { type: "text" });
+    gQTitle.appendChild(inpQTitle);
+    sModal.appendChild(gQTitle);
+
+    var gQSub = createEl("div", { className: "form-group" });
+    gQSub.appendChild(createEl("label", null, "Modal Subtitle / Instructions"));
+    var inpQSub = createEl("textarea");
+    gQSub.appendChild(inpQSub);
+    sModal.appendChild(gQSub);
+    form.appendChild(sModal);
 
     // Hero Stats
     var s3 = createEl("div", { className: "form-section" });
@@ -3326,6 +3348,16 @@
     s4.appendChild(r4);
     form.appendChild(s4);
 
+    // Footer Copyright
+    var s5 = createEl("div", { className: "form-section" });
+    s5.appendChild(createEl("h3", { className: "form-section__title" }, "Footer & Copyright"));
+    var gCopy = createEl("div", { className: "form-group" });
+    gCopy.appendChild(createEl("label", null, "Copyright Notice"));
+    var inpCopy = createEl("input", { type: "text" });
+    gCopy.appendChild(inpCopy);
+    s5.appendChild(gCopy);
+    form.appendChild(s5);
+
     var actions = createEl("div", { className: "form-actions" });
     var saveBtn = createEl("button", { type: "submit", className: "btn btn-primary" }, "Save Settings");
     actions.appendChild(saveBtn);
@@ -3338,13 +3370,18 @@
       if (s) {
         inpMail.value = s.email || "";
         inpPhone.value = s.phone || "";
+        inpWaTip.value = s.whatsapp_tip || "Chat with us";
         inpAddrSales.value = s.address_sales || "";
         inpAddrMfg.value = s.address_manufacturing || "";
         inpFb.value = s.facebook_url || "";
         inpInsta.value = s.instagram_url || "";
         inpX.value = s.x_url || "";
+        inpLi.value = s.linkedin_url || "";
+        inpQTitle.value = s.quote_modal_title || "Request a Custom Propulsion Quote";
+        inpQSub.value = s.quote_modal_subtitle || "";
         inpFn.value = s.founder_name || "";
         inpFt.value = s.founder_title || "";
+        inpCopy.value = s.copyright_text || "";
 
         statsContainer.innerHTML = "";
         var stats = s.hero_stats || [];
@@ -3373,14 +3410,19 @@
         email: inpMail.value.trim(),
         phone: inpPhone.value.trim(),
         whatsapp: inpPhone.value.trim(),
+        whatsapp_tip: inpWaTip.value.trim(),
         address_sales: inpAddrSales.value.trim(),
         address_manufacturing: inpAddrMfg.value.trim(),
         facebook_url: inpFb.value.trim(),
         instagram_url: inpInsta.value.trim(),
         x_url: inpX.value.trim(),
+        linkedin_url: inpLi.value.trim(),
+        quote_modal_title: inpQTitle.value.trim(),
+        quote_modal_subtitle: inpQSub.value.trim(),
         hero_stats: stats,
         founder_name: inpFn.value.trim(),
-        founder_title: inpFt.value.trim()
+        founder_title: inpFt.value.trim(),
+        copyright_text: inpCopy.value.trim()
       };
 
       window.SeagoStore.save("site_settings", record, function(err){
@@ -3494,19 +3536,26 @@
   function loadPageData(pageId, cb) {
     if (window.SeagoStore && typeof window.SeagoStore.get === "function") {
       window.SeagoStore.get("pages", pageId, function(err, page){
+        var seedFallback = null;
+        if (window._SEAGO_SEED_DATA && window._SEAGO_SEED_DATA.pages) {
+          for (var i = 0; i < window._SEAGO_SEED_DATA.pages.length; i++) {
+            if (window._SEAGO_SEED_DATA.pages[i].id === pageId) {
+              seedFallback = window._SEAGO_SEED_DATA.pages[i];
+              break;
+            }
+          }
+        }
         if (!err && page) {
-          cb(null, page);
-        } else {
-          var fallback = null;
-          if (window._SEAGO_SEED_DATA && window._SEAGO_SEED_DATA.pages) {
-            for (var i = 0; i < window._SEAGO_SEED_DATA.pages.length; i++) {
-              if (window._SEAGO_SEED_DATA.pages[i].id === pageId) {
-                fallback = window._SEAGO_SEED_DATA.pages[i];
-                break;
+          if (seedFallback) {
+            for (var k in seedFallback) {
+              if (seedFallback.hasOwnProperty(k) && (page[k] === undefined || page[k] === null || page[k] === "")) {
+                page[k] = seedFallback[k];
               }
             }
           }
-          cb(null, fallback || { id: pageId, title: pageId, updated_at: new Date().toISOString() });
+          cb(null, page);
+        } else {
+          cb(null, seedFallback || { id: pageId, title: pageId, updated_at: new Date().toISOString() });
         }
       });
     } else {
@@ -3554,6 +3603,72 @@
     return header;
   }
 
+  // Universal Media Input (URL + Asset Picker + Direct File Upload)
+  function createMediaField(labelText, initialValue, isVideo) {
+    var group = createEl("div", { className: "form-group" });
+    group.appendChild(createEl("label", null, labelText));
+
+    var row = createEl("div", { style: { display: "flex", gap: "8px", alignItems: "center" } });
+    var inp = createEl("input", { type: "text", value: initialValue || "", style: { flex: "1" } });
+
+    var pickBtn = createEl("button", {
+      type: "button",
+      className: "btn btn-secondary btn-sm",
+      style: { whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", gap: "4px" }
+    });
+    pickBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Select Asset</span>';
+    pickBtn.addEventListener("click", function(){
+      openAssetPicker(isVideo ? null : "image", function(selected){
+        if (selected && selected.url) {
+          inp.value = selected.url;
+          inp.dispatchEvent(new Event("input", { bubbles: true }));
+          showToast("Asset selected: " + (selected.name || selected.url), "info");
+        }
+      });
+    });
+
+    var fileInp = createEl("input", { type: "file", accept: isVideo ? "video/*" : "image/*", style: { display: "none" } });
+    var uploadBtn = createEl("button", {
+      type: "button",
+      className: "btn btn-secondary btn-sm",
+      style: { whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", gap: "4px" }
+    });
+    uploadBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><span>Upload</span>';
+    uploadBtn.addEventListener("click", function(){ fileInp.click(); });
+    fileInp.addEventListener("change", function(){
+      if (fileInp.files && fileInp.files[0]) {
+        var f = fileInp.files[0];
+        if (f.type.match(/^image\//)) {
+          processImageFile(f, function(err, res){
+            if (!err && res) {
+              inp.value = res.url;
+              inp.dispatchEvent(new Event("input", { bubbles: true }));
+              showToast("Uploaded & attached image!", "success");
+            } else {
+              showToast(err ? err.message : "Upload failed", "error");
+            }
+          });
+        } else {
+          window.SeagoStore.uploadFile(isVideo ? "video" : "image", f, function(err, res){
+            if (!err && res) {
+              inp.value = res.url;
+              inp.dispatchEvent(new Event("input", { bubbles: true }));
+              showToast("Uploaded & attached media!", "success");
+            }
+          });
+        }
+      }
+    });
+
+    row.appendChild(inp);
+    row.appendChild(pickBtn);
+    row.appendChild(uploadBtn);
+    row.appendChild(fileInp);
+    group.appendChild(row);
+
+    return { group: group, input: inp };
+  }
+
   // 1. HOME PAGE CMS (index.html)
   function renderHomePageEditor() {
     pageRoot.innerHTML = "";
@@ -3572,12 +3687,12 @@
 
       var formCard = createEl("div", { className: "form-card" });
 
-      // Section 1: Hero Banner
+      // Section 1: Hero Banner & Video
       var s1 = createEl("div", { className: "cms-section-card" });
       var h1 = createEl("div", { className: "cms-section-header" });
       var h1Left = createEl("div", { className: "cms-section-title-wrap" });
       h1Left.appendChild(createEl("span", { className: "cms-section-number" }, "1"));
-      h1Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Hero Announcement Banner"));
+      h1Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Hero Announcement & Visuals"));
       h1.appendChild(h1Left);
       s1.appendChild(h1);
 
@@ -3602,15 +3717,32 @@
       var rCta = createEl("div", { className: "form-row" });
       var gCta1 = createEl("div", { className: "form-group" });
       gCta1.appendChild(createEl("label", null, "Primary Button Text"));
-      var inpCta1 = createEl("input", { type: "text", value: page.cta_primary || "" });
+      var inpCta1 = createEl("input", { type: "text", value: page.cta_primary || "Request a Quote" });
       gCta1.appendChild(inpCta1);
       var gCta2 = createEl("div", { className: "form-group" });
       gCta2.appendChild(createEl("label", null, "Secondary Button Text"));
-      var inpCta2 = createEl("input", { type: "text", value: page.cta_secondary || "" });
+      var inpCta2 = createEl("input", { type: "text", value: page.cta_secondary || "Explore Products" });
       gCta2.appendChild(inpCta2);
       rCta.appendChild(gCta1);
       rCta.appendChild(gCta2);
       s1.appendChild(rCta);
+
+      var mediaVid = createMediaField("Hero Background Video (MP4)", page.hero_video_url || "assets/photos/ai-artwork-videoacc3e3fb-0a4f-467d-bd82-8fc7c55db4ec.mp4", true);
+      s1.appendChild(mediaVid.group);
+
+      var rFloat = createEl("div", { className: "form-row" });
+      var gFloatT = createEl("div", { className: "form-group" });
+      gFloatT.appendChild(createEl("label", null, "Hero Float Badge Title"));
+      var inpFloatT = createEl("input", { type: "text", value: page.float_badge_title || "100% Electric" });
+      gFloatT.appendChild(inpFloatT);
+      var gFloatS = createEl("div", { className: "form-group" });
+      gFloatS.appendChild(createEl("label", null, "Hero Float Badge Subtitle"));
+      var inpFloatS = createEl("input", { type: "text", value: page.float_badge_sub || "Zero local emissions" });
+      gFloatS.appendChild(inpFloatS);
+      rFloat.appendChild(gFloatT);
+      rFloat.appendChild(gFloatS);
+      s1.appendChild(rFloat);
+
       form.appendChild(s1);
 
       // Section 2: Headline Metrics
@@ -3618,62 +3750,46 @@
       var h2 = createEl("div", { className: "cms-section-header" });
       var h2Left = createEl("div", { className: "cms-section-title-wrap" });
       h2Left.appendChild(createEl("span", { className: "cms-section-number" }, "2"));
-      h2Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Headline Performance Statistics"));
+      h2Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Headline Metrics (Hero Counter Strip)"));
       h2.appendChild(h2Left);
       s2.appendChild(h2);
-      s2.appendChild(createEl("p", { className: "cms-section-desc" }, "The 4 headline statistics displayed directly below the hero banner."));
+      s2.appendChild(createEl("p", { className: "cms-section-desc" }, "The 3 key statistics displayed directly inside the homepage hero section."));
 
-      var rS1 = createEl("div", { className: "form-row" });
+      var rS1 = createEl("div", { className: "form-row-3" });
       var gS1Val = createEl("div", { className: "form-group" });
       gS1Val.appendChild(createEl("label", null, "Stat 1 Value"));
-      var inpS1Val = createEl("input", { type: "text", value: page.stat_1_val || "3–50 HP" });
+      var inpS1Val = createEl("input", { type: "text", value: page.stat_1_val || "5" });
       gS1Val.appendChild(inpS1Val);
       var gS1Lbl = createEl("div", { className: "form-group" });
       gS1Lbl.appendChild(createEl("label", null, "Stat 1 Label"));
-      var inpS1Lbl = createEl("input", { type: "text", value: page.stat_1_lbl || "Power Spectrum" });
+      var inpS1Lbl = createEl("input", { type: "text", value: page.stat_1_lbl || "States Operating" });
       gS1Lbl.appendChild(inpS1Lbl);
       rS1.appendChild(gS1Val);
       rS1.appendChild(gS1Lbl);
-      s2.appendChild(rS1);
 
-      var rS2 = createEl("div", { className: "form-row" });
       var gS2Val = createEl("div", { className: "form-group" });
       gS2Val.appendChild(createEl("label", null, "Stat 2 Value"));
-      var inpS2Val = createEl("input", { type: "text", value: page.stat_2_val || "80%" });
+      var inpS2Val = createEl("input", { type: "text", value: page.stat_2_val || "50 HP" });
       gS2Val.appendChild(inpS2Val);
       var gS2Lbl = createEl("div", { className: "form-group" });
       gS2Lbl.appendChild(createEl("label", null, "Stat 2 Label"));
-      var inpS2Lbl = createEl("input", { type: "text", value: page.stat_2_lbl || "Fuel & Lube Savings" });
+      var inpS2Lbl = createEl("input", { type: "text", value: page.stat_2_lbl || "Max Outboard" });
       gS2Lbl.appendChild(inpS2Lbl);
-      rS2.appendChild(gS2Val);
-      rS2.appendChild(gS2Lbl);
-      s2.appendChild(rS2);
+      rS1.appendChild(gS2Val);
+      rS1.appendChild(gS2Lbl);
 
-      var rS3 = createEl("div", { className: "form-row" });
       var gS3Val = createEl("div", { className: "form-group" });
       gS3Val.appendChild(createEl("label", null, "Stat 3 Value"));
-      var inpS3Val = createEl("input", { type: "text", value: page.stat_3_val || "100%" });
+      var inpS3Val = createEl("input", { type: "text", value: page.stat_3_val || "2+ Yrs" });
       gS3Val.appendChild(inpS3Val);
       var gS3Lbl = createEl("div", { className: "form-group" });
       gS3Lbl.appendChild(createEl("label", null, "Stat 3 Label"));
-      var inpS3Lbl = createEl("input", { type: "text", value: page.stat_3_lbl || "Zero Emissions" });
+      var inpS3Lbl = createEl("input", { type: "text", value: page.stat_3_lbl || "Field-Proven" });
       gS3Lbl.appendChild(inpS3Lbl);
-      rS3.appendChild(gS3Val);
-      rS3.appendChild(gS3Lbl);
-      s2.appendChild(rS3);
+      rS1.appendChild(gS3Val);
+      rS1.appendChild(gS3Lbl);
 
-      var rS4 = createEl("div", { className: "form-row" });
-      var gS4Val = createEl("div", { className: "form-group" });
-      gS4Val.appendChild(createEl("label", null, "Stat 4 Value"));
-      var inpS4Val = createEl("input", { type: "text", value: page.stat_4_val || "5+ States" });
-      gS4Val.appendChild(inpS4Val);
-      var gS4Lbl = createEl("div", { className: "form-group" });
-      gS4Lbl.appendChild(createEl("label", null, "Stat 4 Label"));
-      var inpS4Lbl = createEl("input", { type: "text", value: page.stat_4_lbl || "Active Deployments" });
-      gS4Lbl.appendChild(inpS4Lbl);
-      rS4.appendChild(gS4Val);
-      rS4.appendChild(gS4Lbl);
-      s2.appendChild(rS4);
+      s2.appendChild(rS1);
       form.appendChild(s2);
 
       // Section 3: Trust & Deployment Partners
@@ -3681,83 +3797,261 @@
       var h3 = createEl("div", { className: "cms-section-header" });
       var h3Left = createEl("div", { className: "cms-section-title-wrap" });
       h3Left.appendChild(createEl("span", { className: "cms-section-number" }, "3"));
-      h3Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Deployment Partners & Trust"));
+      h3Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Trust Marquee & Deployment Partners"));
       h3.appendChild(h3Left);
       s3.appendChild(h3);
 
       var gTrustHead = createEl("div", { className: "form-group" });
-      gTrustHead.appendChild(createEl("label", null, "Trust Section Heading"));
-      var inpTrustHead = createEl("input", { type: "text", value: page.trust_heading || "" });
+      gTrustHead.appendChild(createEl("label", null, "Trust Marquee Heading"));
+      var inpTrustHead = createEl("input", { type: "text", value: page.trust_heading || "Deployed & Trusted Across" });
       gTrustHead.appendChild(inpTrustHead);
       s3.appendChild(gTrustHead);
 
       var gTrustList = createEl("div", { className: "form-group" });
-      gTrustList.appendChild(createEl("label", null, "Partner Organizations (separated by bullet ·)"));
+      gTrustList.appendChild(createEl("label", null, "Partner Organizations & States (separated by bullet ·)"));
       var inpTrustList = createEl("input", { type: "text", value: page.trust_partners || "" });
       gTrustList.appendChild(inpTrustList);
       s3.appendChild(gTrustList);
       form.appendChild(s3);
 
-      // Section 4: Narrative / Why Electric
+      // Section 4: Our Range Teaser Cards
       var s4 = createEl("div", { className: "cms-section-card" });
       var h4 = createEl("div", { className: "cms-section-header" });
       var h4Left = createEl("div", { className: "cms-section-title-wrap" });
       h4Left.appendChild(createEl("span", { className: "cms-section-number" }, "4"));
-      h4Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Why Transition Narrative"));
+      h4Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Product Range Overview Cards"));
       h4.appendChild(h4Left);
       s4.appendChild(h4);
 
-      var gWhyHead = createEl("div", { className: "form-group" });
-      gWhyHead.appendChild(createEl("label", null, "Section Headline"));
-      var inpWhyHead = createEl("input", { type: "text", value: page.why_heading || "" });
-      gWhyHead.appendChild(inpWhyHead);
-      s4.appendChild(gWhyHead);
+      var rRangeHead = createEl("div", { className: "form-row" });
+      var gREyebrow = createEl("div", { className: "form-group" });
+      gREyebrow.appendChild(createEl("label", null, "Range Eyebrow"));
+      var inpREyebrow = createEl("input", { type: "text", value: page.range_head_eyebrow || "Our Range" });
+      gREyebrow.appendChild(inpREyebrow);
+      var gRTitle = createEl("div", { className: "form-group" });
+      gRTitle.appendChild(createEl("label", null, "Range Title"));
+      var inpRTitle = createEl("input", { type: "text", value: page.range_head_title || "Everything you need to electrify your fleet" });
+      gRTitle.appendChild(inpRTitle);
+      rRangeHead.appendChild(gREyebrow);
+      rRangeHead.appendChild(gRTitle);
+      s4.appendChild(rRangeHead);
 
-      var gWhyBody = createEl("div", { className: "form-group" });
-      gWhyBody.appendChild(createEl("label", null, "Story & Market Problem Paragraph"));
-      var inpWhyBody = createEl("textarea", { rows: "4" }, page.why_body || "");
-      gWhyBody.appendChild(inpWhyBody);
-      s4.appendChild(gWhyBody);
+      var gRDesc = createEl("div", { className: "form-group" });
+      gRDesc.appendChild(createEl("label", null, "Range Subtitle"));
+      var inpRDesc = createEl("textarea", { rows: "2" }, page.range_head_desc || "");
+      gRDesc.appendChild(inpRDesc);
+      s4.appendChild(gRDesc);
+
+      // Range Card 1
+      var rc1Box = createEl("div", { style: { background: "#F8FAFC", border: "1px solid var(--line)", borderRadius: "6px", padding: "12px", marginBottom: "12px" } });
+      rc1Box.appendChild(createEl("h4", { style: { margin: "0 0 10px", fontSize: "13px", color: "var(--navy)" } }, "Range Card 01: Outboard Motors"));
+      var rc1Title = createEl("input", { type: "text", value: page.range_card1_title || "Outboard Motors", style: { marginBottom: "8px" } });
+      rc1Box.appendChild(rc1Title);
+      var rc1Desc = createEl("textarea", { rows: "2", style: { marginBottom: "8px" } }, page.range_card1_desc || "");
+      rc1Box.appendChild(rc1Desc);
+      var rc1Img = createMediaField("Card 01 Photo", page.range_card1_img || "assets/photos/Outboard Motors.webp", false);
+      rc1Box.appendChild(rc1Img.group);
+      s4.appendChild(rc1Box);
+
+      // Range Card 2
+      var rc2Box = createEl("div", { style: { background: "#F8FAFC", border: "1px solid var(--line)", borderRadius: "6px", padding: "12px", marginBottom: "12px" } });
+      rc2Box.appendChild(createEl("h4", { style: { margin: "0 0 10px", fontSize: "13px", color: "var(--navy)" } }, "Range Card 02: Battery Packs"));
+      var rc2Title = createEl("input", { type: "text", value: page.range_card2_title || "Battery Packs", style: { marginBottom: "8px" } });
+      rc2Box.appendChild(rc2Title);
+      var rc2Desc = createEl("textarea", { rows: "2", style: { marginBottom: "8px" } }, page.range_card2_desc || "");
+      rc2Box.appendChild(rc2Desc);
+      var rc2Img = createMediaField("Card 02 Photo", page.range_card2_img || "assets/photos/Battery Box.webp", false);
+      rc2Box.appendChild(rc2Img.group);
+      s4.appendChild(rc2Box);
+
+      // Range Card 3
+      var rc3Box = createEl("div", { style: { background: "#F8FAFC", border: "1px solid var(--line)", borderRadius: "6px", padding: "12px" } });
+      rc3Box.appendChild(createEl("h4", { style: { margin: "0 0 10px", fontSize: "13px", color: "var(--navy)" } }, "Range Card 03: Electric & Solar Boats"));
+      var rc3Title = createEl("input", { type: "text", value: page.range_card3_title || "Electric & Solar Boats", style: { marginBottom: "8px" } });
+      rc3Box.appendChild(rc3Title);
+      var rc3Desc = createEl("textarea", { rows: "2", style: { marginBottom: "8px" } }, page.range_card3_desc || "");
+      rc3Box.appendChild(rc3Desc);
+      var rc3Img = createMediaField("Card 03 Photo", page.range_card3_img || "assets/photos/seago-electric-boat.webp", false);
+      rc3Box.appendChild(rc3Img.group);
+      s4.appendChild(rc3Box);
+
       form.appendChild(s4);
 
-      // Section 5: Bottom CTA Banner
+      // Section 5: Field Case Studies Teasers
       var s5 = createEl("div", { className: "cms-section-card" });
       var h5 = createEl("div", { className: "cms-section-header" });
       var h5Left = createEl("div", { className: "cms-section-title-wrap" });
       h5Left.appendChild(createEl("span", { className: "cms-section-number" }, "5"));
-      h5Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Bottom Call-To-Action Banner"));
+      h5Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Field Case Studies Teaser Section"));
       h5.appendChild(h5Left);
       s5.appendChild(h5);
 
-      var rCtaBan = createEl("div", { className: "form-row" });
-      var gCtaTitle = createEl("div", { className: "form-group" });
-      gCtaTitle.appendChild(createEl("label", null, "Banner Title"));
-      var inpCtaTitle = createEl("input", { type: "text", value: page.cta_banner_title || "" });
-      gCtaTitle.appendChild(inpCtaTitle);
-      var gCtaBtn = createEl("div", { className: "form-group" });
-      gCtaBtn.appendChild(createEl("label", null, "Button Label"));
-      var inpCtaBtn = createEl("input", { type: "text", value: page.cta_banner_btn || "" });
-      gCtaBtn.appendChild(inpCtaBtn);
-      rCtaBan.appendChild(gCtaTitle);
-      rCtaBan.appendChild(gCtaBtn);
-      s5.appendChild(rCtaBan);
+      var rCasesHead = createEl("div", { className: "form-row" });
+      var gCEyebrow = createEl("div", { className: "form-group" });
+      gCEyebrow.appendChild(createEl("label", null, "Case Studies Eyebrow"));
+      var inpCEyebrow = createEl("input", { type: "text", value: page.cases_head_eyebrow || "Proven in the Field" });
+      gCEyebrow.appendChild(inpCEyebrow);
+      var gCTitle = createEl("div", { className: "form-group" });
+      gCTitle.appendChild(createEl("label", null, "Case Studies Heading"));
+      var inpCTitle = createEl("input", { type: "text", value: page.cases_head_title || "Real deployments, real waterways" });
+      gCTitle.appendChild(inpCTitle);
+      rCasesHead.appendChild(gCEyebrow);
+      rCasesHead.appendChild(gCTitle);
+      s5.appendChild(rCasesHead);
+
+      var gCDesc = createEl("div", { className: "form-group" });
+      gCDesc.appendChild(createEl("label", null, "Case Studies Section Subtitle"));
+      var inpCDesc = createEl("textarea", { rows: "2" }, page.cases_head_desc || "");
+      gCDesc.appendChild(inpCDesc);
+      s5.appendChild(gCDesc);
+
+      // Case Teaser 1
+      var ct1Box = createEl("div", { style: { background: "#F8FAFC", border: "1px solid var(--line)", borderRadius: "6px", padding: "12px", marginBottom: "12px" } });
+      ct1Box.appendChild(createEl("h4", { style: { margin: "0 0 10px", fontSize: "13px", color: "var(--navy)" } }, "Teaser 01: Fishing Fleets"));
+      var rCt1 = createEl("div", { className: "form-row" });
+      var inpCt1Tag = createEl("input", { type: "text", value: page.case_teaser1_tag || "Maharashtra", placeholder: "Tag / State" });
+      var inpCt1Title = createEl("input", { type: "text", value: page.case_teaser1_title || "Fishing Fleets", placeholder: "Title" });
+      rCt1.appendChild(inpCt1Tag);
+      rCt1.appendChild(inpCt1Title);
+      ct1Box.appendChild(rCt1);
+      var inpCt1Desc = createEl("textarea", { rows: "2", style: { marginBottom: "8px" } }, page.case_teaser1_desc || "");
+      ct1Box.appendChild(inpCt1Desc);
+      var ct1Img = createMediaField("Case 01 Photo", page.case_teaser1_img || "assets/photos/vikalpika.webp", false);
+      ct1Box.appendChild(ct1Img.group);
+      s5.appendChild(ct1Box);
+
+      // Case Teaser 2
+      var ct2Box = createEl("div", { style: { background: "#F8FAFC", border: "1px solid var(--line)", borderRadius: "6px", padding: "12px", marginBottom: "12px" } });
+      ct2Box.appendChild(createEl("h4", { style: { margin: "0 0 10px", fontSize: "13px", color: "var(--navy)" } }, "Teaser 02: Tourism Boats"));
+      var rCt2 = createEl("div", { className: "form-row" });
+      var inpCt2Tag = createEl("input", { type: "text", value: page.case_teaser2_tag || "Karnataka", placeholder: "Tag / State" });
+      var inpCt2Title = createEl("input", { type: "text", value: page.case_teaser2_title || "Tourism Boats", placeholder: "Title" });
+      rCt2.appendChild(inpCt2Tag);
+      rCt2.appendChild(inpCt2Title);
+      ct2Box.appendChild(rCt2);
+      var inpCt2Desc = createEl("textarea", { rows: "2", style: { marginBottom: "8px" } }, page.case_teaser2_desc || "");
+      ct2Box.appendChild(inpCt2Desc);
+      var ct2Img = createMediaField("Case 02 Photo", page.case_teaser2_img || "assets/photos/seago-tourism-boat.webp", false);
+      ct2Box.appendChild(ct2Img.group);
+      s5.appendChild(ct2Box);
+
+      // Case Teaser 3
+      var ct3Box = createEl("div", { style: { background: "#F8FAFC", border: "1px solid var(--line)", borderRadius: "6px", padding: "12px" } });
+      ct3Box.appendChild(createEl("h4", { style: { margin: "0 0 10px", fontSize: "13px", color: "var(--navy)" } }, "Teaser 03: Public Transport System"));
+      var rCt3 = createEl("div", { className: "form-row" });
+      var inpCt3Tag = createEl("input", { type: "text", value: page.case_teaser3_tag || "Kerala", placeholder: "Tag / State" });
+      var inpCt3Title = createEl("input", { type: "text", value: page.case_teaser3_title || "Public Transport System", placeholder: "Title" });
+      rCt3.appendChild(inpCt3Tag);
+      rCt3.appendChild(inpCt3Title);
+      ct3Box.appendChild(rCt3);
+      var inpCt3Desc = createEl("textarea", { rows: "2", style: { marginBottom: "8px" } }, page.case_teaser3_desc || "");
+      ct3Box.appendChild(inpCt3Desc);
+      var ct3Img = createMediaField("Case 03 Photo", page.case_teaser3_img || "assets/photos/Publictransport.webp", false);
+      ct3Box.appendChild(ct3Img.group);
+      s5.appendChild(ct3Box);
+
       form.appendChild(s5);
 
-      // Section 6: SEO
+      // Section 6: Why Seagö Pillars
       var s6 = createEl("div", { className: "cms-section-card" });
       var h6 = createEl("div", { className: "cms-section-header" });
       var h6Left = createEl("div", { className: "cms-section-title-wrap" });
       h6Left.appendChild(createEl("span", { className: "cms-section-number" }, "6"));
-      h6Left.appendChild(createEl("h3", { className: "cms-section-title" }, "SEO Search Metadata"));
+      h6Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Why Seagö (Editorial Split & 3 Pillars)"));
       h6.appendChild(h6Left);
       s6.appendChild(h6);
+
+      var gWhyHead = createEl("div", { className: "form-group" });
+      gWhyHead.appendChild(createEl("label", null, "Section Headline"));
+      var inpWhyHead = createEl("input", { type: "text", value: page.why_heading || "Built for Indian waterways, backed by real deployments" });
+      gWhyHead.appendChild(inpWhyHead);
+      s6.appendChild(gWhyHead);
+
+      var gWhyBody = createEl("div", { className: "form-group" });
+      gWhyBody.appendChild(createEl("label", null, "Story & Engineering Overview Paragraph"));
+      var inpWhyBody = createEl("textarea", { rows: "3" }, page.why_body || "");
+      gWhyBody.appendChild(inpWhyBody);
+      s6.appendChild(gWhyBody);
+
+      // Pillar 1
+      var p1Box = createEl("div", { style: { background: "#F8FAFC", border: "1px solid var(--line)", borderRadius: "6px", padding: "10px", marginBottom: "8px" } });
+      p1Box.appendChild(createEl("label", { style: { fontWeight: "600", fontSize: "12px", color: "var(--navy)" } }, "Pillar 01"));
+      var inpP1Title = createEl("input", { type: "text", value: page.why_pillar1_title || "Zero-Emission Propulsion", style: { marginBottom: "6px" } });
+      p1Box.appendChild(inpP1Title);
+      var inpP1Desc = createEl("textarea", { rows: "2" }, page.why_pillar1_desc || "");
+      p1Box.appendChild(inpP1Desc);
+      s6.appendChild(p1Box);
+
+      // Pillar 2
+      var p2Box = createEl("div", { style: { background: "#F8FAFC", border: "1px solid var(--line)", borderRadius: "6px", padding: "10px", marginBottom: "8px" } });
+      p2Box.appendChild(createEl("label", { style: { fontWeight: "600", fontSize: "12px", color: "var(--navy)" } }, "Pillar 02"));
+      var inpP2Title = createEl("input", { type: "text", value: page.why_pillar2_title || "Manufactured in Chennai", style: { marginBottom: "6px" } });
+      p2Box.appendChild(inpP2Title);
+      var inpP2Desc = createEl("textarea", { rows: "2" }, page.why_pillar2_desc || "");
+      p2Box.appendChild(inpP2Desc);
+      s6.appendChild(p2Box);
+
+      // Pillar 3
+      var p3Box = createEl("div", { style: { background: "#F8FAFC", border: "1px solid var(--line)", borderRadius: "6px", padding: "10px" } });
+      p3Box.appendChild(createEl("label", { style: { fontWeight: "600", fontSize: "12px", color: "var(--navy)" } }, "Pillar 03"));
+      var inpP3Title = createEl("input", { type: "text", value: page.why_pillar3_title || "Dedicated Service & Spares", style: { marginBottom: "6px" } });
+      p3Box.appendChild(inpP3Title);
+      var inpP3Desc = createEl("textarea", { rows: "2" }, page.why_pillar3_desc || "");
+      p3Box.appendChild(inpP3Desc);
+      s6.appendChild(p3Box);
+
+      form.appendChild(s6);
+
+      // Section 7: Bottom CTA Banner
+      var s7 = createEl("div", { className: "cms-section-card" });
+      var h7 = createEl("div", { className: "cms-section-header" });
+      var h7Left = createEl("div", { className: "cms-section-title-wrap" });
+      h7Left.appendChild(createEl("span", { className: "cms-section-number" }, "7"));
+      h7Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Bottom Call-To-Action Banner"));
+      h7.appendChild(h7Left);
+      s7.appendChild(h7);
+
+      var gCtaTitle = createEl("div", { className: "form-group" });
+      gCtaTitle.appendChild(createEl("label", null, "Banner Title"));
+      var inpCtaTitle = createEl("input", { type: "text", value: page.cta_banner_title || "Ready to electrify your fleet?" });
+      gCtaTitle.appendChild(inpCtaTitle);
+      s7.appendChild(gCtaTitle);
+
+      var gCtaText = createEl("div", { className: "form-group" });
+      gCtaText.appendChild(createEl("label", null, "Banner Subtext"));
+      var inpCtaText = createEl("textarea", { rows: "2" }, page.cta_banner_text || "");
+      gCtaText.appendChild(inpCtaText);
+      s7.appendChild(gCtaText);
+
+      var rCtaBtns = createEl("div", { className: "form-row" });
+      var gCtaBtn1 = createEl("div", { className: "form-group" });
+      gCtaBtn1.appendChild(createEl("label", null, "Primary Button Label"));
+      var inpCtaBtn = createEl("input", { type: "text", value: page.cta_banner_btn || "Request a Quote" });
+      gCtaBtn1.appendChild(inpCtaBtn);
+      var gCtaBtn2 = createEl("div", { className: "form-group" });
+      gCtaBtn2.appendChild(createEl("label", null, "Secondary Button Label"));
+      var inpCtaBtnSec = createEl("input", { type: "text", value: page.cta_banner_secondary_btn || "Explore Our Range" });
+      gCtaBtn2.appendChild(inpCtaBtnSec);
+      rCtaBtns.appendChild(gCtaBtn1);
+      rCtaBtns.appendChild(gCtaBtn2);
+      s7.appendChild(rCtaBtns);
+      form.appendChild(s7);
+
+      // Section 8: SEO
+      var s8 = createEl("div", { className: "cms-section-card" });
+      var h8 = createEl("div", { className: "cms-section-header" });
+      var h8Left = createEl("div", { className: "cms-section-title-wrap" });
+      h8Left.appendChild(createEl("span", { className: "cms-section-number" }, "8"));
+      h8Left.appendChild(createEl("h3", { className: "cms-section-title" }, "SEO Search Metadata"));
+      h8.appendChild(h8Left);
+      s8.appendChild(h8);
 
       var gMeta = createEl("div", { className: "form-group" });
       gMeta.appendChild(createEl("label", null, "Google Search Meta Description"));
       var inpMeta = createEl("textarea", { rows: "2" }, page.meta_desc || "");
       gMeta.appendChild(inpMeta);
-      s6.appendChild(gMeta);
-      form.appendChild(s6);
+      s8.appendChild(gMeta);
+      form.appendChild(s8);
 
       // Submit Bar
       var actions = createEl("div", { className: "form-actions" });
@@ -3776,20 +4070,56 @@
         page.subheadline = inpSub.value.trim();
         page.cta_primary = inpCta1.value.trim();
         page.cta_secondary = inpCta2.value.trim();
+        page.hero_video_url = mediaVid.input.value.trim();
+        page.float_badge_title = inpFloatT.value.trim();
+        page.float_badge_sub = inpFloatS.value.trim();
         page.stat_1_val = inpS1Val.value.trim();
         page.stat_1_lbl = inpS1Lbl.value.trim();
         page.stat_2_val = inpS2Val.value.trim();
         page.stat_2_lbl = inpS2Lbl.value.trim();
         page.stat_3_val = inpS3Val.value.trim();
         page.stat_3_lbl = inpS3Lbl.value.trim();
-        page.stat_4_val = inpS4Val.value.trim();
-        page.stat_4_lbl = inpS4Lbl.value.trim();
         page.trust_heading = inpTrustHead.value.trim();
         page.trust_partners = inpTrustList.value.trim();
+        page.range_head_eyebrow = inpREyebrow.value.trim();
+        page.range_head_title = inpRTitle.value.trim();
+        page.range_head_desc = inpRDesc.value.trim();
+        page.range_card1_title = rc1Title.value.trim();
+        page.range_card1_desc = rc1Desc.value.trim();
+        page.range_card1_img = rc1Img.input.value.trim();
+        page.range_card2_title = rc2Title.value.trim();
+        page.range_card2_desc = rc2Desc.value.trim();
+        page.range_card2_img = rc2Img.input.value.trim();
+        page.range_card3_title = rc3Title.value.trim();
+        page.range_card3_desc = rc3Desc.value.trim();
+        page.range_card3_img = rc3Img.input.value.trim();
+        page.cases_head_eyebrow = inpCEyebrow.value.trim();
+        page.cases_head_title = inpCTitle.value.trim();
+        page.cases_head_desc = inpCDesc.value.trim();
+        page.case_teaser1_tag = inpCt1Tag.value.trim();
+        page.case_teaser1_title = inpCt1Title.value.trim();
+        page.case_teaser1_desc = inpCt1Desc.value.trim();
+        page.case_teaser1_img = ct1Img.input.value.trim();
+        page.case_teaser2_tag = inpCt2Tag.value.trim();
+        page.case_teaser2_title = inpCt2Title.value.trim();
+        page.case_teaser2_desc = inpCt2Desc.value.trim();
+        page.case_teaser2_img = ct2Img.input.value.trim();
+        page.case_teaser3_tag = inpCt3Tag.value.trim();
+        page.case_teaser3_title = inpCt3Title.value.trim();
+        page.case_teaser3_desc = inpCt3Desc.value.trim();
+        page.case_teaser3_img = ct3Img.input.value.trim();
         page.why_heading = inpWhyHead.value.trim();
         page.why_body = inpWhyBody.value.trim();
+        page.why_pillar1_title = inpP1Title.value.trim();
+        page.why_pillar1_desc = inpP1Desc.value.trim();
+        page.why_pillar2_title = inpP2Title.value.trim();
+        page.why_pillar2_desc = inpP2Desc.value.trim();
+        page.why_pillar3_title = inpP3Title.value.trim();
+        page.why_pillar3_desc = inpP3Desc.value.trim();
         page.cta_banner_title = inpCtaTitle.value.trim();
+        page.cta_banner_text = inpCtaText.value.trim();
         page.cta_banner_btn = inpCtaBtn.value.trim();
+        page.cta_banner_secondary_btn = inpCtaBtnSec.value.trim();
         page.meta_desc = inpMeta.value.trim();
         savePageData(page);
       });
@@ -3828,13 +4158,13 @@
 
       var gBadge = createEl("div", { className: "form-group" });
       gBadge.appendChild(createEl("label", null, "Category Badge"));
-      var inpBadge = createEl("input", { type: "text", value: page.badge || "" });
+      var inpBadge = createEl("input", { type: "text", value: page.badge || "PRODUCTS" });
       gBadge.appendChild(inpBadge);
       s1.appendChild(gBadge);
 
       var gHead = createEl("div", { className: "form-group" });
       gHead.appendChild(createEl("label", null, "Headline"));
-      var inpHead = createEl("input", { type: "text", value: page.headline || "" });
+      var inpHead = createEl("input", { type: "text", value: page.headline || "One range, every vessel" });
       gHead.appendChild(inpHead);
       s1.appendChild(gHead);
 
@@ -3857,11 +4187,27 @@
       h2.appendChild(addMotorBtn);
       s2.appendChild(h2);
 
+      var rMHead = createEl("div", { className: "form-row" });
+      var gMBadge = createEl("div", { className: "form-group" });
+      gMBadge.appendChild(createEl("label", null, "Outboard Range Badge"));
+      var inpMBadge = createEl("input", { type: "text", value: page.motors_badge || "3–50 HP · 8 models" });
+      gMBadge.appendChild(inpMBadge);
+      var gMTitle = createEl("div", { className: "form-group" });
+      gMTitle.appendChild(createEl("label", null, "Outboard Range Title"));
+      var inpMTitle = createEl("input", { type: "text", value: page.motors_title || "Outboard Motors" });
+      gMTitle.appendChild(inpMTitle);
+      rMHead.appendChild(gMBadge);
+      rMHead.appendChild(gMTitle);
+      s2.appendChild(rMHead);
+
       var gMIntro = createEl("div", { className: "form-group" });
       gMIntro.appendChild(createEl("label", null, "Outboard Range Description"));
       var inpMIntro = createEl("textarea", { rows: "2" }, page.motors_intro || "");
       gMIntro.appendChild(inpMIntro);
       s2.appendChild(gMIntro);
+
+      var mediaMotor = createMediaField("Outboard Motor Featured Image", page.motors_img || "assets/photos/outboard-motor-cutout.webp", false);
+      s2.appendChild(mediaMotor.group);
 
       // Active Motors List Cards
       var motorTableWrap = createEl("div", { style: { marginTop: "16px" } });
@@ -3928,11 +4274,65 @@
       h3.appendChild(h3Left);
       s3.appendChild(h3);
 
+      var rBHead = createEl("div", { className: "form-row" });
+      var gBBadge = createEl("div", { className: "form-group" });
+      gBBadge.appendChild(createEl("label", null, "Section Badge"));
+      var inpBBadge = createEl("input", { type: "text", value: page.battery_badge || "LiFePO4" });
+      gBBadge.appendChild(inpBBadge);
+      var gBTitle = createEl("div", { className: "form-group" });
+      gBTitle.appendChild(createEl("label", null, "Section Title"));
+      var inpBTitle = createEl("input", { type: "text", value: page.battery_title || "Battery Packs" });
+      gBTitle.appendChild(inpBTitle);
+      rBHead.appendChild(gBBadge);
+      rBHead.appendChild(gBTitle);
+      s3.appendChild(rBHead);
+
       var gBIntro = createEl("div", { className: "form-group" });
       gBIntro.appendChild(createEl("label", null, "Battery Architecture & Chemistry Description"));
       var inpBIntro = createEl("textarea", { rows: "3" }, page.batteries_intro || "");
       gBIntro.appendChild(inpBIntro);
       s3.appendChild(gBIntro);
+
+      var mediaBatt = createMediaField("Battery Box Image", page.battery_img || "assets/photos/Battery Box.webp", false);
+      s3.appendChild(mediaBatt.group);
+
+      s3.appendChild(createEl("h4", { style: { margin: "14px 0 8px", fontSize: "12.5px", color: "var(--navy)" } }, "Battery Specifications Grid"));
+      var rBSpec1 = createEl("div", { className: "form-row-3" });
+      var gBVolt = createEl("div", { className: "form-group" });
+      gBVolt.appendChild(createEl("label", null, "Voltage Options"));
+      var inpBVolt = createEl("input", { type: "text", value: page.battery_voltage || "51.2V / 73.6V / 96V / 144V" });
+      gBVolt.appendChild(inpBVolt);
+      var gBCap = createEl("div", { className: "form-group" });
+      gBCap.appendChild(createEl("label", null, "Capacity Range"));
+      var inpBCap = createEl("input", { type: "text", value: page.battery_capacity || "50 – 400 AH" });
+      gBCap.appendChild(inpBCap);
+      var gBChem = createEl("div", { className: "form-group" });
+      gBChem.appendChild(createEl("label", null, "Chemistry"));
+      var inpBChem = createEl("input", { type: "text", value: page.battery_chemistry || "LiFePO4" });
+      gBChem.appendChild(inpBChem);
+      rBSpec1.appendChild(gBVolt);
+      rBSpec1.appendChild(gBCap);
+      rBSpec1.appendChild(gBChem);
+      s3.appendChild(rBSpec1);
+
+      var rBSpec2 = createEl("div", { className: "form-row-3" });
+      var gBProt = createEl("div", { className: "form-group" });
+      gBProt.appendChild(createEl("label", null, "Protection"));
+      var inpBProt = createEl("input", { type: "text", value: page.battery_protection || "Integrated BMS" });
+      gBProt.appendChild(inpBProt);
+      var gBEnc = createEl("div", { className: "form-group" });
+      gBEnc.appendChild(createEl("label", null, "Enclosure Rating"));
+      var inpBEnc = createEl("input", { type: "text", value: page.battery_enclosure || "Marine-grade, IP-rated" });
+      gBEnc.appendChild(inpBEnc);
+      var gBBest = createEl("div", { className: "form-group" });
+      gBBest.appendChild(createEl("label", null, "Best For"));
+      var inpBBest = createEl("input", { type: "text", value: page.battery_best_for || "Retrofits, new builds, shore charging" });
+      gBBest.appendChild(inpBBest);
+      rBSpec2.appendChild(gBProt);
+      rBSpec2.appendChild(gBEnc);
+      rBSpec2.appendChild(gBBest);
+      s3.appendChild(rBSpec2);
+
       form.appendChild(s3);
 
       // Section 4: Custom Electric & Solar Hybrid Vessels
@@ -3944,28 +4344,111 @@
       h4.appendChild(h4Left);
       s4.appendChild(h4);
 
+      var rBoatsHead = createEl("div", { className: "form-row" });
+      var gBtBadge = createEl("div", { className: "form-group" });
+      gBtBadge.appendChild(createEl("label", null, "Vessels Badge"));
+      var inpBtBadge = createEl("input", { type: "text", value: page.boats_badge || "Custom Build" });
+      gBtBadge.appendChild(inpBtBadge);
+      var gBtTitle = createEl("div", { className: "form-group" });
+      gBtTitle.appendChild(createEl("label", null, "Vessels Title"));
+      var inpBtTitle = createEl("input", { type: "text", value: page.boats_title || "Electric & Solar Boats" });
+      gBtTitle.appendChild(inpBtTitle);
+      rBoatsHead.appendChild(gBtBadge);
+      rBoatsHead.appendChild(gBtTitle);
+      s4.appendChild(rBoatsHead);
+
       var gBoatIntro = createEl("div", { className: "form-group" });
       gBoatIntro.appendChild(createEl("label", null, "Vessel Hull & Passenger Transport Narrative"));
       var inpBoatIntro = createEl("textarea", { rows: "3" }, page.boats_intro || "");
       gBoatIntro.appendChild(inpBoatIntro);
       s4.appendChild(gBoatIntro);
+
+      var mediaBoat = createMediaField("Boat Featured Photo", page.boats_img || "assets/photos/seago-solar-boat.webp", false);
+      s4.appendChild(mediaBoat.group);
+
+      s4.appendChild(createEl("h4", { style: { margin: "14px 0 8px", fontSize: "12.5px", color: "var(--navy)" } }, "Boat Specifications Grid"));
+      var rBtSpec1 = createEl("div", { className: "form-row-3" });
+      var gBtHull = createEl("div", { className: "form-group" });
+      gBtHull.appendChild(createEl("label", null, "Hull Material"));
+      var inpBtHull = createEl("input", { type: "text", value: page.boats_hull || "FRP (fibre-reinforced plastic)" });
+      gBtHull.appendChild(inpBtHull);
+      var gBtProp = createEl("div", { className: "form-group" });
+      gBtProp.appendChild(createEl("label", null, "Propulsion"));
+      var inpBtProp = createEl("input", { type: "text", value: page.boats_propulsion || "Electric or solar-hybrid" });
+      gBtProp.appendChild(inpBtProp);
+      var gBtCfg = createEl("div", { className: "form-group" });
+      gBtCfg.appendChild(createEl("label", null, "Configurations"));
+      var inpBtCfg = createEl("input", { type: "text", value: page.boats_config || "Fishing, tourism, ferry" });
+      gBtCfg.appendChild(inpBtCfg);
+      rBtSpec1.appendChild(gBtHull);
+      rBtSpec1.appendChild(gBtProp);
+      rBtSpec1.appendChild(gBtCfg);
+      s4.appendChild(rBtSpec1);
+
+      var rBtSpec2 = createEl("div", { className: "form-row-3" });
+      var gBtCust = createEl("div", { className: "form-group" });
+      gBtCust.appendChild(createEl("label", null, "Customization"));
+      var inpBtCust = createEl("input", { type: "text", value: page.boats_custom || "Seating, canopy & capacity to spec" });
+      gBtCust.appendChild(inpBtCust);
+      var gBtOrig = createEl("div", { className: "form-group" });
+      gBtOrig.appendChild(createEl("label", null, "Built & Delivered From"));
+      var inpBtOrig = createEl("input", { type: "text", value: page.boats_origin || "Chennai, Tamil Nadu" });
+      gBtOrig.appendChild(inpBtOrig);
+      var gBtRef = createEl("div", { className: "form-group" });
+      gBtRef.appendChild(createEl("label", null, "Reference Builds"));
+      var inpBtRef = createEl("input", { type: "text", value: page.boats_reference || "Fishing & public transport vessels" });
+      gBtRef.appendChild(inpBtRef);
+      rBtSpec2.appendChild(gBtCust);
+      rBtSpec2.appendChild(gBtOrig);
+      rBtSpec2.appendChild(gBtRef);
+      s4.appendChild(rBtSpec2);
+
       form.appendChild(s4);
 
-      // Section 5: SEO
+      // Section 5: Bottom CTA Banner
       var s5 = createEl("div", { className: "cms-section-card" });
       var h5 = createEl("div", { className: "cms-section-header" });
       var h5Left = createEl("div", { className: "cms-section-title-wrap" });
       h5Left.appendChild(createEl("span", { className: "cms-section-number" }, "5"));
-      h5Left.appendChild(createEl("h3", { className: "cms-section-title" }, "SEO Search Metadata"));
+      h5Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Bottom Call-To-Action Banner"));
       h5.appendChild(h5Left);
       s5.appendChild(h5);
+
+      var rCtaBan = createEl("div", { className: "form-row" });
+      var gCtaTitle = createEl("div", { className: "form-group" });
+      gCtaTitle.appendChild(createEl("label", null, "Banner Title"));
+      var inpCtaTitle = createEl("input", { type: "text", value: page.cta_banner_title || "Tell us your boat, we'll spec the system" });
+      gCtaTitle.appendChild(inpCtaTitle);
+      var gCtaBtn = createEl("div", { className: "form-group" });
+      gCtaBtn.appendChild(createEl("label", null, "Button Label"));
+      var inpCtaBtn = createEl("input", { type: "text", value: page.cta_banner_btn || "Request a Quote" });
+      gCtaBtn.appendChild(inpCtaBtn);
+      rCtaBan.appendChild(gCtaTitle);
+      rCtaBan.appendChild(gCtaBtn);
+      s5.appendChild(rCtaBan);
+
+      var gCtaText = createEl("div", { className: "form-group" });
+      gCtaText.appendChild(createEl("label", null, "Banner Subtext"));
+      var inpCtaText = createEl("textarea", { rows: "2" }, page.cta_banner_text || "");
+      gCtaText.appendChild(inpCtaText);
+      s5.appendChild(gCtaText);
+      form.appendChild(s5);
+
+      // Section 6: SEO
+      var s6 = createEl("div", { className: "cms-section-card" });
+      var h6 = createEl("div", { className: "cms-section-header" });
+      var h6Left = createEl("div", { className: "cms-section-title-wrap" });
+      h6Left.appendChild(createEl("span", { className: "cms-section-number" }, "6"));
+      h6Left.appendChild(createEl("h3", { className: "cms-section-title" }, "SEO Search Metadata"));
+      h6.appendChild(h6Left);
+      s6.appendChild(h6);
 
       var gMeta = createEl("div", { className: "form-group" });
       gMeta.appendChild(createEl("label", null, "Google Search Meta Description"));
       var inpMeta = createEl("textarea", { rows: "2" }, page.meta_desc || "");
       gMeta.appendChild(inpMeta);
-      s5.appendChild(gMeta);
-      form.appendChild(s5);
+      s6.appendChild(gMeta);
+      form.appendChild(s6);
 
       // Submit Bar
       var actions = createEl("div", { className: "form-actions" });
@@ -3982,9 +4465,33 @@
         page.badge = inpBadge.value.trim();
         page.headline = inpHead.value.trim();
         page.subheadline = inpSub.value.trim();
+        page.motors_badge = inpMBadge.value.trim();
+        page.motors_title = inpMTitle.value.trim();
         page.motors_intro = inpMIntro.value.trim();
+        page.motors_img = mediaMotor.input.value.trim();
+        page.battery_badge = inpBBadge.value.trim();
+        page.battery_title = inpBTitle.value.trim();
         page.batteries_intro = inpBIntro.value.trim();
+        page.battery_img = mediaBatt.input.value.trim();
+        page.battery_voltage = inpBVolt.value.trim();
+        page.battery_capacity = inpBCap.value.trim();
+        page.battery_chemistry = inpBChem.value.trim();
+        page.battery_protection = inpBProt.value.trim();
+        page.battery_enclosure = inpBEnc.value.trim();
+        page.battery_best_for = inpBBest.value.trim();
+        page.boats_badge = inpBtBadge.value.trim();
+        page.boats_title = inpBtTitle.value.trim();
         page.boats_intro = inpBoatIntro.value.trim();
+        page.boats_img = mediaBoat.input.value.trim();
+        page.boats_hull = inpBtHull.value.trim();
+        page.boats_propulsion = inpBtProp.value.trim();
+        page.boats_config = inpBtCfg.value.trim();
+        page.boats_custom = inpBtCust.value.trim();
+        page.boats_origin = inpBtOrig.value.trim();
+        page.boats_reference = inpBtRef.value.trim();
+        page.cta_banner_title = inpCtaTitle.value.trim();
+        page.cta_banner_btn = inpCtaBtn.value.trim();
+        page.cta_banner_text = inpCtaText.value.trim();
         page.meta_desc = inpMeta.value.trim();
         savePageData(page);
       });
@@ -4023,13 +4530,13 @@
 
       var gBadge = createEl("div", { className: "form-group" });
       gBadge.appendChild(createEl("label", null, "Banner Badge"));
-      var inpBadge = createEl("input", { type: "text", value: page.badge || "" });
+      var inpBadge = createEl("input", { type: "text", value: page.badge || "ABOUT US" });
       gBadge.appendChild(inpBadge);
       s1.appendChild(gBadge);
 
       var gHead = createEl("div", { className: "form-group" });
       gHead.appendChild(createEl("label", null, "Headline"));
-      var inpHead = createEl("input", { type: "text", value: page.headline || "" });
+      var inpHead = createEl("input", { type: "text", value: page.headline || "Building the electric fleet India's waterways need" });
       gHead.appendChild(inpHead);
       s1.appendChild(gHead);
 
@@ -4040,87 +4547,242 @@
       s1.appendChild(gSub);
       form.appendChild(s1);
 
-      // Section 2: Mission & Story
+      // Section 2: Our Story & Impact Counters
       var s2 = createEl("div", { className: "cms-section-card" });
       var h2 = createEl("div", { className: "cms-section-header" });
       var h2Left = createEl("div", { className: "cms-section-title-wrap" });
       h2Left.appendChild(createEl("span", { className: "cms-section-number" }, "2"));
-      h2Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Mission & Company Narrative"));
+      h2Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Our Story & Impact Metrics"));
       h2.appendChild(h2Left);
       s2.appendChild(h2);
 
-      var gMissTitle = createEl("div", { className: "form-group" });
-      gMissTitle.appendChild(createEl("label", null, "Mission Title"));
-      var inpMissTitle = createEl("input", { type: "text", value: page.mission_title || "" });
-      gMissTitle.appendChild(inpMissTitle);
-      s2.appendChild(gMissTitle);
+      var gStoryEyebrow = createEl("div", { className: "form-group" });
+      gStoryEyebrow.appendChild(createEl("label", null, "Story Section Eyebrow"));
+      var inpStoryEye = createEl("input", { type: "text", value: page.story_eyebrow || "Our Story" });
+      gStoryEyebrow.appendChild(inpStoryEye);
+      s2.appendChild(gStoryEyebrow);
 
-      var gMissBody = createEl("div", { className: "form-group" });
-      gMissBody.appendChild(createEl("label", null, "Mission Statement & Story"));
-      var inpMissBody = createEl("textarea", { rows: "4" }, page.mission_body || "");
-      gMissBody.appendChild(inpMissBody);
-      s2.appendChild(gMissBody);
+      var gStoryP1 = createEl("div", { className: "form-group" });
+      gStoryP1.appendChild(createEl("label", null, "Story Paragraph 1"));
+      var inpStoryP1 = createEl("textarea", { rows: "3" }, page.story_p1 || "");
+      gStoryP1.appendChild(inpStoryP1);
+      s2.appendChild(gStoryP1);
+
+      var gStoryP2 = createEl("div", { className: "form-group" });
+      gStoryP2.appendChild(createEl("label", null, "Story Paragraph 2"));
+      var inpStoryP2 = createEl("textarea", { rows: "3" }, page.story_p2 || "");
+      gStoryP2.appendChild(inpStoryP2);
+      s2.appendChild(gStoryP2);
+
+      s2.appendChild(createEl("h4", { style: { margin: "14px 0 8px", fontSize: "12.5px", color: "var(--navy)" } }, "3 Impact Statistics Strip"));
+      var rStoryStats = createEl("div", { className: "form-row-3" });
+      var gSt1 = createEl("div", { className: "form-group" });
+      gSt1.appendChild(createEl("label", null, "Stat 1 (e.g. 5 / States Operating)"));
+      var inpSt1Val = createEl("input", { type: "text", value: page.story_stat1_val || "5", placeholder: "Val" });
+      var inpSt1Lbl = createEl("input", { type: "text", value: page.story_stat1_lbl || "States Operating", placeholder: "Label", style: { marginTop: "4px" } });
+      gSt1.appendChild(inpSt1Val);
+      gSt1.appendChild(inpSt1Lbl);
+      rStoryStats.appendChild(gSt1);
+
+      var gSt2 = createEl("div", { className: "form-group" });
+      gSt2.appendChild(createEl("label", null, "Stat 2 (e.g. 2+ Yrs / Field-Proven)"));
+      var inpSt2Val = createEl("input", { type: "text", value: page.story_stat2_val || "2+ Yrs", placeholder: "Val" });
+      var inpSt2Lbl = createEl("input", { type: "text", value: page.story_stat2_lbl || "Field-Proven", placeholder: "Label", style: { marginTop: "4px" } });
+      gSt2.appendChild(inpSt2Val);
+      gSt2.appendChild(inpSt2Lbl);
+      rStoryStats.appendChild(gSt2);
+
+      var gSt3 = createEl("div", { className: "form-group" });
+      gSt3.appendChild(createEl("label", null, "Stat 3 (e.g. 50 HP / Max Outboard)"));
+      var inpSt3Val = createEl("input", { type: "text", value: page.story_stat3_val || "50 HP", placeholder: "Val" });
+      var inpSt3Lbl = createEl("input", { type: "text", value: page.story_stat3_lbl || "Max Outboard", placeholder: "Label", style: { marginTop: "4px" } });
+      gSt3.appendChild(inpSt3Val);
+      gSt3.appendChild(inpSt3Lbl);
+      rStoryStats.appendChild(gSt3);
+      s2.appendChild(rStoryStats);
+
       form.appendChild(s2);
 
-      // Section 3: Facilities & Testing
+      // Section 3: Where We Work (Facilities & Offices)
       var s3 = createEl("div", { className: "cms-section-card" });
       var h3 = createEl("div", { className: "cms-section-header" });
       var h3Left = createEl("div", { className: "cms-section-title-wrap" });
       h3Left.appendChild(createEl("span", { className: "cms-section-number" }, "3"));
-      h3Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Manufacturing & Watercraft Testing Facilities"));
+      h3Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Where We Work (Locations)"));
       h3.appendChild(h3Left);
       s3.appendChild(h3);
 
-      var gFac = createEl("div", { className: "form-group" });
-      gFac.appendChild(createEl("label", null, "Chennai Propulsion Plant & Kollam Testing Location"));
-      var inpFac = createEl("textarea", { rows: "3" }, page.manufacturing_location || "");
-      gFac.appendChild(inpFac);
-      s3.appendChild(gFac);
+      var rLocHead = createEl("div", { className: "form-row" });
+      var gLocEye = createEl("div", { className: "form-group" });
+      gLocEye.appendChild(createEl("label", null, "Locations Eyebrow"));
+      var inpLocEye = createEl("input", { type: "text", value: page.loc_eyebrow || "Where We Work" });
+      gLocEye.appendChild(inpLocEye);
+      var gLocHead = createEl("div", { className: "form-group" });
+      gLocHead.appendChild(createEl("label", null, "Locations Heading"));
+      var inpLocHead = createEl("input", { type: "text", value: page.loc_heading || "Manufacturing in Tamil Nadu, sales in Kerala" });
+      gLocHead.appendChild(inpLocHead);
+      rLocHead.appendChild(gLocEye);
+      rLocHead.appendChild(gLocHead);
+      s3.appendChild(rLocHead);
 
-      var gHigh = createEl("div", { className: "form-group" });
-      gHigh.appendChild(createEl("label", null, "Engineering & Technology Core Pillars"));
-      var inpHigh = createEl("textarea", { rows: "3" }, page.engineering_highlights || "");
-      gHigh.appendChild(inpHigh);
-      s3.appendChild(gHigh);
+      var gLocSub = createEl("div", { className: "form-group" });
+      gLocSub.appendChild(createEl("label", null, "Locations Subtitle"));
+      var inpLocSub = createEl("textarea", { rows: "2" }, page.loc_sub || "");
+      gLocSub.appendChild(inpLocSub);
+      s3.appendChild(gLocSub);
+
+      // Location 1: Chennai
+      var loc1Box = createEl("div", { style: { background: "#F8FAFC", border: "1px solid var(--line)", borderRadius: "6px", padding: "12px", marginBottom: "12px" } });
+      loc1Box.appendChild(createEl("h4", { style: { margin: "0 0 10px", fontSize: "13px", color: "var(--navy)" } }, "Location 1: Manufacturing Facility"));
+      var rLoc1 = createEl("div", { className: "form-row" });
+      var inpLoc1Title = createEl("input", { type: "text", value: page.loc1_title || "Manufacturing Facility", placeholder: "Facility Title" });
+      var inpLoc1Addr = createEl("input", { type: "text", value: page.loc1_addr || "Chennai, Tamil Nadu, India", placeholder: "Address / City" });
+      rLoc1.appendChild(inpLoc1Title);
+      rLoc1.appendChild(inpLoc1Addr);
+      loc1Box.appendChild(rLoc1);
+      var inpLoc1Desc = createEl("textarea", { rows: "2", style: { marginTop: "8px" } }, page.loc1_desc || "");
+      loc1Box.appendChild(inpLoc1Desc);
+      s3.appendChild(loc1Box);
+
+      // Location 2: Kerala
+      var loc2Box = createEl("div", { style: { background: "#F8FAFC", border: "1px solid var(--line)", borderRadius: "6px", padding: "12px" } });
+      loc2Box.appendChild(createEl("h4", { style: { margin: "0 0 10px", fontSize: "13px", color: "var(--navy)" } }, "Location 2: Sales & Support Office"));
+      var rLoc2 = createEl("div", { className: "form-row" });
+      var inpLoc2Title = createEl("input", { type: "text", value: page.loc2_title || "Sales & Support Office", placeholder: "Office Title" });
+      var inpLoc2Addr = createEl("input", { type: "text", value: page.loc2_addr || "Kerala, India", placeholder: "Address / City" });
+      rLoc2.appendChild(inpLoc2Title);
+      rLoc2.appendChild(inpLoc2Addr);
+      loc2Box.appendChild(rLoc2);
+      var inpLoc2Desc = createEl("textarea", { rows: "2", style: { marginTop: "8px" } }, page.loc2_desc || "");
+      loc2Box.appendChild(inpLoc2Desc);
+      s3.appendChild(loc2Box);
+
       form.appendChild(s3);
 
-      // Section 4: Leadership Profile
+      // Section 4: Our Approach (3 Priorities)
       var s4 = createEl("div", { className: "cms-section-card" });
       var h4 = createEl("div", { className: "cms-section-header" });
       var h4Left = createEl("div", { className: "cms-section-title-wrap" });
       h4Left.appendChild(createEl("span", { className: "cms-section-number" }, "4"));
-      h4Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Founder & Leadership Profile"));
+      h4Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Our Approach (Three Uncompromised Priorities)"));
       h4.appendChild(h4Left);
       s4.appendChild(h4);
+
+      var rAppHead = createEl("div", { className: "form-row" });
+      var gAppEye = createEl("div", { className: "form-group" });
+      gAppEye.appendChild(createEl("label", null, "Approach Eyebrow"));
+      var inpAppEye = createEl("input", { type: "text", value: page.approach_eyebrow || "Our Approach" });
+      gAppEye.appendChild(inpAppEye);
+      var gAppHead = createEl("div", { className: "form-group" });
+      gAppHead.appendChild(createEl("label", null, "Approach Heading"));
+      var inpAppHead = createEl("input", { type: "text", value: page.approach_heading || "Three things we don't compromise on" });
+      gAppHead.appendChild(inpAppHead);
+      rAppHead.appendChild(gAppEye);
+      rAppHead.appendChild(gAppHead);
+      s4.appendChild(rAppHead);
+
+      var gAppSub = createEl("div", { className: "form-group" });
+      gAppSub.appendChild(createEl("label", null, "Approach Subtitle"));
+      var inpAppSub = createEl("textarea", { rows: "2" }, page.approach_sub || "");
+      gAppSub.appendChild(inpAppSub);
+      s4.appendChild(gAppSub);
+
+      // Priority 1
+      var pr1Box = createEl("div", { style: { background: "#F8FAFC", border: "1px solid var(--line)", borderRadius: "6px", padding: "10px", marginBottom: "8px" } });
+      pr1Box.appendChild(createEl("label", { style: { fontWeight: "600", fontSize: "12px", color: "var(--navy)" } }, "Priority 01"));
+      var inpPr1Title = createEl("input", { type: "text", value: page.priority1_title || "Engineered for Indian Waters", style: { marginBottom: "6px" } });
+      pr1Box.appendChild(inpPr1Title);
+      var inpPr1Desc = createEl("textarea", { rows: "2" }, page.priority1_desc || "");
+      pr1Box.appendChild(inpPr1Desc);
+      s4.appendChild(pr1Box);
+
+      // Priority 2
+      var pr2Box = createEl("div", { style: { background: "#F8FAFC", border: "1px solid var(--line)", borderRadius: "6px", padding: "10px", marginBottom: "8px" } });
+      pr2Box.appendChild(createEl("label", { style: { fontWeight: "600", fontSize: "12px", color: "var(--navy)" } }, "Priority 02"));
+      var inpPr2Title = createEl("input", { type: "text", value: page.priority2_title || "Manufactured, Not Imported", style: { marginBottom: "6px" } });
+      pr2Box.appendChild(inpPr2Title);
+      var inpPr2Desc = createEl("textarea", { rows: "2" }, page.priority2_desc || "");
+      pr2Box.appendChild(inpPr2Desc);
+      s4.appendChild(pr2Box);
+
+      // Priority 3
+      var pr3Box = createEl("div", { style: { background: "#F8FAFC", border: "1px solid var(--line)", borderRadius: "6px", padding: "10px" } });
+      pr3Box.appendChild(createEl("label", { style: { fontWeight: "600", fontSize: "12px", color: "var(--navy)" } }, "Priority 03"));
+      var inpPr3Title = createEl("input", { type: "text", value: page.priority3_title || "Field-Tested With Real Institutions", style: { marginBottom: "6px" } });
+      pr3Box.appendChild(inpPr3Title);
+      var inpPr3Desc = createEl("textarea", { rows: "2" }, page.priority3_desc || "");
+      pr3Box.appendChild(inpPr3Desc);
+      s4.appendChild(pr3Box);
+
+      form.appendChild(s4);
+
+      // Section 5: Leadership Profile
+      var s5 = createEl("div", { className: "cms-section-card" });
+      var h5 = createEl("div", { className: "cms-section-header" });
+      var h5Left = createEl("div", { className: "cms-section-title-wrap" });
+      h5Left.appendChild(createEl("span", { className: "cms-section-number" }, "5"));
+      h5Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Founder & Leadership Profile"));
+      h5.appendChild(h5Left);
+      s5.appendChild(h5);
 
       var rLead = createEl("div", { className: "form-row" });
       var gFName = createEl("div", { className: "form-group" });
       gFName.appendChild(createEl("label", null, "Founder Full Name"));
-      var inpFName = createEl("input", { type: "text", value: page.founder_name || "" });
+      var inpFName = createEl("input", { type: "text", value: page.founder_name || "Gopish Kumar.G" });
       gFName.appendChild(inpFName);
       var gFTitle = createEl("div", { className: "form-group" });
       gFTitle.appendChild(createEl("label", null, "Official Title"));
-      var inpFTitle = createEl("input", { type: "text", value: page.founder_title || "" });
+      var inpFTitle = createEl("input", { type: "text", value: page.founder_title || "Founder & CEO, Seagö" });
       gFTitle.appendChild(inpFTitle);
       rLead.appendChild(gFName);
       rLead.appendChild(gFTitle);
-      s4.appendChild(rLead);
+      s5.appendChild(rLead);
+
+      var mediaFounder = createMediaField("Founder Portrait Photo", page.founder_image || "assets/photos/founder.webp", false);
+      s5.appendChild(mediaFounder.group);
+
+      var gFQuote = createEl("div", { className: "form-group" });
+      gFQuote.appendChild(createEl("label", null, "Founder Pull Quote"));
+      var inpFQuote = createEl("input", { type: "text", value: page.founder_quote || "We build exactly what India's waterways need." });
+      gFQuote.appendChild(inpFQuote);
+      s5.appendChild(gFQuote);
 
       var gFBio = createEl("div", { className: "form-group" });
       gFBio.appendChild(createEl("label", null, "Leadership Message / Biography"));
       var inpFBio = createEl("textarea", { rows: "3" }, page.founder_bio || "");
       gFBio.appendChild(inpFBio);
-      s4.appendChild(gFBio);
-      form.appendChild(s4);
+      s5.appendChild(gFBio);
 
-      // Section 5: SEO
-      var s5 = createEl("div", { className: "cms-section-card" });
+      var rLeadContact = createEl("div", { className: "form-row" });
+      var gFMail = createEl("div", { className: "form-group" });
+      gFMail.appendChild(createEl("label", null, "Direct Email"));
+      var inpFMail = createEl("input", { type: "email", value: page.founder_email || "sales@seago.in" });
+      gFMail.appendChild(inpFMail);
+      var gFPhone = createEl("div", { className: "form-group" });
+      gFPhone.appendChild(createEl("label", null, "Direct Telephone / WhatsApp"));
+      var inpFPhone = createEl("input", { type: "text", value: page.founder_phone || "+91 86063 66633" });
+      gFPhone.appendChild(inpFPhone);
+      rLeadContact.appendChild(gFMail);
+      rLeadContact.appendChild(gFPhone);
+      s5.appendChild(rLeadContact);
+
+      form.appendChild(s5);
+
+      // Section 6: SEO
+      var s6 = createEl("div", { className: "cms-section-card" });
+      var h6 = createEl("div", { className: "cms-section-header" });
+      var h6Left = createEl("div", { className: "cms-section-title-wrap" });
+      h6Left.appendChild(createEl("span", { className: "cms-section-number" }, "6"));
+      h6Left.appendChild(createEl("h3", { className: "cms-section-title" }, "SEO Search Metadata"));
+      h6.appendChild(h6Left);
+      s6.appendChild(h6);
+
       var gMeta = createEl("div", { className: "form-group" });
       gMeta.appendChild(createEl("label", null, "Google Search Meta Description"));
       var inpMeta = createEl("textarea", { rows: "2" }, page.meta_desc || "");
       gMeta.appendChild(inpMeta);
-      s5.appendChild(gMeta);
-      form.appendChild(s5);
+      s6.appendChild(gMeta);
+      form.appendChild(s6);
 
       // Submit Bar
       var actions = createEl("div", { className: "form-actions" });
@@ -4137,13 +4799,40 @@
         page.badge = inpBadge.value.trim();
         page.headline = inpHead.value.trim();
         page.subheadline = inpSub.value.trim();
-        page.mission_title = inpMissTitle.value.trim();
-        page.mission_body = inpMissBody.value.trim();
-        page.manufacturing_location = inpFac.value.trim();
-        page.engineering_highlights = inpHigh.value.trim();
+        page.story_eyebrow = inpStoryEye.value.trim();
+        page.story_p1 = inpStoryP1.value.trim();
+        page.story_p2 = inpStoryP2.value.trim();
+        page.story_stat1_val = inpSt1Val.value.trim();
+        page.story_stat1_lbl = inpSt1Lbl.value.trim();
+        page.story_stat2_val = inpSt2Val.value.trim();
+        page.story_stat2_lbl = inpSt2Lbl.value.trim();
+        page.story_stat3_val = inpSt3Val.value.trim();
+        page.story_stat3_lbl = inpSt3Lbl.value.trim();
+        page.loc_eyebrow = inpLocEye.value.trim();
+        page.loc_heading = inpLocHead.value.trim();
+        page.loc_sub = inpLocSub.value.trim();
+        page.loc1_title = inpLoc1Title.value.trim();
+        page.loc1_addr = inpLoc1Addr.value.trim();
+        page.loc1_desc = inpLoc1Desc.value.trim();
+        page.loc2_title = inpLoc2Title.value.trim();
+        page.loc2_addr = inpLoc2Addr.value.trim();
+        page.loc2_desc = inpLoc2Desc.value.trim();
+        page.approach_eyebrow = inpAppEye.value.trim();
+        page.approach_heading = inpAppHead.value.trim();
+        page.approach_sub = inpAppSub.value.trim();
+        page.priority1_title = inpPr1Title.value.trim();
+        page.priority1_desc = inpPr1Desc.value.trim();
+        page.priority2_title = inpPr2Title.value.trim();
+        page.priority2_desc = inpPr2Desc.value.trim();
+        page.priority3_title = inpPr3Title.value.trim();
+        page.priority3_desc = inpPr3Desc.value.trim();
         page.founder_name = inpFName.value.trim();
         page.founder_title = inpFTitle.value.trim();
+        page.founder_image = mediaFounder.input.value.trim();
+        page.founder_quote = inpFQuote.value.trim();
         page.founder_bio = inpFBio.value.trim();
+        page.founder_email = inpFMail.value.trim();
+        page.founder_phone = inpFPhone.value.trim();
         page.meta_desc = inpMeta.value.trim();
         savePageData(page);
       });
@@ -4182,13 +4871,13 @@
 
       var gBadge = createEl("div", { className: "form-group" });
       gBadge.appendChild(createEl("label", null, "Hero Badge"));
-      var inpBadge = createEl("input", { type: "text", value: page.badge || "" });
+      var inpBadge = createEl("input", { type: "text", value: page.badge || "CASE STUDIES" });
       gBadge.appendChild(inpBadge);
       s1.appendChild(gBadge);
 
       var gHead = createEl("div", { className: "form-group" });
       gHead.appendChild(createEl("label", null, "Headline"));
-      var inpHead = createEl("input", { type: "text", value: page.headline || "" });
+      var inpHead = createEl("input", { type: "text", value: page.headline || "Proven in the field, not just on paper" });
       gHead.appendChild(inpHead);
       s1.appendChild(gHead);
 
@@ -4204,21 +4893,59 @@
       var h2 = createEl("div", { className: "cms-section-header" });
       var h2Left = createEl("div", { className: "cms-section-title-wrap" });
       h2Left.appendChild(createEl("span", { className: "cms-section-number" }, "2"));
-      h2Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Deployment: ICAR-CIFT Vikalpika Solar Boat"));
+      h2Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Deployment 01: ICAR-CIFT Vikalpika Solar-Electric Vessel"));
       h2.appendChild(h2Left);
       s2.appendChild(h2);
 
+      var rVikHead = createEl("div", { className: "form-row" });
+      var gVikTag = createEl("div", { className: "form-group" });
+      gVikTag.appendChild(createEl("label", null, "Case Tag / Date"));
+      var inpVikTag = createEl("input", { type: "text", value: page.vikalpika_tag || "Maharashtra · May 2025" });
+      gVikTag.appendChild(inpVikTag);
       var gVikTitle = createEl("div", { className: "form-group" });
-      gVikTitle.appendChild(createEl("label", null, "Craft Title"));
-      var inpVikTitle = createEl("input", { type: "text", value: page.vikalpika_title || "" });
+      gVikTitle.appendChild(createEl("label", null, "Project Title"));
+      var inpVikTitle = createEl("input", { type: "text", value: page.vikalpika_title || "Fishing Fleets — India's First Electric Fishing Vessel" });
       gVikTitle.appendChild(inpVikTitle);
-      s2.appendChild(gVikTitle);
+      rVikHead.appendChild(gVikTag);
+      rVikHead.appendChild(gVikTitle);
+      s2.appendChild(rVikHead);
 
       var gVikDesc = createEl("div", { className: "form-group" });
-      gVikDesc.appendChild(createEl("label", null, "Deployment Details & Fuel Savings Impact"));
+      gVikDesc.appendChild(createEl("label", null, "Deployment Details & Impact Narrative"));
       var inpVikDesc = createEl("textarea", { rows: "3" }, page.vikalpika_desc || "");
       gVikDesc.appendChild(inpVikDesc);
       s2.appendChild(gVikDesc);
+
+      var mediaVik = createMediaField("Vikalpika Vessel Photo", page.vikalpika_image || "assets/photos/vikalpika.webp", false);
+      s2.appendChild(mediaVik.group);
+
+      s2.appendChild(createEl("h4", { style: { margin: "12px 0 6px", fontSize: "12.5px", color: "var(--navy)" } }, "3 Mini-Metrics"));
+      var rVikStats = createEl("div", { className: "form-row-3" });
+      var gV1 = createEl("div", { className: "form-group" });
+      gV1.appendChild(createEl("label", null, "Metric 1 (Val / Lbl)"));
+      var inpV1Val = createEl("input", { type: "text", value: page.vikalpika_stat1_val || "1st" });
+      var inpV1Lbl = createEl("input", { type: "text", value: page.vikalpika_stat1_lbl || "Electric Fishing Vessel in India", style: { marginTop: "4px" } });
+      gV1.appendChild(inpV1Val);
+      gV1.appendChild(inpV1Lbl);
+      rVikStats.appendChild(gV1);
+
+      var gV2 = createEl("div", { className: "form-group" });
+      gV2.appendChild(createEl("label", null, "Metric 2 (Val / Lbl)"));
+      var inpV2Val = createEl("input", { type: "text", value: page.vikalpika_stat2_val || "2025" });
+      var inpV2Lbl = createEl("input", { type: "text", value: page.vikalpika_stat2_lbl || "Launched", style: { marginTop: "4px" } });
+      gV2.appendChild(inpV2Val);
+      gV2.appendChild(inpV2Lbl);
+      rVikStats.appendChild(gV2);
+
+      var gV3 = createEl("div", { className: "form-group" });
+      gV3.appendChild(createEl("label", null, "Metric 3 (Val / Lbl)"));
+      var inpV3Val = createEl("input", { type: "text", value: page.vikalpika_stat3_val || "ICAR-CIFT" });
+      var inpV3Lbl = createEl("input", { type: "text", value: page.vikalpika_stat3_lbl || "Research Partner", style: { marginTop: "4px" } });
+      gV3.appendChild(inpV3Val);
+      gV3.appendChild(inpV3Lbl);
+      rVikStats.appendChild(gV3);
+      s2.appendChild(rVikStats);
+
       form.appendChild(s2);
 
       // Section 3: Deployment 2 - Water Transport
@@ -4226,21 +4953,59 @@
       var h3 = createEl("div", { className: "cms-section-header" });
       var h3Left = createEl("div", { className: "cms-section-title-wrap" });
       h3Left.appendChild(createEl("span", { className: "cms-section-number" }, "3"));
-      h3Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Deployment: Kerala SWTD Public Ferry"));
+      h3Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Deployment 02: Kerala Public Transit Ferry Fleet"));
       h3.appendChild(h3Left);
       s3.appendChild(h3);
 
+      var rWtHead = createEl("div", { className: "form-row" });
+      var gWtTag = createEl("div", { className: "form-group" });
+      gWtTag.appendChild(createEl("label", null, "Case Tag / Region"));
+      var inpWtTag = createEl("input", { type: "text", value: page.water_transport_tag || "Kerala" });
+      gWtTag.appendChild(inpWtTag);
       var gWtTitle = createEl("div", { className: "form-group" });
-      gWtTitle.appendChild(createEl("label", null, "Ferry Project Title"));
-      var inpWtTitle = createEl("input", { type: "text", value: page.water_transport_title || "" });
+      gWtTitle.appendChild(createEl("label", null, "Project Title"));
+      var inpWtTitle = createEl("input", { type: "text", value: page.water_transport_title || "Public Transport System" });
       gWtTitle.appendChild(inpWtTitle);
-      s3.appendChild(gWtTitle);
+      rWtHead.appendChild(gWtTag);
+      rWtHead.appendChild(gWtTitle);
+      s3.appendChild(rWtHead);
 
       var gWtDesc = createEl("div", { className: "form-group" });
       gWtDesc.appendChild(createEl("label", null, "Transit Routes & Fleet Efficiency"));
       var inpWtDesc = createEl("textarea", { rows: "3" }, page.water_transport_desc || "");
       gWtDesc.appendChild(inpWtDesc);
       s3.appendChild(gWtDesc);
+
+      var mediaWt = createMediaField("Ferry Vessel Photo", page.water_transport_image || "assets/photos/Publictransport.webp", false);
+      s3.appendChild(mediaWt.group);
+
+      s3.appendChild(createEl("h4", { style: { margin: "12px 0 6px", fontSize: "12.5px", color: "var(--navy)" } }, "3 Mini-Metrics"));
+      var rWtStats = createEl("div", { className: "form-row-3" });
+      var gW1 = createEl("div", { className: "form-group" });
+      gW1.appendChild(createEl("label", null, "Metric 1 (Val / Lbl)"));
+      var inpW1Val = createEl("input", { type: "text", value: page.water_transport_stat1_val || "Daily" });
+      var inpW1Lbl = createEl("input", { type: "text", value: page.water_transport_stat1_lbl || "Commuter Routes", style: { marginTop: "4px" } });
+      gW1.appendChild(inpW1Val);
+      gW1.appendChild(inpW1Lbl);
+      rWtStats.appendChild(gW1);
+
+      var gW2 = createEl("div", { className: "form-group" });
+      gW2.appendChild(createEl("label", null, "Metric 2 (Val / Lbl)"));
+      var inpW2Val = createEl("input", { type: "text", value: page.water_transport_stat2_val || "Zero" });
+      var inpW2Lbl = createEl("input", { type: "text", value: page.water_transport_stat2_lbl || "Exhaust Onboard", style: { marginTop: "4px" } });
+      gW2.appendChild(inpW2Val);
+      gW2.appendChild(inpW2Lbl);
+      rWtStats.appendChild(gW2);
+
+      var gW3 = createEl("div", { className: "form-group" });
+      gW3.appendChild(createEl("label", null, "Metric 3 (Val / Lbl)"));
+      var inpW3Val = createEl("input", { type: "text", value: page.water_transport_stat3_val || "Silent" });
+      var inpW3Lbl = createEl("input", { type: "text", value: page.water_transport_stat3_lbl || "Operation", style: { marginTop: "4px" } });
+      gW3.appendChild(inpW3Val);
+      gW3.appendChild(inpW3Lbl);
+      rWtStats.appendChild(gW3);
+      s3.appendChild(rWtStats);
+
       form.appendChild(s3);
 
       // Section 4: Deployment 3 - Karnataka Tourism
@@ -4248,53 +5013,165 @@
       var h4 = createEl("div", { className: "cms-section-header" });
       var h4Left = createEl("div", { className: "cms-section-title-wrap" });
       h4Left.appendChild(createEl("span", { className: "cms-section-number" }, "4"));
-      h4Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Deployment: Eco-Tourism Sanctuary Craft"));
+      h4Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Deployment 03: Karnataka Eco-Tourism Heritage Waterways"));
       h4.appendChild(h4Left);
       s4.appendChild(h4);
 
+      var rTourHead = createEl("div", { className: "form-row" });
+      var gTourTag = createEl("div", { className: "form-group" });
+      gTourTag.appendChild(createEl("label", null, "Case Tag / State"));
+      var inpTourTag = createEl("input", { type: "text", value: page.tourism_tag || "Karnataka" });
+      gTourTag.appendChild(inpTourTag);
       var gTourTitle = createEl("div", { className: "form-group" });
-      gTourTitle.appendChild(createEl("label", null, "Sanctuary Craft Title"));
-      var inpTourTitle = createEl("input", { type: "text", value: page.tourism_title || "" });
+      gTourTitle.appendChild(createEl("label", null, "Tourism Project Title"));
+      var inpTourTitle = createEl("input", { type: "text", value: page.tourism_title || "Tourism Boats — Hampi, Hubli, Gadag, Bagalkot & Honnavar" });
       gTourTitle.appendChild(inpTourTitle);
-      s4.appendChild(gTourTitle);
+      rTourHead.appendChild(gTourTag);
+      rTourHead.appendChild(gTourTitle);
+      s4.appendChild(rTourHead);
 
       var gTourDesc = createEl("div", { className: "form-group" });
-      gTourDesc.appendChild(createEl("label", null, "Wildlife Reserve Impact & Quiet Propulsion"));
+      gTourDesc.appendChild(createEl("label", null, "Heritage Waterways Impact & Quiet Rides"));
       var inpTourDesc = createEl("textarea", { rows: "3" }, page.tourism_desc || "");
       gTourDesc.appendChild(inpTourDesc);
       s4.appendChild(gTourDesc);
+
+      var mediaTour = createMediaField("Tourism Boat Photo", page.tourism_image || "assets/photos/seago-tourism-boat.webp", false);
+      s4.appendChild(mediaTour.group);
+
+      s4.appendChild(createEl("h4", { style: { margin: "12px 0 6px", fontSize: "12.5px", color: "var(--navy)" } }, "3 Mini-Metrics"));
+      var rTourStats = createEl("div", { className: "form-row-3" });
+      var gT1 = createEl("div", { className: "form-group" });
+      gT1.appendChild(createEl("label", null, "Metric 1 (Val / Lbl)"));
+      var inpT1Val = createEl("input", { type: "text", value: page.tourism_stat1_val || "5" });
+      var inpT1Lbl = createEl("input", { type: "text", value: page.tourism_stat1_lbl || "Locations Deployed", style: { marginTop: "4px" } });
+      gT1.appendChild(inpT1Val);
+      gT1.appendChild(inpT1Lbl);
+      rTourStats.appendChild(gT1);
+
+      var gT2 = createEl("div", { className: "form-group" });
+      gT2.appendChild(createEl("label", null, "Metric 2 (Val / Lbl)"));
+      var inpT2Val = createEl("input", { type: "text", value: page.tourism_stat2_val || "100%" });
+      var inpT2Lbl = createEl("input", { type: "text", value: page.tourism_stat2_lbl || "Electric", style: { marginTop: "4px" } });
+      gT2.appendChild(inpT2Val);
+      gT2.appendChild(inpT2Lbl);
+      rTourStats.appendChild(gT2);
+
+      var gT3 = createEl("div", { className: "form-group" });
+      gT3.appendChild(createEl("label", null, "Metric 3 (Val / Lbl)"));
+      var inpT3Val = createEl("input", { type: "text", value: page.tourism_stat3_val || "Silent" });
+      var inpT3Lbl = createEl("input", { type: "text", value: page.tourism_stat3_lbl || "Operation", style: { marginTop: "4px" } });
+      gT3.appendChild(inpT3Val);
+      gT3.appendChild(inpT3Lbl);
+      rTourStats.appendChild(gT3);
+      s4.appendChild(rTourStats);
+
       form.appendChild(s4);
 
-      // Section 5: Deployment 4 - Hydrogen Fuel Cell
+      // Section 5: Deployment 4 - Hydrogen Fuel Cell (Completed)
       var s5 = createEl("div", { className: "cms-section-card" });
       var h5 = createEl("div", { className: "cms-section-header" });
       var h5Left = createEl("div", { className: "cms-section-title-wrap" });
       h5Left.appendChild(createEl("span", { className: "cms-section-number" }, "5"));
-      h5Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Deployment: Hydrogen Fuel Cell Hybrid Prototype"));
+      h5Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Deployment 04: Hydrogen Fuel Cell Boat (IMU R&D)"));
       h5.appendChild(h5Left);
       s5.appendChild(h5);
 
+      var rH2Head = createEl("div", { className: "form-row" });
+      var gH2Tag = createEl("div", { className: "form-group" });
+      gH2Tag.appendChild(createEl("label", null, "Case Tag / Status"));
+      var inpH2Tag = createEl("input", { type: "text", value: page.hydrogen_tag || "Tamil Nadu · Completed" });
+      gH2Tag.appendChild(inpH2Tag);
       var gH2Title = createEl("div", { className: "form-group" });
       gH2Title.appendChild(createEl("label", null, "Vessel Prototype Title"));
-      var inpH2Title = createEl("input", { type: "text", value: page.hydrogen_title || "" });
+      var inpH2Title = createEl("input", { type: "text", value: page.hydrogen_title || "Hydrogen Fuel-Cell Boat" });
       gH2Title.appendChild(inpH2Title);
-      s5.appendChild(gH2Title);
+      rH2Head.appendChild(gH2Tag);
+      rH2Head.appendChild(gH2Title);
+      s5.appendChild(rH2Head);
 
       var gH2Desc = createEl("div", { className: "form-group" });
-      gH2Desc.appendChild(createEl("label", null, "Fuel Cell Powertrain Architecture"));
+      gH2Desc.appendChild(createEl("label", null, "Fuel Cell Powertrain Architecture & Findings"));
       var inpH2Desc = createEl("textarea", { rows: "3" }, page.hydrogen_desc || "");
       gH2Desc.appendChild(inpH2Desc);
       s5.appendChild(gH2Desc);
+
+      var mediaH2 = createMediaField("Hydrogen Boat Prototype Photo", page.hydrogen_image || "assets/photos/hydrogenboat.webp", false);
+      s5.appendChild(mediaH2.group);
+
+      s5.appendChild(createEl("h4", { style: { margin: "12px 0 6px", fontSize: "12.5px", color: "var(--navy)" } }, "3 Mini-Metrics"));
+      var rH2Stats = createEl("div", { className: "form-row-3" });
+      var gH1Metric = createEl("div", { className: "form-group" });
+      gH1Metric.appendChild(createEl("label", null, "Metric 1 (Val / Lbl)"));
+      var inpH1Val = createEl("input", { type: "text", value: page.hydrogen_stat1_val || "IMU" });
+      var inpH1Lbl = createEl("input", { type: "text", value: page.hydrogen_stat1_lbl || "Research Partner", style: { marginTop: "4px" } });
+      gH1Metric.appendChild(inpH1Val);
+      gH1Metric.appendChild(inpH1Lbl);
+      rH2Stats.appendChild(gH1Metric);
+
+      var gH2Metric = createEl("div", { className: "form-group" });
+      gH2Metric.appendChild(createEl("label", null, "Metric 2 (Val / Lbl)"));
+      var inpH2Val = createEl("input", { type: "text", value: page.hydrogen_stat2_val || "Tamil Nadu" });
+      var inpH2Lbl = createEl("input", { type: "text", value: page.hydrogen_stat2_lbl || "Research Base", style: { marginTop: "4px" } });
+      gH2Metric.appendChild(inpH2Val);
+      gH2Metric.appendChild(inpH2Lbl);
+      rH2Stats.appendChild(gH2Metric);
+
+      var gH3Metric = createEl("div", { className: "form-group" });
+      gH3Metric.appendChild(createEl("label", null, "Metric 3 (Val / Lbl)"));
+      var inpH3Val = createEl("input", { type: "text", value: page.hydrogen_stat3_val || "Completed" });
+      var inpH3Lbl = createEl("input", { type: "text", value: page.hydrogen_stat3_lbl || "R&D Programme", style: { marginTop: "4px" } });
+      gH3Metric.appendChild(inpH3Val);
+      gH3Metric.appendChild(inpH3Lbl);
+      rH2Stats.appendChild(gH3Metric);
+      s5.appendChild(rH2Stats);
+
       form.appendChild(s5);
 
-      // Section 6: SEO
+      // Section 6: Bottom CTA Banner
       var s6 = createEl("div", { className: "cms-section-card" });
+      var h6 = createEl("div", { className: "cms-section-header" });
+      var h6Left = createEl("div", { className: "cms-section-title-wrap" });
+      h6Left.appendChild(createEl("span", { className: "cms-section-number" }, "6"));
+      h6Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Bottom Call-To-Action Banner"));
+      h6.appendChild(h6Left);
+      s6.appendChild(h6);
+
+      var rCtaBan = createEl("div", { className: "form-row" });
+      var gCtaTitle = createEl("div", { className: "form-group" });
+      gCtaTitle.appendChild(createEl("label", null, "Banner Title"));
+      var inpCtaTitle = createEl("input", { type: "text", value: page.cta_banner_title || "Have a fleet, route, or vessel in mind?" });
+      gCtaTitle.appendChild(inpCtaTitle);
+      var gCtaBtn = createEl("div", { className: "form-group" });
+      gCtaBtn.appendChild(createEl("label", null, "Button Label"));
+      var inpCtaBtn = createEl("input", { type: "text", value: page.cta_banner_btn || "Request a Quote" });
+      gCtaBtn.appendChild(inpCtaBtn);
+      rCtaBan.appendChild(gCtaTitle);
+      rCtaBan.appendChild(gCtaBtn);
+      s6.appendChild(rCtaBan);
+
+      var gCtaText = createEl("div", { className: "form-group" });
+      gCtaText.appendChild(createEl("label", null, "Banner Subtext"));
+      var inpCtaText = createEl("textarea", { rows: "2" }, page.cta_banner_text || "Whether it's a single boat or a multi-vessel deployment, tell us the details and we'll help you scope it.");
+      gCtaText.appendChild(inpCtaText);
+      s6.appendChild(gCtaText);
+      form.appendChild(s6);
+
+      // Section 7: SEO
+      var s7 = createEl("div", { className: "cms-section-card" });
+      var h7 = createEl("div", { className: "cms-section-header" });
+      var h7Left = createEl("div", { className: "cms-section-title-wrap" });
+      h7Left.appendChild(createEl("span", { className: "cms-section-number" }, "7"));
+      h7Left.appendChild(createEl("h3", { className: "cms-section-title" }, "SEO Search Metadata"));
+      h7.appendChild(h7Left);
+      s7.appendChild(h7);
+
       var gMeta = createEl("div", { className: "form-group" });
       gMeta.appendChild(createEl("label", null, "Google Search Meta Description"));
       var inpMeta = createEl("textarea", { rows: "2" }, page.meta_desc || "");
       gMeta.appendChild(inpMeta);
-      s6.appendChild(gMeta);
-      form.appendChild(s6);
+      s7.appendChild(gMeta);
+      form.appendChild(s7);
 
       // Submit Bar
       var actions = createEl("div", { className: "form-actions" });
@@ -4311,14 +5188,49 @@
         page.badge = inpBadge.value.trim();
         page.headline = inpHead.value.trim();
         page.subheadline = inpSub.value.trim();
+        page.vikalpika_tag = inpVikTag.value.trim();
         page.vikalpika_title = inpVikTitle.value.trim();
         page.vikalpika_desc = inpVikDesc.value.trim();
+        page.vikalpika_image = mediaVik.input.value.trim();
+        page.vikalpika_stat1_val = inpV1Val.value.trim();
+        page.vikalpika_stat1_lbl = inpV1Lbl.value.trim();
+        page.vikalpika_stat2_val = inpV2Val.value.trim();
+        page.vikalpika_stat2_lbl = inpV2Lbl.value.trim();
+        page.vikalpika_stat3_val = inpV3Val.value.trim();
+        page.vikalpika_stat3_lbl = inpV3Lbl.value.trim();
+        page.water_transport_tag = inpWtTag.value.trim();
         page.water_transport_title = inpWtTitle.value.trim();
         page.water_transport_desc = inpWtDesc.value.trim();
+        page.water_transport_image = mediaWt.input.value.trim();
+        page.water_transport_stat1_val = inpW1Val.value.trim();
+        page.water_transport_stat1_lbl = inpW1Lbl.value.trim();
+        page.water_transport_stat2_val = inpW2Val.value.trim();
+        page.water_transport_stat2_lbl = inpW2Lbl.value.trim();
+        page.water_transport_stat3_val = inpW3Val.value.trim();
+        page.water_transport_stat3_lbl = inpW3Lbl.value.trim();
+        page.tourism_tag = inpTourTag.value.trim();
         page.tourism_title = inpTourTitle.value.trim();
         page.tourism_desc = inpTourDesc.value.trim();
+        page.tourism_image = mediaTour.input.value.trim();
+        page.tourism_stat1_val = inpT1Val.value.trim();
+        page.tourism_stat1_lbl = inpT1Lbl.value.trim();
+        page.tourism_stat2_val = inpT2Val.value.trim();
+        page.tourism_stat2_lbl = inpT2Lbl.value.trim();
+        page.tourism_stat3_val = inpT3Val.value.trim();
+        page.tourism_stat3_lbl = inpT3Lbl.value.trim();
+        page.hydrogen_tag = inpH2Tag.value.trim();
         page.hydrogen_title = inpH2Title.value.trim();
         page.hydrogen_desc = inpH2Desc.value.trim();
+        page.hydrogen_image = mediaH2.input.value.trim();
+        page.hydrogen_stat1_val = inpH1Val.value.trim();
+        page.hydrogen_stat1_lbl = inpH1Lbl.value.trim();
+        page.hydrogen_stat2_val = inpH2Val.value.trim();
+        page.hydrogen_stat2_lbl = inpH2Lbl.value.trim();
+        page.hydrogen_stat3_val = inpH3Val.value.trim();
+        page.hydrogen_stat3_lbl = inpH3Lbl.value.trim();
+        page.cta_banner_title = inpCtaTitle.value.trim();
+        page.cta_banner_text = inpCtaText.value.trim();
+        page.cta_banner_btn = inpCtaBtn.value.trim();
         page.meta_desc = inpMeta.value.trim();
         savePageData(page);
       });
@@ -4517,61 +5429,92 @@
 
       var gSub = createEl("div", { className: "form-group" });
       gSub.appendChild(createEl("label", null, "Subheadline"));
-      var inpSub = createEl("textarea", { rows: "2" }, page.subheadline || "");
+      var inpSub = createEl("textarea", { rows: "2" }, page.subheadline || "Sea trials, customer deliveries, and footage across Indian waters.");
       gSub.appendChild(inpSub);
       s1.appendChild(gSub);
       form.appendChild(s1);
 
-      // Section 2: Video Embed Link
+      // Section 2: Video Sections Headings
       var s2 = createEl("div", { className: "cms-section-card" });
       var h2 = createEl("div", { className: "cms-section-header" });
       var h2Left = createEl("div", { className: "cms-section-title-wrap" });
       h2Left.appendChild(createEl("span", { className: "cms-section-number" }, "2"));
-      h2Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Featured Sea Trial Video"));
+      h2Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Video Sections & Editorial Headers"));
       h2.appendChild(h2Left);
       s2.appendChild(h2);
 
-      var gVid = createEl("div", { className: "form-group" });
-      gVid.appendChild(createEl("label", null, "YouTube / Video Embed URL"));
-      var inpVid = createEl("input", { type: "url", value: page.video_embed || "" });
-      gVid.appendChild(inpVid);
-      s2.appendChild(gVid);
+      // Sea Trials
+      var stBox = createEl("div", { style: { background: "#F8FAFC", border: "1px solid var(--line)", borderRadius: "6px", padding: "10px", marginBottom: "10px" } });
+      stBox.appendChild(createEl("label", { style: { fontWeight: "600", fontSize: "12px", color: "var(--navy)" } }, "Sea Trials Section"));
+      var rSt = createEl("div", { className: "form-row" });
+      var inpStEye = createEl("input", { type: "text", value: page.sea_trials_eyebrow || "Sea Trials & Verification", placeholder: "Eyebrow" });
+      var inpStTitle = createEl("input", { type: "text", value: page.sea_trials_title || "Engineered on the Water", placeholder: "Title" });
+      rSt.appendChild(inpStEye);
+      rSt.appendChild(inpStTitle);
+      stBox.appendChild(rSt);
+      var inpStDesc = createEl("textarea", { rows: "2", style: { marginTop: "6px" } }, page.sea_trials_desc || "High-resolution video trials across each outboard horsepower category.");
+      stBox.appendChild(inpStDesc);
+      s2.appendChild(stBox);
+
+      // Tourism Runs
+      var trBox = createEl("div", { style: { background: "#F8FAFC", border: "1px solid var(--line)", borderRadius: "6px", padding: "10px", marginBottom: "10px" } });
+      trBox.appendChild(createEl("label", { style: { fontWeight: "600", fontSize: "12px", color: "var(--navy)" } }, "Tourism Runs Section"));
+      var rTr = createEl("div", { className: "form-row" });
+      var inpTrEye = createEl("input", { type: "text", value: page.tourism_eyebrow || "Tourism Runs", placeholder: "Eyebrow" });
+      var inpTrTitle = createEl("input", { type: "text", value: page.tourism_title || "Full boats, no engine roar", placeholder: "Title" });
+      rTr.appendChild(inpTrEye);
+      rTr.appendChild(inpTrTitle);
+      trBox.appendChild(rTr);
+      var inpTrDesc = createEl("textarea", { rows: "2", style: { marginTop: "6px" } }, page.tourism_desc || "Tourism operators running Seagö outboards on charter routes — no exhaust, no engine roar over the passengers.");
+      trBox.appendChild(inpTrDesc);
+      s2.appendChild(trBox);
+
+      // Field Footage
+      var ffBox = createEl("div", { style: { background: "#F8FAFC", border: "1px solid var(--line)", borderRadius: "6px", padding: "10px", marginBottom: "10px" } });
+      ffBox.appendChild(createEl("label", { style: { fontWeight: "600", fontSize: "12px", color: "var(--navy)" } }, "From the Field Footage Section"));
+      var rFf = createEl("div", { className: "form-row" });
+      var inpFfEye = createEl("input", { type: "text", value: page.field_eyebrow || "From the Field", placeholder: "Eyebrow" });
+      var inpFfTitle = createEl("input", { type: "text", value: page.field_title || "Trials & customer footage", placeholder: "Title" });
+      rFf.appendChild(inpFfEye);
+      rFf.appendChild(inpFfTitle);
+      ffBox.appendChild(rFf);
+      var inpFfDesc = createEl("textarea", { rows: "2", style: { marginTop: "6px" } }, page.field_desc || "Raw clips recorded during sea trials and handovers — straight off the camera, nothing staged.");
+      ffBox.appendChild(inpFfDesc);
+      s2.appendChild(ffBox);
+
+      // Fleet Gallery Header
+      var flBox = createEl("div", { style: { background: "#F8FAFC", border: "1px solid var(--line)", borderRadius: "6px", padding: "10px" } });
+      flBox.appendChild(createEl("label", { style: { fontWeight: "600", fontSize: "12px", color: "var(--navy)" } }, "The Fleet Gallery Section"));
+      var rFl = createEl("div", { className: "form-row" });
+      var inpFlEye = createEl("input", { type: "text", value: page.fleet_eyebrow || "Gallery", placeholder: "Eyebrow" });
+      var inpFlTitle = createEl("input", { type: "text", value: page.fleet_title || "The fleet, up close", placeholder: "Title" });
+      rFl.appendChild(inpFlEye);
+      rFl.appendChild(inpFlTitle);
+      flBox.appendChild(rFl);
+      var inpFlDesc = createEl("textarea", { rows: "2", style: { marginTop: "6px" } }, page.fleet_desc || "Boats, motors, and installs from our deployments across the five states we operate in.");
+      flBox.appendChild(inpFlDesc);
+      s2.appendChild(flBox);
+
       form.appendChild(s2);
 
-      // Section 3: Photo Albums Narrative
+      // Section 3: Photo Gallery & Sea Trials Library
       var s3 = createEl("div", { className: "cms-section-card" });
       var h3 = createEl("div", { className: "cms-section-header" });
       var h3Left = createEl("div", { className: "cms-section-title-wrap" });
       h3Left.appendChild(createEl("span", { className: "cms-section-number" }, "3"));
-      h3Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Footage Description"));
+      h3Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Photo Gallery & Sea Trials Library"));
       h3.appendChild(h3Left);
-      s3.appendChild(h3);
-
-      var gIntro = createEl("div", { className: "form-group" });
-      gIntro.appendChild(createEl("label", null, "Photo Album Narrative"));
-      var inpIntro = createEl("textarea", { rows: "3" }, page.intro_text || "");
-      gIntro.appendChild(inpIntro);
-      s3.appendChild(gIntro);
-      form.appendChild(s3);
-
-      // Section 4: Photo Gallery & Sea Trials Library
-      var s4 = createEl("div", { className: "cms-section-card" });
-      var h4 = createEl("div", { className: "cms-section-header" });
-      var h4Left = createEl("div", { className: "cms-section-title-wrap" });
-      h4Left.appendChild(createEl("span", { className: "cms-section-number" }, "4"));
-      h4Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Photo Gallery & Sea Trials Library"));
-      h4.appendChild(h4Left);
 
       var addPhotoBtn = createEl("button", { type: "button", className: "btn btn-primary btn-sm" });
       addPhotoBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px; vertical-align:middle;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span>+ Add Photo</span>';
-      h4.appendChild(addPhotoBtn);
-      s4.appendChild(h4);
+      h3.appendChild(addPhotoBtn);
+      s3.appendChild(h3);
 
       var pDesc = createEl("p", { style: { fontSize: "12.5px", color: "var(--text-muted)", marginBottom: "16px" } }, "Photos and video reels published on the public gallery page. Click \"+ Add Photo\" to upload local files or choose from existing assets.");
-      s4.appendChild(pDesc);
+      s3.appendChild(pDesc);
 
       var galleryGrid = createEl("div", { className: "gallery-grid" });
-      s4.appendChild(galleryGrid);
+      s3.appendChild(galleryGrid);
 
       function loadGalleryItems() {
         galleryGrid.innerHTML = '<div style="grid-column: 1 / -1; padding: 20px; text-align: center; color: var(--text-muted);">Loading gallery photos…</div>';
@@ -4652,6 +5595,35 @@
       });
 
       loadGalleryItems();
+      form.appendChild(s3);
+
+      // Section 4: Bottom CTA Banner
+      var s4 = createEl("div", { className: "cms-section-card" });
+      var h4 = createEl("div", { className: "cms-section-header" });
+      var h4Left = createEl("div", { className: "cms-section-title-wrap" });
+      h4Left.appendChild(createEl("span", { className: "cms-section-number" }, "4"));
+      h4Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Bottom Call-To-Action Banner"));
+      h4.appendChild(h4Left);
+      s4.appendChild(h4);
+
+      var rCtaBan = createEl("div", { className: "form-row" });
+      var gCtaTitle = createEl("div", { className: "form-group" });
+      gCtaTitle.appendChild(createEl("label", null, "Banner Title"));
+      var inpCtaTitle = createEl("input", { type: "text", value: page.cta_banner_title || "Put a Seagö on your boat" });
+      gCtaTitle.appendChild(inpCtaTitle);
+      var gCtaBtn = createEl("div", { className: "form-group" });
+      gCtaBtn.appendChild(createEl("label", null, "Button Label"));
+      var inpCtaBtn = createEl("input", { type: "text", value: page.cta_banner_btn || "Request a Quote" });
+      gCtaBtn.appendChild(inpCtaBtn);
+      rCtaBan.appendChild(gCtaTitle);
+      rCtaBan.appendChild(gCtaBtn);
+      s4.appendChild(rCtaBan);
+
+      var gCtaText = createEl("div", { className: "form-group" });
+      gCtaText.appendChild(createEl("label", null, "Banner Subtext"));
+      var inpCtaText = createEl("textarea", { rows: "2" }, page.cta_banner_text || "Tell us your boat size, use case, and timeline — we'll get back to you with a configuration and quote within one business day.");
+      gCtaText.appendChild(inpCtaText);
+      s4.appendChild(gCtaText);
       form.appendChild(s4);
 
       // Section 5: SEO
@@ -4685,8 +5657,21 @@
         page.badge = inpBadge.value.trim();
         page.headline = inpHead.value.trim();
         page.subheadline = inpSub.value.trim();
-        page.video_embed = inpVid.value.trim();
-        page.intro_text = inpIntro.value.trim();
+        page.sea_trials_eyebrow = inpStEye.value.trim();
+        page.sea_trials_title = inpStTitle.value.trim();
+        page.sea_trials_desc = inpStDesc.value.trim();
+        page.tourism_eyebrow = inpTrEye.value.trim();
+        page.tourism_title = inpTrTitle.value.trim();
+        page.tourism_desc = inpTrDesc.value.trim();
+        page.field_eyebrow = inpFfEye.value.trim();
+        page.field_title = inpFfTitle.value.trim();
+        page.field_desc = inpFfDesc.value.trim();
+        page.fleet_eyebrow = inpFlEye.value.trim();
+        page.fleet_title = inpFlTitle.value.trim();
+        page.fleet_desc = inpFlDesc.value.trim();
+        page.cta_banner_title = inpCtaTitle.value.trim();
+        page.cta_banner_text = inpCtaText.value.trim();
+        page.cta_banner_btn = inpCtaBtn.value.trim();
         page.meta_desc = inpMeta.value.trim();
         savePageData(page);
       });
@@ -4844,13 +5829,13 @@
 
       var gBadge = createEl("div", { className: "form-group" });
       gBadge.appendChild(createEl("label", null, "Hero Badge"));
-      var inpBadge = createEl("input", { type: "text", value: page.badge || "" });
+      var inpBadge = createEl("input", { type: "text", value: page.badge || "CONTACT" });
       gBadge.appendChild(inpBadge);
       s1.appendChild(gBadge);
 
       var gHead = createEl("div", { className: "form-group" });
       gHead.appendChild(createEl("label", null, "Headline"));
-      var inpHead = createEl("input", { type: "text", value: page.headline || "" });
+      var inpHead = createEl("input", { type: "text", value: page.headline || "Get in touch" });
       gHead.appendChild(inpHead);
       s1.appendChild(gHead);
 
@@ -4861,77 +5846,149 @@
       s1.appendChild(gSub);
       form.appendChild(s1);
 
-      // Section 2: Direct Hotlines & Channels
+      // Section 2: Get In Touch Narrative
       var s2 = createEl("div", { className: "cms-section-card" });
       var h2 = createEl("div", { className: "cms-section-header" });
       var h2Left = createEl("div", { className: "cms-section-title-wrap" });
       h2Left.appendChild(createEl("span", { className: "cms-section-number" }, "2"));
-      h2Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Direct Hotlines & Inquiries"));
+      h2Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Get In Touch Overview Card"));
       h2.appendChild(h2Left);
       s2.appendChild(h2);
 
-      var rChans = createEl("div", { className: "form-row" });
-      var gMail = createEl("div", { className: "form-group" });
-      gMail.appendChild(createEl("label", null, "Commercial Sales Email"));
-      var inpMail = createEl("input", { type: "email", value: page.sales_email || "" });
-      gMail.appendChild(inpMail);
-      var gPhone = createEl("div", { className: "form-group" });
-      gPhone.appendChild(createEl("label", null, "Support Phone Hotline"));
-      var inpPhone = createEl("input", { type: "text", value: page.support_phone || "" });
-      gPhone.appendChild(inpPhone);
-      var gWa = createEl("div", { className: "form-group" });
-      gWa.appendChild(createEl("label", null, "WhatsApp Hotline"));
-      var inpWa = createEl("input", { type: "text", value: page.whatsapp_number || "" });
-      gWa.appendChild(inpWa);
-      rChans.appendChild(gMail);
-      rChans.appendChild(gPhone);
-      rChans.appendChild(gWa);
-      s2.appendChild(rChans);
+      var rInfoHead = createEl("div", { className: "form-row" });
+      var gInfoEye = createEl("div", { className: "form-group" });
+      gInfoEye.appendChild(createEl("label", null, "Eyebrow"));
+      var inpInfoEye = createEl("input", { type: "text", value: page.info_eyebrow || "GET IN TOUCH" });
+      gInfoEye.appendChild(inpInfoEye);
+      var gInfoTitle = createEl("div", { className: "form-group" });
+      gInfoTitle.appendChild(createEl("label", null, "Heading"));
+      var inpInfoTitle = createEl("input", { type: "text", value: page.info_title || "We'd love to hear about your project" });
+      gInfoTitle.appendChild(inpInfoTitle);
+      rInfoHead.appendChild(gInfoEye);
+      rInfoHead.appendChild(gInfoTitle);
+      s2.appendChild(rInfoHead);
+
+      var gInfoDesc = createEl("div", { className: "form-group" });
+      gInfoDesc.appendChild(createEl("label", null, "Overview Description"));
+      var inpInfoDesc = createEl("textarea", { rows: "3" }, page.info_desc || "Whether you're outfitting a single boat or building out a fleet, our team can help you find the right motor, battery, and configuration for the water you operate in.");
+      gInfoDesc.appendChild(inpInfoDesc);
+      s2.appendChild(gInfoDesc);
       form.appendChild(s2);
 
-      // Section 3: Physical Facilities
+      // Section 3: Direct Hotlines & Channels
       var s3 = createEl("div", { className: "cms-section-card" });
       var h3 = createEl("div", { className: "cms-section-header" });
       var h3Left = createEl("div", { className: "cms-section-title-wrap" });
       h3Left.appendChild(createEl("span", { className: "cms-section-number" }, "3"));
-      h3Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Showroom & Manufacturing Facilities"));
+      h3Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Direct Hotlines & Inquiries"));
       h3.appendChild(h3Left);
       s3.appendChild(h3);
 
+      var rChans = createEl("div", { className: "form-row" });
+      var gMail = createEl("div", { className: "form-group" });
+      gMail.appendChild(createEl("label", null, "Commercial Sales Email"));
+      var inpMail = createEl("input", { type: "email", value: page.sales_email || "sales@seago.in" });
+      gMail.appendChild(inpMail);
+      var gPhone = createEl("div", { className: "form-group" });
+      gPhone.appendChild(createEl("label", null, "Support Phone Hotline"));
+      var inpPhone = createEl("input", { type: "text", value: page.support_phone || "+91 86063 66633" });
+      gPhone.appendChild(inpPhone);
+      var gWa = createEl("div", { className: "form-group" });
+      gWa.appendChild(createEl("label", null, "WhatsApp Hotline"));
+      var inpWa = createEl("input", { type: "text", value: page.whatsapp_number || "+91 86063 66633" });
+      gWa.appendChild(inpWa);
+      rChans.appendChild(gMail);
+      rChans.appendChild(gPhone);
+      rChans.appendChild(gWa);
+      s3.appendChild(rChans);
+      form.appendChild(s3);
+
+      // Section 4: Physical Facilities & Hours
+      var s4 = createEl("div", { className: "cms-section-card" });
+      var h4 = createEl("div", { className: "cms-section-header" });
+      var h4Left = createEl("div", { className: "cms-section-title-wrap" });
+      h4Left.appendChild(createEl("span", { className: "cms-section-number" }, "4"));
+      h4Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Showroom & Manufacturing Facilities"));
+      h4.appendChild(h4Left);
+      s4.appendChild(h4);
+
       var gAddr1 = createEl("div", { className: "form-group" });
-      gAddr1.appendChild(createEl("label", null, "Kerala Showroom & Experience Center"));
-      var inpAddr1 = createEl("textarea", { rows: "2" }, page.sales_address || "");
+      gAddr1.appendChild(createEl("label", null, "Kerala Sales Office & Showroom"));
+      var inpAddr1 = createEl("textarea", { rows: "2" }, page.sales_address || "GG Plaza, NH-66, Lalaji Junction,\nKarunagappally, Kollam – 690518, Kerala, India");
       gAddr1.appendChild(inpAddr1);
-      s3.appendChild(gAddr1);
+      s4.appendChild(gAddr1);
 
       var gAddr2 = createEl("div", { className: "form-group" });
       gAddr2.appendChild(createEl("label", null, "Chennai Propulsion Manufacturing Plant"));
-      var inpAddr2 = createEl("textarea", { rows: "2" }, page.manufacturing_address || "");
+      var inpAddr2 = createEl("textarea", { rows: "2" }, page.manufacturing_address || "Chennai, Tamil Nadu, India");
       gAddr2.appendChild(inpAddr2);
-      s3.appendChild(gAddr2);
+      s4.appendChild(gAddr2);
 
       var rHours = createEl("div", { className: "form-row" });
       var gHours = createEl("div", { className: "form-group" });
       gHours.appendChild(createEl("label", null, "Working Hours & Schedule"));
-      var inpHours = createEl("input", { type: "text", value: page.hours || "" });
+      var inpHours = createEl("input", { type: "text", value: page.hours || "Monday – Saturday: 9:00 AM – 6:00 PM IST" });
       gHours.appendChild(inpHours);
       var gResp = createEl("div", { className: "form-group" });
       gResp.appendChild(createEl("label", null, "Response SLA"));
-      var inpResp = createEl("input", { type: "text", value: page.response_time || "" });
+      var inpResp = createEl("input", { type: "text", value: page.response_time || "Under 24 hours turnaround for commercial inquiries" });
       gResp.appendChild(inpResp);
       rHours.appendChild(gHours);
       rHours.appendChild(gResp);
-      s3.appendChild(rHours);
-      form.appendChild(s3);
+      s4.appendChild(rHours);
+      form.appendChild(s4);
 
-      // Section 4: SEO
-      var s4 = createEl("div", { className: "cms-section-card" });
+      // Section 5: Web3Forms Quote Form Settings
+      var s5 = createEl("div", { className: "cms-section-card" });
+      var h5 = createEl("div", { className: "cms-section-header" });
+      var h5Left = createEl("div", { className: "cms-section-title-wrap" });
+      h5Left.appendChild(createEl("span", { className: "cms-section-number" }, "5"));
+      h5Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Request a Quote Form Settings"));
+      h5.appendChild(h5Left);
+      s5.appendChild(h5);
+
+      var rFormHead = createEl("div", { className: "form-row" });
+      var gFTitle = createEl("div", { className: "form-group" });
+      gFTitle.appendChild(createEl("label", null, "Form Card Heading"));
+      var inpFTitle = createEl("input", { type: "text", value: page.form_title || "Request a Quote" });
+      gFTitle.appendChild(inpFTitle);
+      var gFSub = createEl("div", { className: "form-group" });
+      gFSub.appendChild(createEl("label", null, "Form Card Subtitle"));
+      var inpFSub = createEl("input", { type: "text", value: page.form_subtitle || "Fill in your details and our team will get back to you with pricing, specs, and lead time." });
+      gFSub.appendChild(inpFSub);
+      rFormHead.appendChild(gFTitle);
+      rFormHead.appendChild(gFSub);
+      s5.appendChild(rFormHead);
+
+      var rFormKeys = createEl("div", { className: "form-row" });
+      var gFKey = createEl("div", { className: "form-group" });
+      gFKey.appendChild(createEl("label", null, "Web3Forms Access Key"));
+      var inpFKey = createEl("input", { type: "text", value: page.web3forms_key || "12fe7002-524c-4c4c-a9c9-cd31891d7432" });
+      gFKey.appendChild(inpFKey);
+      var gFSubj = createEl("div", { className: "form-group" });
+      gFSubj.appendChild(createEl("label", null, "Email Notification Subject"));
+      var inpFSubj = createEl("input", { type: "text", value: page.form_subject || "New Quote Request — Seagö Website" });
+      gFSubj.appendChild(inpFSubj);
+      rFormKeys.appendChild(gFKey);
+      rFormKeys.appendChild(gFSubj);
+      s5.appendChild(rFormKeys);
+      form.appendChild(s5);
+
+      // Section 6: SEO
+      var s6 = createEl("div", { className: "cms-section-card" });
+      var h6 = createEl("div", { className: "cms-section-header" });
+      var h6Left = createEl("div", { className: "cms-section-title-wrap" });
+      h6Left.appendChild(createEl("span", { className: "cms-section-number" }, "6"));
+      h6Left.appendChild(createEl("h3", { className: "cms-section-title" }, "SEO Search Metadata"));
+      h6.appendChild(h6Left);
+      s6.appendChild(h6);
+
       var gMeta = createEl("div", { className: "form-group" });
       gMeta.appendChild(createEl("label", null, "Google Search Meta Description"));
       var inpMeta = createEl("textarea", { rows: "2" }, page.meta_desc || "");
       gMeta.appendChild(inpMeta);
-      s4.appendChild(gMeta);
-      form.appendChild(s4);
+      s6.appendChild(gMeta);
+      form.appendChild(s6);
 
       // Submit Bar
       var actions = createEl("div", { className: "form-actions" });
@@ -4948,6 +6005,9 @@
         page.badge = inpBadge.value.trim();
         page.headline = inpHead.value.trim();
         page.subheadline = inpSub.value.trim();
+        page.info_eyebrow = inpInfoEye.value.trim();
+        page.info_title = inpInfoTitle.value.trim();
+        page.info_desc = inpInfoDesc.value.trim();
         page.sales_email = inpMail.value.trim();
         page.support_phone = inpPhone.value.trim();
         page.whatsapp_number = inpWa.value.trim();
@@ -4955,6 +6015,10 @@
         page.manufacturing_address = inpAddr2.value.trim();
         page.hours = inpHours.value.trim();
         page.response_time = inpResp.value.trim();
+        page.form_title = inpFTitle.value.trim();
+        page.form_subtitle = inpFSub.value.trim();
+        page.web3forms_key = inpFKey.value.trim();
+        page.form_subject = inpFSubj.value.trim();
         page.meta_desc = inpMeta.value.trim();
         savePageData(page);
       });
