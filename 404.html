@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script>document.documentElement.classList.add('js-ready');</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Waters Uncharted | Seagö Electric Marine Propulsion</title>
+  <meta name="description"
+    content="The coordinates you navigated to do not exist on Seagö's waterways. Return to port to explore electric outboard motors, battery systems, and custom electric boats.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#070c14">
+
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
+
+  <style>
+    /* =====================================================================
+       404 Custom Marine Styles: Water, Motors & Boats
+       ===================================================================== */
+    .error-hero {
+      position: relative;
+      min-height: calc(100vh - 80px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 0 80px;
+      background: radial-gradient(circle at 50% 25%, #0d284f 0%, #060e1d 60%, #03070f 100%);
+      color: #fff;
+      overflow: hidden;
+    }
+
+    /* Ambient radar grid */
+    .radar-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(40, 212, 200, 0.08) 0, rgba(40, 212, 200, 0.08) 1px, transparent 1px),
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 80px 80px, 40px 40px, 40px 40px;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    /* Radar sweep animation */
+    .radar-sweep {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 700px;
+      height: 700px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 1px dashed rgba(40, 212, 200, 0.15);
+      pointer-events: none;
+    }
+    .radar-sweep::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, transparent 0deg, transparent 310deg, rgba(40, 212, 200, 0.12) 360deg);
+      animation: radarRotate 8s linear infinite;
+    }
+    @keyframes radarRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .error-layout {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* Digital coordinates badge */
+    .telemetry-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 18px;
+      background: rgba(14, 44, 87, 0.7);
+      border: 1px solid rgba(40, 212, 200, 0.35);
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--cyan);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      margin-bottom: 24px;
+      box-shadow: 0 0 20px rgba(40, 212, 200, 0.15);
+    }
+    .telemetry-dot {
+      width: 8px;
+      height: 8px;
+      background: #ff5252;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #ff5252;
+      animation: pulseAlert 1.4s ease-in-out infinite;
+    }
+    @keyframes pulseAlert {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.8); }
+    }
+
+    /* Giant 404 Display with Oceanic Depth */
+    .error-code-container {
+      position: relative;
+      display: inline-block;
+      margin: 0 auto 10px;
+      user-select: none;
+    }
+    .error-code {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(96px, 18vw, 190px);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      background: linear-gradient(180deg, #ffffff 15%, #5FA6FF 60%, #0E2C57 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.6));
+      margin: 0;
+    }
+    .error-code-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      height: 60%;
+      background: radial-gradient(ellipse, rgba(44, 123, 229, 0.35) 0%, transparent 70%);
+      filter: blur(40px);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* ================= WATER & BOAT INTERACTIVE STAGE ================= */
+    .marine-stage {
+      position: relative;
+      width: 100%;
+      max-width: 860px;
+      height: 220px;
+      margin: 10px auto 36px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(11, 29, 61, 0.4) 0%, rgba(6, 17, 36, 0.8) 100%);
+      border: 1px solid rgba(40, 212, 200, 0.2);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    /* Depth markers */
+    .depth-marker {
+      position: absolute;
+      top: 14px;
+      font-family: 'Space Grotesk', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: rgba(136, 146, 164, 0.7);
+      z-index: 5;
+    }
+    .depth-marker.left { left: 20px; }
+    .depth-marker.right { right: 20px; }
+
+    /* The Bobbing Electric Boat */
+    .vessel-carrier {
+      position: absolute;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 4;
+      animation: boatFloat 4s ease-in-out infinite alternate;
+      cursor: grab;
+      transition: transform 0.2s ease;
+    }
+    @keyframes boatFloat {
+      0% {
+        transform: translate(-50%, 0px) rotate(-1.5deg);
+      }
+      50% {
+        transform: translate(-50%, 8px) rotate(1deg);
+      }
+      100% {
+        transform: translate(-50%, -4px) rotate(-1deg);
+      }
+    }
+
+    .vessel-composite {
+      position: relative;
+      width: 320px;
+      height: 110px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    /* Custom Electric Boat Illustration */
+    .boat-hull {
+      position: relative;
+      width: 250px;
+      height: 60px;
+      background: linear-gradient(135deg, #f0f4f8 0%, #d8e2ed 60%, #9cb1c9 100%);
+      clip-path: polygon(0% 25%, 82% 25%, 100% 70%, 90% 100%, 12% 100%, 0% 70%);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .boat-stripe {
+      position: absolute;
+      bottom: 12px;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--cyan) 0%, var(--blue) 100%);
+      box-shadow: 0 0 10px rgba(40, 212, 200, 0.6);
+    }
+    .boat-logo-tag {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      color: var(--navy);
+      margin-top: -6px;
+    }
+    .boat-canopy {
+      position: absolute;
+      top: -24px;
+      left: 38px;
+      width: 150px;
+      height: 26px;
+      background: rgba(14, 44, 87, 0.85);
+      border: 1px solid rgba(40, 212, 200, 0.4);
+      border-radius: 6px 6px 2px 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .canopy-solar {
+      width: 90%;
+      height: 4px;
+      background: linear-gradient(90deg, #1f68cc, #28D4C8);
+      border-radius: 2px;
+      box-shadow: 0 0 8px rgba(40, 212, 200, 0.8);
+    }
+    .canopy-pillar {
+      position: absolute;
+      width: 2.5px;
+      height: 18px;
+      background: #7a8a9e;
+      bottom: -18px;
+    }
+    .canopy-pillar.p1 { left: 45px; }
+    .canopy-pillar.p2 { right: 45px; }
+
+    /* The Mounted Electric Outboard Motor */
+    .outboard-mount {
+      position: absolute;
+      left: -18px;
+      bottom: 2px;
+      width: 58px;
+      height: 85px;
+      z-index: 6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .motor-cowling {
+      width: 36px;
+      height: 38px;
+      background: linear-gradient(135deg, #1c2536 0%, #0b111c 100%);
+      border-radius: 10px 10px 4px 4px;
+      border: 1.5px solid rgba(40, 212, 200, 0.6);
+      position: relative;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+    .motor-badge {
+      position: absolute;
+      top: 6px;
+      left: 5px;
+      right: 5px;
+      height: 4px;
+      background: var(--cyan);
+      border-radius: 2px;
+      box-shadow: 0 0 8px var(--cyan);
+    }
+    .motor-shaft {
+      width: 7px;
+      height: 44px;
+      background: linear-gradient(180deg, #2b3548 0%, #151b24 100%);
+      margin-top: -2px;
+      position: relative;
+      border-radius: 0 0 3px 3px;
+    }
+    .motor-skeg {
+      position: absolute;
+      bottom: -6px;
+      left: -3px;
+      width: 14px;
+      height: 10px;
+      background: #111722;
+      clip-path: polygon(0 0, 100% 40%, 80% 100%, 0% 100%);
+    }
+    .motor-propeller {
+      position: absolute;
+      bottom: 2px;
+      left: -12px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px dashed rgba(40, 212, 200, 0.9);
+      animation: spinPropeller 0.4s linear infinite;
+      box-shadow: 0 0 12px rgba(40, 212, 200, 0.8);
+    }
+    @keyframes spinPropeller {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Electric Propeller Vortex / Underwater Bubbles */
+    .prop-vortex {
+      position: absolute;
+      bottom: 0px;
+      left: -48px;
+      width: 44px;
+      height: 14px;
+      background: radial-gradient(ellipse at right, rgba(40, 212, 200, 0.7) 0%, rgba(95, 166, 255, 0.3) 50%, transparent 100%);
+      border-radius: 50%;
+      filter: blur(2px);
+      animation: vortexPulse 0.8s ease-in-out infinite alternate;
+    }
+    @keyframes vortexPulse {
+      from { transform: scaleX(0.85); opacity: 0.6; }
+      to { transform: scaleX(1.2); opacity: 1; }
+    }
+
+    /* Multi-layered Animated Water Waves */
+    .waves-wrapper {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 125px;
+      overflow: hidden;
+      z-index: 3;
+    }
+    .wave-svg {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 200%;
+      height: 100%;
+    }
+    .wave-back {
+      fill: rgba(14, 44, 87, 0.7);
+      animation: waveDrift 14s linear infinite;
+    }
+    .wave-mid {
+      fill: rgba(20, 68, 133, 0.55);
+      animation: waveDrift 9s linear infinite reverse;
+      bottom: -6px;
+    }
+    .wave-front {
+      fill: rgba(7, 24, 52, 0.88);
+      animation: waveDrift 6s linear infinite;
+      bottom: -12px;
+    }
+    @keyframes waveDrift {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Underwater shimmer */
+    .water-shimmer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40px;
+      background: linear-gradient(180deg, transparent 0%, rgba(40, 212, 200, 0.12) 100%);
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    /* Typography & Content */
+    .error-title {
+      font-size: clamp(26px, 4vw, 38px);
+      font-weight: 700;
+      margin-bottom: 14px;
+      letter-spacing: -0.02em;
+    }
+    .error-desc {
+      font-size: clamp(15px, 2vw, 17.5px);
+      color: rgba(230, 233, 239, 0.82);
+      max-width: 660px;
+      margin: 0 auto 32px;
+      line-height: 1.65;
+    }
+
+    /* Primary Actions */
+    .error-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 56px;
+    }
+
+    /* Suggested Navigation / Course Correction Grid */
+    .rescue-hub {
+      margin-top: 24px;
+      padding-top: 48px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: left;
+    }
+    .rescue-head {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .rescue-head h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .rescue-head p {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .rescue-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 20px;
+    }
+    .rescue-card {
+      background: rgba(11, 29, 61, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s, background 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .rescue-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(40, 212, 200, 0.4);
+      background: rgba(14, 44, 87, 0.7);
+      box-shadow: 0 16px 32px -10px rgba(0, 0, 0, 0.5);
+    }
+    .rescue-card__thumb {
+      width: 100%;
+      height: 140px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: #070f24;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .rescue-card__tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--cyan);
+    }
+    .rescue-card__title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: #fff;
+      margin: 0;
+    }
+    .rescue-card__desc {
+      font-size: 13.5px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin: 0;
+    }
+    .rescue-card__arrow {
+      margin-top: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--blue-2);
+      transition: gap 0.2s;
+    }
+    .rescue-card:hover .rescue-card__arrow {
+      gap: 10px;
+      color: var(--cyan);
+    }
+
+    @media (max-width: 680px) {
+      .marine-stage {
+        height: 190px;
+        margin-bottom: 28px;
+      }
+      .vessel-composite {
+        width: 250px;
+        transform: scale(0.85);
+      }
+      .error-actions {
+        flex-direction: column;
+        width: 100%;
+      }
+      .error-actions .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="progress" id="progressBar"></div>
+
+  <!-- ================= NAV ================= -->
+  <header class="nav">
+    <div class="wrap nav-row">
+      <a class="nav-logo" href="index.html#top"><img src="assets/seago-logo.png" alt="Seagö"></a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="products.html">Products</a>
+        <a href="case-studies.html">Case Studies</a>
+        <a href="gallery.html">Gallery</a>
+      </nav>
+      <div class="nav-cta">
+        <a class="btn btn-primary magnetic" href="contact.html" data-quote-open>Request a Quote</a>
+        <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="products.html">Products</a>
+    <a href="case-studies.html">Case Studies</a>
+    <a href="gallery.html">Gallery</a>
+    <a class="btn btn-primary" href="contact.html" data-quote-open>Request a Quote</a>
+  </div>
+
+  <!-- ================= MAIN 404 SECTION ================= -->
+  <main class="error-hero">
+    <div class="radar-grid"></div>
+    <div class="radar-sweep"></div>
+
+    <div class="wrap error-layout">
+      <!-- Telemetry Chip -->
+      <div class="telemetry-chip">
+        <span class="telemetry-dot"></span>
+        <span>COORDINATES OFF-GRID &bull; VESSEL DRIFT DETECTED</span>
+      </div>
+
+      <!-- 404 Code Display -->
+      <div class="error-code-container">
+        <div class="error-code-glow"></div>
+        <h1 class="error-code">404</h1>
+      </div>
+
+      <!-- Animated Marine Water & Boat Stage -->
+      <div class="marine-stage" aria-label="Interactive electric boat navigating water waves">
+        <div class="depth-marker left">LAT 9.8974&deg; N // SOUNDING: 42M</div>
+        <div class="depth-marker right">ELECTRIC TORQUE: ACTIVE</div>
+
+        <!-- The Bobbing Electric Boat with Outboard Motor -->
+        <div class="vessel-carrier">
+          <div class="vessel-composite">
+            <!-- Outboard Motor -->
+            <div class="outboard-mount" title="Seagö Electric Outboard Propulsion">
+              <div class="motor-cowling">
+                <div class="motor-badge"></div>
+              </div>
+              <div class="motor-shaft">
+                <div class="motor-skeg"></div>
+                <div class="motor-propeller"></div>
+              </div>
+              <div class="prop-vortex"></div>
+            </div>
+
+            <!-- Boat Hull & Solar Canopy -->
+            <div class="boat-hull">
+              <div class="boat-canopy">
+                <div class="canopy-solar"></div>
+                <div class="canopy-pillar p1"></div>
+                <div class="canopy-pillar p2"></div>
+              </div>
+              <div class="boat-logo-tag">SEAG&Ouml;</div>
+              <div class="boat-stripe"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Animated Wave Layers -->
+        <div class="waves-wrapper">
+          <!-- Back Wave -->
+          <svg class="wave-svg wave-back" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M0,45 C150,90 350,10 500,45 C650,80 900,15 1050,55 C1150,80 1200,60 1200,60 L1200,120 L0,120 Z"></path>
+          </svg>
+          <!-- Mid Wave -->
+          <svg class="wave-svg wave-mid" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M0,60 C200,10 400,90 600,45 C800,10 1000,75 1200,45 L1200,120 L0,120 Z"></path>
+          </svg>
+          <!-- Front Wave -->
+          <svg class="wave-svg wave-front" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M0,75 C250,30 450,95 700,65 C950,35 1100,85 1200,65 L1200,120 L0,120 Z"></path>
+          </svg>
+        </div>
+        <div class="water-shimmer"></div>
+      </div>
+
+      <!-- Copy -->
+      <h2 class="error-title">You've drifted into uncharted waters.</h2>
+      <p class="error-desc">
+        The coordinates or route you charted cannot be found on our marine navigation grid.
+        Whether this channel was moved, retired, or never left dry dock, Seagö's electric propulsion
+        will steer you safely back to harbour.
+      </p>
+
+      <!-- Primary Action Buttons -->
+      <div class="error-actions">
+        <a class="btn btn-primary magnetic" href="index.html">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          <span>Return to Safe Harbour (Home)</span>
+        </a>
+        <a class="btn btn-ghost magnetic" href="products.html">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+          </svg>
+          <span>Explore Electric Fleet</span>
+        </a>
+        <a class="btn btn-outline magnetic" href="contact.html" style="color:#fff; border-color:rgba(255,255,255,0.25);">
+          <span>Contact Technical Team</span>
+        </a>
+      </div>
+
+      <!-- Navigation Rescue Hub -->
+      <div class="rescue-hub">
+        <div class="rescue-head">
+          <span class="eyebrow" style="color:var(--cyan); display:block; margin-bottom:8px;">CHART A NEW COURSE</span>
+          <h3>Popular Waterways &amp; Technical Systems</h3>
+          <p>Pick a destination below to continue exploring our marine engineering</p>
+        </div>
+
+        <div class="rescue-grid">
+          <!-- Card 1: Motors -->
+          <a class="rescue-card" href="products.html#outboards">
+            <img class="rescue-card__thumb" src="assets/photos/outboard-motor-cutout.webp" alt="Seagö Electric Outboard Motor">
+            <span class="rescue-card__tag">Electric Propulsion</span>
+            <h4 class="rescue-card__title">Electric Outboard Motors</h4>
+            <p class="rescue-card__desc">Heavy-duty brushless DC outboards ranging from 3 to 50 HP engineered for saltwater durability and quiet thrust.</p>
+            <span class="rescue-card__arrow">
+              View Motors
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </a>
+
+          <!-- Card 2: Custom Boats -->
+          <a class="rescue-card" href="products.html#boats">
+            <img class="rescue-card__thumb" src="assets/photos/seago-electric-boat.webp" alt="Seagö Custom Electric &amp; Solar Boats">
+            <span class="rescue-card__tag">Custom Hull Building</span>
+            <h4 class="rescue-card__title">Electric &amp; Solar Boats</h4>
+            <p class="rescue-card__desc">Full FRP vessels tailored for tourism, backwater transport, and fishing cooperatives with integrated solar canopies.</p>
+            <span class="rescue-card__arrow">
+              View Custom Boats
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </a>
+
+          <!-- Card 3: Field Deployments -->
+          <a class="rescue-card" href="case-studies.html">
+            <img class="rescue-card__thumb" src="assets/photos/case-deployment-boat.webp" alt="Field Marine Deployments">
+            <span class="rescue-card__tag">Field Proven</span>
+            <h4 class="rescue-card__title">Proven Case Studies</h4>
+            <p class="rescue-card__desc">Real-world operational data from Kerala ferries, Karnataka tourism runs, and autonomous research craft.</p>
+            <span class="rescue-card__arrow">
+              Read Deployments
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-logo"><img src="assets/seago-logo.png" alt="Seagö"></div>
+          <p>Electric outboard motors, battery systems, and custom electric boats — engineered and manufactured in India.</p>
+        </div>
+        <div class="footer-col">
+          <h5>Products</h5>
+          <a href="products.html">Outboard Motors</a>
+          <a href="products.html">Battery Packs</a>
+          <a href="products.html">Electric &amp; Solar Boats</a>
+        </div>
+        <div class="footer-col">
+          <h5>Company</h5>
+          <a href="about.html">About Us</a>
+          <a href="about.html#founder">Leadership</a>
+          <a href="case-studies.html">Case Studies</a>
+          <a href="gallery.html">Gallery</a>
+        </div>
+        <div class="footer-col">
+          <h5>Contact</h5>
+          <a href="contact.html">Kerala, India</a>
+          <a href="contact.html">Chennai, Tamil Nadu</a>
+          <a href="mailto:sales@seago.in">sales@seago.in</a>
+          <a href="tel:+918606366633">+91 86063 66633</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Seagö Marine Propulsion. All rights reserved.</span>
+        <div class="footer-social">
+          <a href="https://www.facebook.com/profile.php?id=61595336871370" target="_blank" rel="noopener"
+            data-social="facebook" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z" />
+            </svg></a>
+          <a href="https://www.instagram.com/seagowaters/" target="_blank" rel="noopener" data-social="instagram"
+            aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4C8.4 2.2 8.8 2.2 12 2.2zm0 3.1A6.7 6.7 0 1 0 18.7 12 6.7 6.7 0 0 0 12 5.3zm0 11A4.3 4.3 0 1 1 16.3 12 4.3 4.3 0 0 1 12 16.3zm6.9-11.3a1.6 1.6 0 1 1-1.6-1.6 1.6 1.6 0 0 1 1.6 1.6z" />
+            </svg></a>
+          <a href="https://x.com/Seagowaters" target="_blank" rel="noopener" data-social="twitter"
+            aria-label="X (Twitter)"><svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.9 2H21l-6.6 7.5L22 22h-6.5l-5-6.6L4.7 22H2.6l7-8-7.3-9.9h6.6l4.5 6z" />
+            </svg></a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener" data-social="linkedin" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M20.4 3H3.6A.6.6 0 0 0 3 3.6v16.8a.6.6 0 0 0 .6.6h16.8a.6.6 0 0 0 .6-.6V3.6a.6.6 0 0 0-.6-.6zM8.3 18.1H5.7V9.9h2.6v8.2zM7 8.8a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm11.1 9.3h-2.6v-4.3c0-1 0-2.4-1.5-2.4s-1.7 1.1-1.7 2.3v4.4H9.7V9.9h2.5v1.1a2.7 2.7 0 0 1 2.5-1.4c2.6 0 3.1 1.7 3.1 4v4.5z" />
+            </svg></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= WHATSAPP FLOAT ================= -->
+  <a class="wa-float"
+    href="https://wa.me/918606366633?text=Hi%20Seag%C3%B6%2C%20I%20hit%20a%20404%20page%20and%20would%20like%20assistance."
+    target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+    <span class="wa-tip">Chat with us</span>
+    <svg viewBox="0 0 24 24">
+      <path
+        d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.6.1-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.4 0-.5 0-.1-.6-1.5-.8-2-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.1 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.7.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 2-1.4.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3z" />
+      <path
+        d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2z" />
+    </svg>
+  </a>
+
+  <!-- ================= QUOTE MODAL ================= -->
+  <div class="quote-modal" id="quoteModal" aria-hidden="true" role="dialog" aria-modal="true"
+    aria-labelledby="quoteModalTitle">
+    <div class="quote-modal__backdrop" data-close-quote></div>
+    <div class="quote-modal__box">
+      <div class="quote-modal__head">
+        <div class="quote-modal__intro">
+          <span class="eyebrow" style="color:var(--blue)">REQUEST A QUOTE</span>
+          <h3 id="quoteModalTitle">Tell us about your boat</h3>
+          <p>Share your vessel size, use case, and timeline — our engineering team will get back to you with pricing, specs, and lead time within one business day.</p>
+        </div>
+        <button class="quote-modal__close" type="button" data-close-quote aria-label="Close quote form">&times;</button>
+      </div>
+      <div class="quote-modal__body">
+        <form id="quoteModalForm" class="quote-form">
+          <input type="hidden" name="access_key" value="12fe7002-524c-4c4c-a9c9-cd31891d7432">
+          <input type="hidden" name="subject" value="New Quote Request — Seagö Website">
+          <input type="hidden" name="from_name" value="Seagö Website">
+          <input type="checkbox" name="botcheck" class="hidden-field" tabindex="-1" autocomplete="off">
+
+          <div class="field-row">
+            <div class="field">
+              <label for="qm-name">Full Name *</label>
+              <input id="qm-name" type="text" name="name" required>
+            </div>
+            <div class="field">
+              <label for="qm-company">Company Name</label>
+              <input id="qm-company" type="text" name="company">
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="qm-email">Email *</label>
+              <input id="qm-email" type="email" name="email" required>
+            </div>
+            <div class="field">
+              <label for="qm-phone">Phone</label>
+              <input id="qm-phone" type="tel" name="phone">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="qm-interest">Product Interest</label>
+            <select id="qm-interest" name="product_interest">
+              <option value="">Select an option</option>
+              <option>Outboard Motor</option>
+              <option>Battery Pack</option>
+              <option>Electric / Solar Boat</option>
+              <option>Service &amp; Spares Support</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="qm-message">Your Requirements *</label>
+            <textarea id="qm-message" name="message" rows="4" required
+              placeholder="Tell us about your boat size, use case, and timeline..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary form-submit">
+            <span class="btn-label">Send Request</span>
+          </button>
+          <div class="form-msg" id="qmFormMsg" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
