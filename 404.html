@@ -31,61 +31,30 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 120px 0 80px;
-      background: radial-gradient(circle at 50% 25%, #0d284f 0%, #060e1d 60%, #03070f 100%);
+      padding: 100px 0 80px;
+      background: radial-gradient(ellipse at 50% 30%, #0d284f 0%, #07152b 55%, #030813 100%);
       color: #fff;
       overflow: hidden;
-    }
-
-    /* Ambient radar grid */
-    .radar-grid {
-      position: absolute;
-      inset: 0;
-      background-image: 
-        radial-gradient(circle at 50% 50%, rgba(40, 212, 200, 0.08) 0, rgba(40, 212, 200, 0.08) 1px, transparent 1px),
-        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-      background-size: 80px 80px, 40px 40px, 40px 40px;
-      pointer-events: none;
-      opacity: 0.7;
-    }
-
-    /* Radar sweep animation */
-    .radar-sweep {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 700px;
-      height: 700px;
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      border: 1px dashed rgba(40, 212, 200, 0.15);
-      pointer-events: none;
-    }
-    .radar-sweep::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      background: conic-gradient(from 0deg, transparent 0deg, transparent 310deg, rgba(40, 212, 200, 0.12) 360deg);
-      animation: radarRotate 8s linear infinite;
-    }
-    @keyframes radarRotate {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
     }
 
     .error-layout {
       position: relative;
       z-index: 2;
       width: 100%;
+      max-width: 980px;
+      margin: 0 auto;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
     /* Digital coordinates badge */
     .telemetry-chip {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 10px;
       padding: 7px 18px;
       background: rgba(14, 44, 87, 0.7);
@@ -98,20 +67,15 @@
       color: var(--cyan);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      margin-bottom: 24px;
+      margin: 0 auto 24px;
       box-shadow: 0 0 20px rgba(40, 212, 200, 0.15);
     }
     .telemetry-dot {
       width: 8px;
       height: 8px;
-      background: #ff5252;
+      background: var(--cyan);
       border-radius: 50%;
-      box-shadow: 0 0 10px #ff5252;
-      animation: pulseAlert 1.4s ease-in-out infinite;
-    }
-    @keyframes pulseAlert {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.3; transform: scale(0.8); }
+      box-shadow: 0 0 8px var(--cyan);
     }
 
     /* Giant 404 Display with Oceanic Depth */
@@ -201,18 +165,20 @@
 
     .vessel-composite {
       position: relative;
-      width: 320px;
+      width: 300px;
       height: 110px;
       display: flex;
       align-items: flex-end;
       justify-content: center;
+      margin: 0 auto;
     }
 
     /* Custom Electric Boat Illustration */
     .boat-hull {
       position: relative;
-      width: 250px;
+      width: 240px;
       height: 60px;
+      margin-left: 24px;
       background: linear-gradient(135deg, #f0f4f8 0%, #d8e2ed 60%, #9cb1c9 100%);
       clip-path: polygon(0% 25%, 82% 25%, 100% 70%, 90% 100%, 12% 100%, 0% 70%);
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
@@ -423,10 +389,11 @@
 
     /* Suggested Navigation / Course Correction Grid */
     .rescue-hub {
+      width: 100%;
       margin-top: 24px;
       padding-top: 48px;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
-      text-align: left;
+      text-align: center;
     }
     .rescue-head {
       text-align: center;
@@ -447,6 +414,8 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
       gap: 20px;
+      max-width: 960px;
+      margin: 0 auto;
     }
     .rescue-card {
       background: rgba(11, 29, 61, 0.5);
@@ -458,6 +427,8 @@
       gap: 14px;
       text-decoration: none;
       color: inherit;
+      text-align: center;
+      align-items: center;
       transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s, background 0.3s, box-shadow 0.3s;
       position: relative;
       overflow: hidden;
@@ -500,6 +471,7 @@
       margin-top: auto;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
       font-size: 13px;
       font-weight: 600;
@@ -565,9 +537,6 @@
 
   <!-- ================= MAIN 404 SECTION ================= -->
   <main class="error-hero">
-    <div class="radar-grid"></div>
-    <div class="radar-sweep"></div>
-
     <div class="wrap error-layout">
       <!-- Telemetry Chip -->
       <div class="telemetry-chip">
@@ -850,3 +819,4 @@
 </body>
 
 </html>
+
