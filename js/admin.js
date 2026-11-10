@@ -720,49 +720,49 @@
 
     var websitePages = [
       {
-        svg: '<svg class="cms-svg-icon icon-anim-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="anim-roof" d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline class="anim-door" points="9 22 9 12 15 12 15 22"></polyline></svg>',
+        svg: '<svg class="cms-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>',
         title: "Home Page",
         file: "index.html",
         route: "#/pages/home",
         desc: "Hero announcement · 4 impact metrics · Partners ticker"
       },
       {
-        svg: '<svg class="cms-svg-icon icon-anim-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon class="anim-lightning" points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>',
+        svg: '<svg class="cms-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>',
         title: "Products & Motors",
         file: "products.html",
         route: "#/pages/products",
         desc: "3–50 HP outboards · Battery systems · Electric boats"
       },
       {
-        svg: '<svg class="cms-svg-icon icon-anim-compass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon class="anim-needle" points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>',
+        svg: '<svg class="cms-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>',
         title: "About & Leadership",
         file: "about.html",
         route: "#/pages/about",
         desc: "Mission · Manufacturing plant · Founder profile"
       },
       {
-        svg: '<svg class="cms-svg-icon icon-anim-ship" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="anim-hull" d="M3 15l2 4h14l2-4H3z M12 3v12 M8 8l4-5 4 5"></path><path class="anim-water" d="M2 21c3-1 5 1 8 0s5-1 8 0 4 1 4 0"></path></svg>',
+        svg: '<svg class="cms-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>',
         title: "Field Case Studies",
         file: "case-studies.html",
         route: "#/pages/case-studies",
         desc: "ICAR-CIFT · Kerala SWTD · Karnataka eco-safari"
       },
       {
-        svg: '<svg class="cms-svg-icon icon-anim-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle class="anim-lens" cx="12" cy="13" r="4"></circle></svg>',
+        svg: '<svg class="cms-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>',
         title: "Media Gallery",
         file: "gallery.html",
         route: "#/pages/gallery",
         desc: "Featured video player · Sea trials & photo library"
       },
       {
-        svg: '<svg class="cms-svg-icon icon-anim-bulb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="anim-filament" d="M9 18h6 M10 22h4 M12 2a7 7 0 0 0-7 7c0 2.5 1.5 4.5 3 6h8c1.5-1.5 3-3.5 3-6a7 7 0 0 0-7-7z"></path><line x1="12" y1="9" x2="12" y2="13"></line></svg>',
+        svg: '<svg class="cms-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>',
         title: "Tech & Economics",
         file: "know-more.html",
         route: "#/pages/know-more",
         desc: "TCO calculator · Fuel savings & environmental metrics"
       },
       {
-        svg: '<svg class="cms-svg-icon icon-anim-contact" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path><circle class="anim-signal-ping" cx="18" cy="6" r="3"></circle></svg>',
+        svg: '<svg class="cms-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>',
         title: "Contact & Showroom",
         file: "contact.html",
         route: "#/pages/contact",
@@ -4328,6 +4328,154 @@
     });
   }
 
+  // Helper: Modal for Adding/Editing Gallery Photos
+  function openGalleryPhotoModal(existingItem, onSaved) {
+    var isNew = !existingItem;
+    var modalWrap = createEl("div");
+
+    var formRow1 = createEl("div", { className: "form-row" });
+
+    var gType = createEl("div", { className: "form-group" });
+    gType.appendChild(createEl("label", null, "Media Format"));
+    var selType = createEl("select");
+    selType.innerHTML = '<option value="photo">Photo (High-Res Image)</option><option value="video">Video Reel</option>';
+    if (existingItem && existingItem.media_type) selType.value = existingItem.media_type;
+    gType.appendChild(selType);
+    formRow1.appendChild(gType);
+
+    var gCat = createEl("div", { className: "form-group" });
+    gCat.appendChild(createEl("label", null, "Gallery Category"));
+    var selCat = createEl("select");
+    selCat.innerHTML = '<option value="outboard">Outboard Motors</option><option value="trials">Sea Trials &amp; Testing</option><option value="tourism">Tourism &amp; Charters</option><option value="backwater">Backwater Voyages</option><option value="factory">Manufacturing &amp; R&amp;D</option>';
+    if (existingItem && existingItem.category) selCat.value = existingItem.category;
+    gCat.appendChild(selCat);
+    formRow1.appendChild(gCat);
+
+    modalWrap.appendChild(formRow1);
+
+    // Photo Upload & Preview
+    var gUpload = createEl("div", { className: "form-group" });
+    gUpload.appendChild(createEl("label", null, "Photo Image (Upload Local File or Pick Asset) *"));
+
+    var previewBox = createEl("div", { style: { display: "flex", alignItems: "center", gap: "12px", marginBottom: "8px" } });
+    var thumbImg = createEl("img", {
+      src: existingItem && existingItem.url ? existingItem.url : "assets/photos/Outboard Motors.webp",
+      alt: "Preview",
+      style: { width: "70px", height: "50px", objectFit: "cover", borderRadius: "6px", border: "1px solid var(--line)", background: "#0a192f" }
+    });
+    previewBox.appendChild(thumbImg);
+
+    var inpUrl = createEl("input", {
+      type: "text",
+      value: existingItem && existingItem.url ? existingItem.url : "",
+      placeholder: "e.g. assets/photos/Outboard Motors.webp",
+      style: { flex: "1" }
+    });
+    inpUrl.addEventListener("input", function(){
+      thumbImg.src = inpUrl.value.trim() || "assets/photos/Outboard Motors.webp";
+    });
+    previewBox.appendChild(inpUrl);
+    gUpload.appendChild(previewBox);
+
+    var uploadBtnsRow = createEl("div", { style: { display: "flex", gap: "8px", marginTop: "4px" } });
+    var fileInput = createEl("input", { type: "file", accept: "image/*,video/*", style: { display: "none" } });
+    var uploadBtn = createEl("button", { type: "button", className: "btn btn-secondary btn-sm" }, "Upload Local File");
+    var pickAssetBtn = createEl("button", { type: "button", className: "btn btn-secondary btn-sm" }, "Choose from Asset Manager");
+
+    uploadBtn.addEventListener("click", function(){ fileInput.click(); });
+    fileInput.addEventListener("change", function(){
+      if (fileInput.files && fileInput.files[0]) {
+        var f = fileInput.files[0];
+        showToast("Processing media file...", "info");
+        if (f.type.match(/^image\//)) {
+          processImageFile(f, function(err, res){
+            if (!err && res) {
+              inpUrl.value = res.url;
+              thumbImg.src = res.url;
+              showToast("Photo processed & stored!", "success");
+            } else {
+              showToast(err ? err.message : "Image processing failed", "error");
+            }
+          });
+        } else {
+          window.SeagoStore.uploadFile("video", f, function(err, res){
+            if (!err && res) {
+              inpUrl.value = res.url;
+              showToast("Video stored!", "success");
+            }
+          });
+        }
+      }
+    });
+
+    pickAssetBtn.addEventListener("click", function(){
+      openAssetPicker("image", function(selected){
+        inpUrl.value = selected.url;
+        thumbImg.src = selected.url;
+        showToast("Attached from Asset Manager", "success");
+      });
+    });
+
+    uploadBtnsRow.appendChild(fileInput);
+    uploadBtnsRow.appendChild(uploadBtn);
+    uploadBtnsRow.appendChild(pickAssetBtn);
+    gUpload.appendChild(uploadBtnsRow);
+    modalWrap.appendChild(gUpload);
+
+    // Caption
+    var gCap = createEl("div", { className: "form-group" });
+    gCap.appendChild(createEl("label", null, "Caption / Title"));
+    var inpCap = createEl("input", {
+      type: "text",
+      value: existingItem && existingItem.caption ? existingItem.caption : "",
+      placeholder: "e.g. Seagö 15 HP Outboard testing in backwaters"
+    });
+    gCap.appendChild(inpCap);
+    modalWrap.appendChild(gCap);
+
+    // Published toggle
+    var chkPub = createEl("div", { className: "form-check", style: { marginTop: "12px" } });
+    var inpPub = createEl("input", {
+      type: "checkbox",
+      id: "m_gal_pub",
+      checked: existingItem ? !!existingItem.published : true
+    });
+    chkPub.appendChild(inpPub);
+    chkPub.appendChild(createEl("label", { for: "m_gal_pub" }, "Published (visible on live website)"));
+    modalWrap.appendChild(chkPub);
+
+    openModal({
+      title: isNew ? "Add Photo to Gallery" : "Edit Gallery Photo",
+      bodyEl: modalWrap,
+      maxWidth: "540px",
+      confirmLabel: isNew ? "Add Photo" : "Save Changes",
+      onConfirm: function(){
+        var urlVal = inpUrl.value.trim();
+        if (!urlVal) {
+          showToast("Photo URL or file is required", "error");
+          return;
+        }
+        var record = existingItem ? JSON.parse(JSON.stringify(existingItem)) : {};
+        record.id = record.id || ("gallery-" + Date.now());
+        record.media_type = selType.value;
+        record.category = selCat.value;
+        record.url = urlVal;
+        record.caption = inpCap.value.trim() || "Seagö Electric Marine Photo";
+        record.published = inpPub.checked;
+        record.updated_at = new Date().toISOString();
+
+        window.SeagoStore.save("gallery_items", record, function(err){
+          if (!err) {
+            showToast(isNew ? "Photo added to gallery!" : "Photo updated!", "success");
+            if (typeof onSaved === "function") onSaved();
+          } else {
+            showToast("Error saving photo: " + err.message, "error");
+          }
+        });
+      }
+    });
+  }
+
   // 5. GALLERY PAGE CMS (gallery.html)
   function renderGalleryPageEditor() {
     pageRoot.innerHTML = "";
@@ -4406,14 +4554,121 @@
       s3.appendChild(gIntro);
       form.appendChild(s3);
 
-      // Section 4: SEO
+      // Section 4: Photo Gallery & Sea Trials Library
       var s4 = createEl("div", { className: "cms-section-card" });
+      var h4 = createEl("div", { className: "cms-section-header" });
+      var h4Left = createEl("div", { className: "cms-section-title-wrap" });
+      h4Left.appendChild(createEl("span", { className: "cms-section-number" }, "4"));
+      h4Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Photo Gallery & Sea Trials Library"));
+      h4.appendChild(h4Left);
+
+      var addPhotoBtn = createEl("button", { type: "button", className: "btn btn-primary btn-sm" });
+      addPhotoBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px; vertical-align:middle;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span>+ Add Photo</span>';
+      h4.appendChild(addPhotoBtn);
+      s4.appendChild(h4);
+
+      var pDesc = createEl("p", { style: { fontSize: "12.5px", color: "var(--text-muted)", marginBottom: "16px" } }, "Photos and video reels published on the public gallery page. Click \"+ Add Photo\" to upload local files or choose from existing assets.");
+      s4.appendChild(pDesc);
+
+      var galleryGrid = createEl("div", { className: "gallery-grid" });
+      s4.appendChild(galleryGrid);
+
+      function loadGalleryItems() {
+        galleryGrid.innerHTML = '<div style="grid-column: 1 / -1; padding: 20px; text-align: center; color: var(--text-muted);">Loading gallery photos…</div>';
+        window.SeagoStore.list("gallery_items", function(err, items){
+          galleryGrid.innerHTML = "";
+          if (!items || items.length === 0) {
+            galleryGrid.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1; padding: 30px; text-align: center;"><p style="margin:0 0 10px;">No photos in gallery yet. Click "+ Add Photo" above to add your first photo.</p></div>';
+            return;
+          }
+
+          items.forEach(function(item){
+            var card = createEl("div", { className: "gallery-card" });
+            var mediaWrap = createEl("div", { className: "gallery-media" });
+            var mUrl = item.url || "assets/photos/Outboard Motors.webp";
+
+            var img = createEl("img", { src: mUrl, alt: item.caption || "Photo" });
+            mediaWrap.appendChild(img);
+
+            var catBadge = createEl("span", { className: "gallery-badge" }, (item.category || "photo").toUpperCase());
+            mediaWrap.appendChild(catBadge);
+            card.appendChild(mediaWrap);
+
+            var body = createEl("div", { className: "gallery-body", style: { padding: "12px" } });
+            var caption = createEl("div", { className: "gallery-caption", style: { fontSize: "13px", fontWeight: "600", color: "var(--navy)", marginBottom: "10px", lineHeight: "1.3" } }, item.caption || "Untitled Photo");
+            body.appendChild(caption);
+
+            var footerRow = createEl("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: "6px" } });
+            var statusPill = createEl("span", {
+              className: "badge " + (item.published ? "badge-success" : "badge-secondary"),
+              style: { fontSize: "11px", padding: "2px 8px", cursor: "pointer" },
+              title: "Click to toggle visibility"
+            }, item.published ? "Published" : "Draft");
+
+            statusPill.addEventListener("click", function(){
+              item.published = !item.published;
+              window.SeagoStore.save("gallery_items", item, function(){
+                loadGalleryItems();
+                showToast("Photo " + (item.published ? "published" : "set to draft"), "info");
+              });
+            });
+
+            var btnGroup = createEl("div", { style: { display: "flex", gap: "6px" } });
+            var editBtn = createEl("button", { type: "button", className: "btn btn-secondary btn-sm", style: { padding: "4px 8px", fontSize: "11px" } }, "Edit");
+            editBtn.addEventListener("click", function(){
+              openGalleryPhotoModal(item, loadGalleryItems);
+            });
+
+            var delBtn = createEl("button", { type: "button", className: "btn btn-secondary btn-sm", style: { padding: "4px 8px", fontSize: "11px", color: "var(--danger)" }, title: "Delete Photo" }, "Delete");
+            delBtn.addEventListener("click", function(){
+              openModal({
+                title: "Delete Gallery Photo?",
+                bodyText: "Are you sure you want to remove \"" + (item.caption || "this photo") + "\" from the gallery?",
+                confirmLabel: "Delete Photo",
+                danger: true,
+                onConfirm: function(){
+                  window.SeagoStore.delete("gallery_items", item.id, function(){
+                    loadGalleryItems();
+                    showToast("Photo deleted from gallery", "info");
+                  });
+                }
+              });
+            });
+
+            btnGroup.appendChild(editBtn);
+            btnGroup.appendChild(delBtn);
+            footerRow.appendChild(statusPill);
+            footerRow.appendChild(btnGroup);
+            body.appendChild(footerRow);
+
+            card.appendChild(body);
+            galleryGrid.appendChild(card);
+          });
+        });
+      }
+
+      addPhotoBtn.addEventListener("click", function(){
+        openGalleryPhotoModal(null, loadGalleryItems);
+      });
+
+      loadGalleryItems();
+      form.appendChild(s4);
+
+      // Section 5: SEO
+      var s5 = createEl("div", { className: "cms-section-card" });
+      var h5 = createEl("div", { className: "cms-section-header" });
+      var h5Left = createEl("div", { className: "cms-section-title-wrap" });
+      h5Left.appendChild(createEl("span", { className: "cms-section-number" }, "5"));
+      h5Left.appendChild(createEl("h3", { className: "cms-section-title" }, "SEO Metadata"));
+      h5.appendChild(h5Left);
+      s5.appendChild(h5);
+
       var gMeta = createEl("div", { className: "form-group" });
       gMeta.appendChild(createEl("label", null, "Google Search Meta Description"));
       var inpMeta = createEl("textarea", { rows: "2" }, page.meta_desc || "");
       gMeta.appendChild(inpMeta);
-      s4.appendChild(gMeta);
-      form.appendChild(s4);
+      s5.appendChild(gMeta);
+      form.appendChild(s5);
 
       // Submit Bar
       var actions = createEl("div", { className: "form-actions" });

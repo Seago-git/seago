@@ -409,7 +409,7 @@ a:hover {
   width: 20px;
 }
 
-/* High-End Animated SVG Navigation Icons */
+/* Standard Clean SVG Navigation Icons */
 .nav-svg-icon {
   width: 18px;
   height: 18px;
@@ -417,143 +417,26 @@ a:hover {
   display: inline-block;
   vertical-align: middle;
   flex-shrink: 0;
-  transition: color 0.2s ease, transform 0.2s ease, filter 0.2s ease;
+  transition: color 0.2s ease, filter 0.2s ease;
 }
 
 .nav-link:hover .nav-svg-icon,
 .nav-link.active .nav-svg-icon {
   color: #00D4AA;
-  filter: drop-shadow(0 0 6px rgba(0, 212, 170, 0.55));
 }
 
 .cms-svg-icon {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   color: #008775;
   display: inline-block;
   vertical-align: middle;
   flex-shrink: 0;
-  transition: all 0.25s ease;
+  transition: color 0.2s ease;
 }
 
 .cms-page-card:hover .cms-svg-icon {
   color: #00D4AA;
-  filter: drop-shadow(0 0 8px rgba(0, 212, 170, 0.6));
-}
-
-/* Micro-Animations on Hover & Active */
-.icon-anim-home .anim-roof {
-  transition: transform 0.25s ease;
-}
-.nav-link:hover .icon-anim-home .anim-roof,
-.cms-page-card:hover .icon-anim-home .anim-roof {
-  transform: translateY(-2px);
-}
-.nav-link:hover .icon-anim-home .anim-door,
-.cms-page-card:hover .icon-anim-home .anim-door {
-  animation: svgPulseDoor 1.4s ease-in-out infinite;
-}
-
-.icon-anim-bolt .anim-lightning {
-  transform-origin: 12px 12px;
-  transition: all 0.25s ease;
-}
-.nav-link:hover .icon-anim-bolt .anim-lightning,
-.cms-page-card:hover .icon-anim-bolt .anim-lightning {
-  animation: svgEnergyPulse 1.2s ease-in-out infinite;
-}
-
-.icon-anim-compass .anim-needle {
-  transform-origin: 12px 12px;
-  transition: transform 0.3s ease;
-}
-.nav-link:hover .icon-anim-compass .anim-needle,
-.cms-page-card:hover .icon-anim-compass .anim-needle {
-  animation: svgCompassOscillate 2s ease-in-out infinite;
-}
-
-.icon-anim-ship .anim-hull {
-  transform-origin: 12px 15px;
-  transition: transform 0.3s ease;
-}
-.icon-anim-ship .anim-water {
-  stroke-dasharray: 6 3;
-}
-.nav-link:hover .icon-anim-ship .anim-hull,
-.cms-page-card:hover .icon-anim-ship .anim-hull {
-  animation: svgShipBob 2s ease-in-out infinite;
-}
-.nav-link:hover .icon-anim-ship .anim-water,
-.cms-page-card:hover .icon-anim-ship .anim-water {
-  animation: svgWaveFlow 1.5s linear infinite;
-}
-
-.icon-anim-camera .anim-lens {
-  transform-origin: 12px 13px;
-  transition: transform 0.3s ease;
-}
-.nav-link:hover .icon-anim-camera .anim-lens,
-.cms-page-card:hover .icon-anim-camera .anim-lens {
-  animation: svgRotateSpin 3s linear infinite;
-}
-
-.icon-anim-bulb .anim-filament {
-  transition: all 0.25s ease;
-}
-.nav-link:hover .icon-anim-bulb .anim-filament,
-.cms-page-card:hover .icon-anim-bulb .anim-filament {
-  animation: svgBulbGlow 1.4s ease-in-out infinite;
-}
-
-.icon-anim-contact .anim-signal-ping {
-  transform-origin: 18px 6px;
-}
-.nav-link:hover .icon-anim-contact .anim-signal-ping,
-.cms-page-card:hover .icon-anim-contact .anim-signal-ping {
-  animation: svgRadarPing 1.5s ease-out infinite;
-}
-
-@keyframes svgPulseDoor {
-  0%, 100% { stroke: currentColor; opacity: 0.8; }
-  50% { stroke: #38BDF8; opacity: 1; }
-}
-
-@keyframes svgEnergyPulse {
-  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 1px rgba(0, 212, 170, 0.4)); }
-  50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(0, 212, 170, 0.95)); }
-}
-
-@keyframes svgCompassOscillate {
-  0% { transform: rotate(0deg); }
-  25% { transform: rotate(24deg); }
-  75% { transform: rotate(-18deg); }
-  100% { transform: rotate(0deg); }
-}
-
-@keyframes svgShipBob {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-2px) rotate(2.5deg); }
-}
-
-@keyframes svgWaveFlow {
-  0% { stroke-dashoffset: 0; }
-  100% { stroke-dashoffset: 18; }
-}
-
-@keyframes svgRotateSpin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes svgBulbGlow {
-  0%, 100% { filter: drop-shadow(0 0 1px rgba(250, 204, 21, 0.3)); stroke: currentColor; }
-  50% { filter: drop-shadow(0 0 9px rgba(0, 212, 170, 0.9)); stroke: #38BDF8; }
-}
-
-@keyframes svgRadarPing {
-  0% { r: 1.5; opacity: 1; stroke-width: 2; }
-  75% { r: 5; opacity: 0; stroke-width: 1; }
-  100% { r: 1.5; opacity: 0; stroke-width: 1; }
 }
 
 .nav-slug-badge {
