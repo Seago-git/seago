@@ -577,7 +577,7 @@
     var links = document.querySelectorAll(".sidebar-nav .nav-link");
     for (var i = 0; i < links.length; i++) {
       var r = links[i].getAttribute("data-route");
-      if (r && route.indexOf(r) === 0) {
+      if (r && (route === r || (r !== "/dashboard" && route.indexOf(r) === 0))) {
         links[i].classList.add("active");
       } else {
         links[i].classList.remove("active");
@@ -615,8 +615,37 @@
     var id = parts[2] || "";
 
     if (root === "dashboard") {
-      pageTitle.textContent = "Executive Dashboard";
+      pageTitle.textContent = "CMS Overview · All Website Pages";
       renderDashboard();
+    } else if (root === "pages") {
+      var targetPage = action || "home";
+      if (targetPage === "home") {
+        pageTitle.textContent = "Home Page (index.html)";
+        renderHomePageEditor();
+      } else if (targetPage === "products") {
+        pageTitle.textContent = "Products & Motors (products.html)";
+        renderProductsPageEditor();
+      } else if (targetPage === "about") {
+        pageTitle.textContent = "About & Leadership (about.html)";
+        renderAboutPageEditor();
+      } else if (targetPage === "case-studies" || targetPage === "case_studies") {
+        pageTitle.textContent = "Field Case Studies (case-studies.html)";
+        renderCaseStudiesPageEditor();
+      } else if (targetPage === "gallery") {
+        pageTitle.textContent = "Media Gallery (gallery.html)";
+        renderGalleryPageEditor();
+      } else if (targetPage === "know-more" || targetPage === "know_more") {
+        pageTitle.textContent = "Tech & Economics (know-more.html)";
+        renderKnowMorePageEditor();
+      } else if (targetPage === "contact") {
+        pageTitle.textContent = "Contact & Showroom (contact.html)";
+        renderContactPageEditor();
+      } else if (targetPage === "edit" && id) {
+        window.location.hash = "#/pages/" + id;
+      } else {
+        pageTitle.textContent = "CMS Overview";
+        renderDashboard();
+      }
     } else if (root === "motors") {
       if (action === "new") {
         pageTitle.textContent = "New Outboard Motor";
@@ -625,66 +654,18 @@
         pageTitle.textContent = "Edit Outboard Motor";
         renderMotorForm(id);
       } else {
-        pageTitle.textContent = "Outboard Motors (3–50 HP)";
-        renderMotorsList();
+        window.location.hash = "#/pages/products";
       }
-    } else if (root === "battery-packs") {
-      if (action === "new") {
-        pageTitle.textContent = "New Marine Battery Pack";
-        renderBatteryForm(null);
-      } else if (action === "edit" && id) {
-        pageTitle.textContent = "Edit Battery Pack";
-        renderBatteryForm(id);
-      } else {
-        pageTitle.textContent = "LiFePO4 Marine Battery Packs";
-        renderBatteryList();
-      }
-    } else if (root === "boats") {
-      if (action === "new") {
-        pageTitle.textContent = "New Electric Boat";
-        renderBoatForm(null);
-      } else if (action === "edit" && id) {
-        pageTitle.textContent = "Edit Electric Boat";
-        renderBoatForm(id);
-      } else {
-        pageTitle.textContent = "Electric & Solar Boats";
-        renderBoatsList();
-      }
+    } else if (root === "battery-packs" || root === "boats") {
+      window.location.hash = "#/pages/products";
     } else if (root === "case-studies") {
-      if (action === "new") {
-        pageTitle.textContent = "New Field Deployment";
-        renderCaseStudyForm(null);
-      } else if (action === "edit" && id) {
-        pageTitle.textContent = "Edit Case Study";
-        renderCaseStudyForm(id);
-      } else {
-        pageTitle.textContent = "Field Deployments & Research";
-        renderCaseStudiesList();
-      }
+      window.location.hash = "#/pages/case-studies";
     } else if (root === "gallery") {
-      if (action === "new") {
-        pageTitle.textContent = "New Gallery Media";
-        renderGalleryForm(null);
-      } else if (action === "edit" && id) {
-        pageTitle.textContent = "Edit Media Item";
-        renderGalleryForm(id);
-      } else {
-        pageTitle.textContent = "Photo & Video Gallery";
-        renderGalleryGrid();
-      }
-    } else if (root === "pages") {
-      if (action === "edit" && id) {
-        pageTitle.textContent = "Edit Page: " + id;
-        renderPageEdit(id);
-      } else {
-        pageTitle.textContent = "Website Pages CMS";
-        renderPagesList();
-      }
+      window.location.hash = "#/pages/gallery";
     } else if (root === "media") {
-      pageTitle.textContent = "Digital Asset Manager (DAM)";
-      renderMediaLibrary();
+      window.location.hash = "#/pages/gallery";
     } else if (root === "site-settings") {
-      pageTitle.textContent = "Site Settings";
+      pageTitle.textContent = "Global Site Settings";
       renderSiteSettings();
     } else if (root === "data") {
       pageTitle.textContent = "Data & Backup";
@@ -696,126 +677,154 @@
 
   window.addEventListener("hashchange", handleRouting);
 
-  // ================= 6. SCREEN: EXECUTIVE DASHBOARD =================
+  // ================= 6. SCREEN: CMS OVERVIEW & ALL PAGES =================
   function renderDashboard() {
     pageRoot.innerHTML = "";
     var wrap = createEl("div");
 
-    var grid = createEl("div", { className: "dash-grid" });
+    var header = createEl("div", { className: "page-header" });
+    var info = createEl("div", { className: "page-header-info" });
+    info.appendChild(createEl("h1", { className: "page-header-title" }, "Seagö CMS Studio · Website Pages"));
+    info.appendChild(createEl("p", { className: "page-header-sub" }, "Live content management for all 7 public website pages. Edit headlines, copy, propulsion parameters, photos, or hotlines."));
+    header.appendChild(info);
 
-    var statItems = [
-      { key: "motors", name: "Outboard Motors", route: "#/motors", icon: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z", subText: "3 to 50 HP Lineup" },
-      { key: "battery_packs", name: "Battery Packs", route: "#/battery-packs", icon: "M2 7h20v14H2z", subText: "51.2V to 144V Systems" },
-      { key: "boats", name: "Custom Vessels", route: "#/boats", icon: "M2 20h20M5 20V8l7-5 7 5v12", subText: "Electric & Solar Hybrid" },
-      { key: "pages", name: "Website Pages", route: "#/pages", icon: "M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z", subText: "Home, About, Contact CMS" },
-      { key: "case_studies", name: "Field Deployments", route: "#/case-studies", icon: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z", subText: "Commercial & Govt fleets" },
-      { key: "assets", name: "Digital Assets", route: "#/media", icon: "M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z", subText: "PDF Datasheets & Photos" }
+    var headerActions = createEl("div", { className: "page-header-actions" });
+    var liveBtn = createEl("a", { className: "btn btn-outline-topbar", href: "index.html", target: "_blank", rel: "noopener" }, "↗ View Public Website");
+    var backupBtn = createEl("a", { className: "btn btn-secondary", href: "#/data" }, "💾 Backups");
+    headerActions.appendChild(liveBtn);
+    headerActions.appendChild(backupBtn);
+    header.appendChild(headerActions);
+    wrap.appendChild(header);
+
+    // All 7 Pages CMS Grid
+    var hubGrid = createEl("div", { className: "cms-page-hub" });
+
+    var websitePages = [
+      {
+        icon: "🏠",
+        title: "Home Page",
+        file: "index.html",
+        route: "#/pages/home",
+        desc: "Hero announcement banner, 4 headline metrics (3–50 HP, 80% fuel savings, zero emissions), deployment partners ticker, and commercial fleet CTA."
+      },
+      {
+        icon: "⚡",
+        title: "Products & Motors",
+        file: "products.html",
+        route: "#/pages/products",
+        desc: "Outboard Motors catalog (3–50 HP models, power kW, RPM, cooling, PDF datasheets), marine LiFePO4 battery packs, and custom electric boats."
+      },
+      {
+        icon: "ℹ️",
+        title: "About & Leadership",
+        file: "about.html",
+        route: "#/pages/about",
+        desc: "Decarbonization mission, Chennai manufacturing plant credentials, Kollam watercraft trial operations, PMSM motors, and Founder profile."
+      },
+      {
+        icon: "🚢",
+        title: "Field Case Studies",
+        file: "case-studies.html",
+        route: "#/pages/case-studies",
+        desc: "ICAR-CIFT Vikalpika solar fishing boat, Kerala SWTD passenger ferries, Karnataka eco-tourism safari, and hydrogen fuel cell prototypes."
+      },
+      {
+        icon: "📸",
+        title: "Media Gallery",
+        file: "gallery.html",
+        route: "#/pages/gallery",
+        desc: "High-resolution sea trials footage, factory component assembly photos, and YouTube video embed links."
+      },
+      {
+        icon: "💡",
+        title: "Tech & Economics",
+        file: "know-more.html",
+        route: "#/pages/know-more",
+        desc: "Total Cost of Ownership (TCO) calculator, commercial fuel savings vs. 2-stroke petrol engines, and Indian maritime environmental metrics."
+      },
+      {
+        icon: "📞",
+        title: "Contact & Showroom",
+        file: "contact.html",
+        route: "#/pages/contact",
+        desc: "Direct sales inquiries, Kerala showroom address, Chennai manufacturing plant details, WhatsApp chat hotline, and workshop hours."
+      }
     ];
 
-    statItems.forEach(function(col){
-      var card = createEl("a", { className: "dash-card", href: col.route });
-      var info = createEl("div", { className: "dash-card-info" });
-      var countH3 = createEl("h3", null, "…");
-      var labelP = createEl("p", null, col.name);
-      var subP = createEl("div", { className: "dash-card-sub" }, col.subText);
-      info.appendChild(countH3);
-      info.appendChild(labelP);
-      info.appendChild(subP);
+    websitePages.forEach(function(p){
+      var card = createEl("div", { className: "cms-page-card" });
 
-      var iconWrap = createEl("div", { className: "dash-card-icon" });
-      iconWrap.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="' + col.icon + '"/></svg>';
+      var cardTop = createEl("div");
+      var headWrap = createEl("div", { className: "cms-page-header" });
+      var titleWrap = createEl("div", { className: "cms-page-title-wrap" });
+      var iconEl = createEl("span", { className: "cms-page-icon-lg" }, p.icon);
+      var titleBox = createEl("div");
+      var titleEl = createEl("h3", { className: "cms-page-title" }, p.title);
+      var slugEl = createEl("div", { className: "cms-page-slug" }, p.file);
+      titleBox.appendChild(titleEl);
+      titleBox.appendChild(slugEl);
+      titleWrap.appendChild(iconEl);
+      titleWrap.appendChild(titleBox);
 
-      card.appendChild(info);
-      card.appendChild(iconWrap);
-      grid.appendChild(card);
+      var statusPill = createEl("div", { className: "cms-status-pill" });
+      var dot = createEl("span", { className: "cms-status-dot" });
+      var statusTxt = createEl("span", null, "Live & Published");
+      statusPill.appendChild(dot);
+      statusPill.appendChild(statusTxt);
 
-      window.SeagoStore.list(col.key, function(err, items){
-        if (!err && items) {
-          countH3.textContent = String(items.length);
-        } else {
-          countH3.textContent = "0";
-        }
-      });
+      headWrap.appendChild(titleWrap);
+      headWrap.appendChild(statusPill);
+      cardTop.appendChild(headWrap);
+
+      var descEl = createEl("p", { className: "cms-page-desc" }, p.desc);
+      cardTop.appendChild(descEl);
+      card.appendChild(cardTop);
+
+      var cardFooter = createEl("div", { className: "cms-page-footer" });
+      var viewLink = createEl("a", { className: "btn btn-secondary btn-sm", href: p.file, target: "_blank", rel: "noopener" }, "↗ View Page");
+      var editLink = createEl("a", { className: "btn btn-primary btn-sm", href: p.route }, "✎ Edit Page Content →");
+      cardFooter.appendChild(viewLink);
+      cardFooter.appendChild(editLink);
+      card.appendChild(cardFooter);
+
+      hubGrid.appendChild(card);
     });
 
-    wrap.appendChild(grid);
+    wrap.appendChild(hubGrid);
 
-    // Two-column layout: Recent Activity + Quick Actions
-    var cols = createEl("div", { className: "dash-columns" });
+    // Bottom Two Columns: Global Settings Card + Quick Links
+    var bottomCols = createEl("div", { className: "dash-columns", style: { marginTop: "28px" } });
 
-    // Recent items card
-    var recentCard = createEl("div", { className: "form-card" });
-    recentCard.appendChild(createEl("h3", { className: "form-section__title" }, "Latest Catalog Updates"));
-    var recentList = createEl("ul", { className: "recent-list", style: { marginTop: "16px" } });
-    recentCard.appendChild(recentList);
+    var globalCard = createEl("div", { className: "form-card" });
+    globalCard.appendChild(createEl("h3", { className: "form-section__title" }, "Global Site Elements"));
+    globalCard.appendChild(createEl("p", { className: "form-section__desc" }, "Configure sitewide navigation menus, footer legal notices, and official brand assets."));
 
-    window.SeagoStore.list("motors", function(err, motors){
-      window.SeagoStore.list("case_studies", function(err2, cases){
-        var combined = [];
-        if (motors) {
-          motors.forEach(function(m){
-            combined.push({
-              title: m.title || ("Seagö " + m.hp + " HP"),
-              type: "Motor",
-              route: "#/motors/edit/" + m.id,
-              date: m.updated_at || ""
-            });
-          });
-        }
-        if (cases) {
-          cases.forEach(function(c){
-            combined.push({
-              title: c.title,
-              type: "Case Study",
-              route: "#/case-studies/edit/" + c.id,
-              date: c.updated_at || ""
-            });
-          });
-        }
-        combined.sort(function(a, b){
-          return (b.date || "").localeCompare(a.date || "");
-        });
+    var globalBtns = createEl("div", { style: { display: "flex", gap: "10px", marginTop: "16px", flexWrap: "wrap" } });
+    var setBtn = createEl("a", { className: "btn btn-secondary", href: "#/site-settings" }, "⚙ Edit Header, Footer & Social Links");
+    var backupBtn2 = createEl("a", { className: "btn btn-secondary", href: "#/data" }, "💾 Export JSON Catalog Backup");
+    globalBtns.appendChild(setBtn);
+    globalBtns.appendChild(backupBtn2);
+    globalCard.appendChild(globalBtns);
 
-        var top6 = combined.slice(0, 6);
-        if (top6.length === 0) {
-          var liEmpty = createEl("li", { className: "recent-item" }, "No recent activity.");
-          recentList.appendChild(liEmpty);
-        } else {
-          top6.forEach(function(item){
-            var li = createEl("li", { className: "recent-item" });
-            var a = createEl("a", { className: "recent-item-title", href: item.route }, item.title);
-            var meta = createEl("span", { className: "recent-item-meta" }, item.type);
-            li.appendChild(a);
-            li.appendChild(meta);
-            recentList.appendChild(li);
-          });
-        }
-      });
+    var activityCard = createEl("div", { className: "form-card" });
+    activityCard.appendChild(createEl("h3", { className: "form-section__title" }, "Propulsion Lineup Status"));
+    activityCard.appendChild(createEl("p", { className: "form-section__desc" }, "Active engineering models deployed in the Products & Motors page."));
+
+    var motorSummary = createEl("div", { style: { display: "flex", gap: "6px", flexWrap: "wrap", marginTop: "16px" } });
+    var hps = [3, 7, 10, 15, 20, 30, 40, 50];
+    hps.forEach(function(hp){
+      var pill = createEl("a", {
+        className: "badge badge-success",
+        style: { textDecoration: "none", padding: "6px 12px", fontSize: "12px" },
+        href: "#/motors/edit/motor-" + hp + "hp"
+      }, "Seagö " + hp + " HP");
+      motorSummary.appendChild(pill);
     });
+    activityCard.appendChild(motorSummary);
 
-    // Quick Add Actions Card
-    var actionsCard = createEl("div", { className: "form-card" });
-    actionsCard.appendChild(createEl("h3", { className: "form-section__title" }, "Quick Add Shortcuts"));
-    var btnList = createEl("div", { style: { display: "flex", flexDirection: "column", gap: "10px", marginTop: "18px" } });
-
-    var quickLinks = [
-      { label: "+ New Outboard Motor", href: "#/motors/new" },
-      { label: "✎ Edit Home Page Copy", href: "#/pages/edit/home" },
-      { label: "📁 Digital Asset Manager", href: "#/media" },
-      { label: "+ New Battery Pack", href: "#/battery-packs/new" },
-      { label: "+ New Field Case Study", href: "#/case-studies/new" },
-      { label: "⤓ Export JSON Backup", href: "#/data" }
-    ];
-
-    quickLinks.forEach(function(ql){
-      var btn = createEl("a", { className: "btn btn-secondary btn-full", href: ql.href }, ql.label);
-      btnList.appendChild(btn);
-    });
-
-    actionsCard.appendChild(btnList);
-    cols.appendChild(recentCard);
-    cols.appendChild(actionsCard);
-    wrap.appendChild(cols);
+    bottomCols.appendChild(globalCard);
+    bottomCols.appendChild(activityCard);
+    wrap.appendChild(bottomCols);
 
     pageRoot.appendChild(wrap);
   }
@@ -3473,380 +3482,1213 @@
     pageRoot.appendChild(card);
   }
 
-  // ================= 13.5 SCREEN: WEBSITE PAGES CMS =================
-  function renderPagesList() {
-    pageRoot.innerHTML = "";
-    var wrap = createEl("div");
-
-    var header = createEl("div", { className: "page-header" });
-    var info = createEl("div", { className: "page-header-info" });
-    info.appendChild(createEl("h1", { className: "page-header-title" }, "Website Pages CMS"));
-    info.appendChild(createEl("p", { className: "page-header-sub" }, "Edit public-facing website copy, hero announcements, engineering credentials, and sales contacts."));
-    header.appendChild(info);
-
-    var headerActions = createEl("div", { className: "page-header-actions" });
-    var liveBtn = createEl("a", { className: "btn btn-secondary", href: "index.html", target: "_blank", rel: "noopener" }, "↗ View Public Website");
-    headerActions.appendChild(liveBtn);
-    header.appendChild(headerActions);
-    wrap.appendChild(header);
-
-    var grid = createEl("div", { className: "pages-grid" });
-
-    window.SeagoStore.list("pages", function(err, pages){
-      var pageItems = pages || [];
-      if (pageItems.length === 0 && window.SEAGO_FACTORY_SEED && window.SEAGO_FACTORY_SEED.pages) {
-        pageItems = window.SEAGO_FACTORY_SEED.pages;
-      }
-
-      pageItems.forEach(function(p){
-        var card = createEl("div", { className: "page-hub-card" });
-        
-        var cardTop = createEl("div");
-        var hWrap = createEl("div", { className: "page-hub-header" });
-        var title = createEl("h3", { className: "page-hub-title" }, p.title || p.id);
-        var badge = createEl("span", { className: "badge badge-success" }, "Published");
-        hWrap.appendChild(title);
-        hWrap.appendChild(badge);
-        cardTop.appendChild(hWrap);
-
-        var descText = "";
-        if (p.id === "home") {
-          descText = "Hero headline, mission tagline, performance stats (3–50 HP, 80% fuel savings, 100% zero emissions), and call-to-actions.";
-        } else if (p.id === "about") {
-          descText = "Company engineering mission, manufacturing and testing facilities (Chennai & Kollam), and PMSM motor technology.";
-        } else if (p.id === "contact") {
-          descText = "Sales inquiry email, Kerala showroom phone, WhatsApp hotline, showroom address, and operating hours.";
+  // ================= 13.5 SCREEN: ALL WEBSITE PAGES CMS =================
+  function loadPageData(pageId, cb) {
+    if (window.SeagoStore && typeof window.SeagoStore.get === "function") {
+      window.SeagoStore.get("pages", pageId, function(err, page){
+        if (!err && page) {
+          cb(null, page);
         } else {
-          descText = p.meta_desc || "Manage page content, copy, and layout parameters.";
+          var fallback = null;
+          if (window._SEAGO_SEED_DATA && window._SEAGO_SEED_DATA.pages) {
+            for (var i = 0; i < window._SEAGO_SEED_DATA.pages.length; i++) {
+              if (window._SEAGO_SEED_DATA.pages[i].id === pageId) {
+                fallback = window._SEAGO_SEED_DATA.pages[i];
+                break;
+              }
+            }
+          }
+          cb(null, fallback || { id: pageId, title: pageId, updated_at: new Date().toISOString() });
         }
-        var desc = createEl("p", { className: "page-hub-desc" }, descText);
-        cardTop.appendChild(desc);
-        card.appendChild(cardTop);
-
-        var cardBottom = createEl("div");
-        var meta = createEl("div", { className: "page-hub-meta" });
-        meta.appendChild(createEl("span", null, "Route: " + (p.slug === "home" ? "index.html" : p.slug + ".html")));
-        var editBtn = createEl("a", { className: "btn btn-primary btn-sm", href: "#/pages/edit/" + p.id }, "Edit Page Content →");
-        meta.appendChild(editBtn);
-        cardBottom.appendChild(meta);
-        card.appendChild(cardBottom);
-
-        grid.appendChild(card);
       });
+    } else {
+      cb(new Error("Storage unavailable"));
+    }
+  }
 
-      wrap.appendChild(grid);
-      pageRoot.appendChild(wrap);
+  function savePageData(pageRecord, cb) {
+    pageRecord.updated_at = new Date().toISOString();
+    window.SeagoStore.save("pages", pageRecord, function(err){
+      if (!err) {
+        isDirty = false;
+        showToast("Changes saved to " + (pageRecord.title || "page") + " successfully!", "success");
+      } else {
+        showToast("Error saving page: " + err.message, "error");
+      }
+      if (typeof cb === "function") cb(err);
     });
   }
 
-  function renderPageEdit(pageId) {
+  function createPageHeader(pageTitleText, slugName, onSave) {
+    var header = createEl("div", { className: "page-header" });
+    var info = createEl("div", { className: "page-header-info" });
+    var titleRow = createEl("div", { style: { display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" } });
+    titleRow.appendChild(createEl("h1", { className: "page-header-title" }, pageTitleText));
+    titleRow.appendChild(createEl("span", { className: "nav-slug-badge", style: { fontSize: "12px", padding: "3px 8px" } }, slugName));
+    info.appendChild(titleRow);
+    info.appendChild(createEl("p", { className: "page-header-sub" }, "Live CMS editor · Content updates reflect directly on the public website."));
+    header.appendChild(info);
+
+    var headerActions = createEl("div", { className: "page-header-actions" });
+    var backBtn = createEl("a", { className: "btn btn-secondary", href: "#/dashboard" }, "← CMS Hub");
+    var liveBtn = createEl("a", { className: "btn btn-outline-topbar", href: slugName, target: "_blank", rel: "noopener" }, "↗ View Live Page");
+    var saveBtn = createEl("button", { type: "button", className: "btn btn-primary" }, "Save Page (Ctrl+S)");
+    if (typeof onSave === "function") {
+      saveBtn.addEventListener("click", onSave);
+    }
+    headerActions.appendChild(backBtn);
+    headerActions.appendChild(liveBtn);
+    headerActions.appendChild(saveBtn);
+    header.appendChild(headerActions);
+    return header;
+  }
+
+  // 1. HOME PAGE CMS (index.html)
+  function renderHomePageEditor() {
     pageRoot.innerHTML = "";
-    
-    window.SeagoStore.get("pages", pageId, function(err, page){
-      if (!page) {
-        if (window.SEAGO_FACTORY_SEED && window.SEAGO_FACTORY_SEED.pages) {
-          for (var i = 0; i < window.SEAGO_FACTORY_SEED.pages.length; i++) {
-            if (window.SEAGO_FACTORY_SEED.pages[i].id === pageId) {
-              page = window.SEAGO_FACTORY_SEED.pages[i];
-              break;
-            }
-          }
-        }
-      }
+    loadPageData("home", function(err, page){
+      if (!page) return;
 
-      if (!page) {
-        showToast("Page not found", "error");
-        window.location.hash = "#/pages";
-        return;
-      }
-
-      var header = createEl("div", { className: "page-header" });
-      var info = createEl("div", { className: "page-header-info" });
-      info.appendChild(createEl("h1", { className: "page-header-title" }, page.title || ("Edit Page: " + pageId)));
-      info.appendChild(createEl("p", { className: "page-header-sub" }, "Modify public website copy, call-to-actions, and metadata."));
-      header.appendChild(info);
-
-      var headerActions = createEl("div", { className: "page-header-actions" });
-      var backBtn = createEl("a", { className: "btn btn-secondary", href: "#/pages" }, "← Back to Pages");
-      var topSaveBtn = createEl("button", { type: "button", className: "btn btn-primary" }, "Save Page (Ctrl+S)");
-      headerActions.appendChild(backBtn);
-      headerActions.appendChild(topSaveBtn);
-      header.appendChild(headerActions);
-      pageRoot.appendChild(header);
-
-      var formCard = createEl("div", { className: "form-card" });
       var form = createEl("form", { novalidate: "novalidate" });
-
-      topSaveBtn.addEventListener("click", function(){
+      var header = createPageHeader("Home Page CMS", "index.html", function(){
         if (typeof form.requestSubmit === "function") {
           form.requestSubmit();
         } else {
           form.dispatchEvent(new Event("submit", { cancelable: true }));
         }
       });
+      pageRoot.appendChild(header);
 
-      if (pageId === "home") {
-        // Hero Section Copy
-        var sHero = createEl("div", { className: "form-section" });
-        var hHero = createEl("div", { className: "form-section__header" });
-        hHero.appendChild(createEl("span", { className: "form-section__badge" }, "1"));
-        hHero.appendChild(createEl("h3", { className: "form-section__title" }, "Hero Section Copy"));
-        sHero.appendChild(hHero);
+      var formCard = createEl("div", { className: "form-card" });
 
-        var gBadge = createEl("div", { className: "form-group" });
-        gBadge.appendChild(createEl("label", null, "Hero Top Badge"));
-        var inpBadge = createEl("input", { type: "text", value: page.badge || "" });
-        gBadge.appendChild(inpBadge);
-        sHero.appendChild(gBadge);
+      // Section 1: Hero Banner
+      var s1 = createEl("div", { className: "cms-section-card" });
+      var h1 = createEl("div", { className: "cms-section-header" });
+      var h1Left = createEl("div", { className: "cms-section-title-wrap" });
+      h1Left.appendChild(createEl("span", { className: "cms-section-number" }, "1"));
+      h1Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Hero Announcement Banner"));
+      h1.appendChild(h1Left);
+      s1.appendChild(h1);
 
-        var gHead = createEl("div", { className: "form-group" });
-        gHead.appendChild(createEl("label", null, "Main Headline"));
-        var inpHead = createEl("input", { type: "text", value: page.headline || "" });
-        gHead.appendChild(inpHead);
-        sHero.appendChild(gHead);
+      var gBadge = createEl("div", { className: "form-group" });
+      gBadge.appendChild(createEl("label", null, "Top Announcement Badge"));
+      var inpBadge = createEl("input", { type: "text", value: page.badge || "" });
+      gBadge.appendChild(inpBadge);
+      s1.appendChild(gBadge);
 
-        var gSub = createEl("div", { className: "form-group" });
-        gSub.appendChild(createEl("label", null, "Hero Subheadline & Value Proposition"));
-        var inpSub = createEl("textarea", { rows: "3" }, page.subheadline || "");
-        gSub.appendChild(inpSub);
-        sHero.appendChild(gSub);
+      var gHead = createEl("div", { className: "form-group" });
+      gHead.appendChild(createEl("label", null, "Main Headline"));
+      var inpHead = createEl("input", { type: "text", value: page.headline || "" });
+      gHead.appendChild(inpHead);
+      s1.appendChild(gHead);
 
-        var rCta = createEl("div", { className: "form-row" });
-        var gCta1 = createEl("div", { className: "form-group" });
-        gCta1.appendChild(createEl("label", null, "Primary CTA Button Text"));
-        var inpCta1 = createEl("input", { type: "text", value: page.cta_primary || "" });
-        gCta1.appendChild(inpCta1);
-        var gCta2 = createEl("div", { className: "form-group" });
-        gCta2.appendChild(createEl("label", null, "Secondary CTA Button Text"));
-        var inpCta2 = createEl("input", { type: "text", value: page.cta_secondary || "" });
-        gCta2.appendChild(inpCta2);
-        rCta.appendChild(gCta1);
-        rCta.appendChild(gCta2);
-        sHero.appendChild(rCta);
-        form.appendChild(sHero);
+      var gSub = createEl("div", { className: "form-group" });
+      gSub.appendChild(createEl("label", null, "Hero Subheadline"));
+      var inpSub = createEl("textarea", { rows: "3" }, page.subheadline || "");
+      gSub.appendChild(inpSub);
+      s1.appendChild(gSub);
 
-        // Headline Statistics
-        var sStats = createEl("div", { className: "form-section" });
-        var hStats = createEl("div", { className: "form-section__header" });
-        hStats.appendChild(createEl("span", { className: "form-section__badge" }, "2"));
-        hStats.appendChild(createEl("h3", { className: "form-section__title" }, "Headline Metrics"));
-        sStats.appendChild(hStats);
-        sStats.appendChild(createEl("p", { className: "form-section__desc" }, "The 4 headline statistics displayed on the home page."));
+      var rCta = createEl("div", { className: "form-row" });
+      var gCta1 = createEl("div", { className: "form-group" });
+      gCta1.appendChild(createEl("label", null, "Primary Button Text"));
+      var inpCta1 = createEl("input", { type: "text", value: page.cta_primary || "" });
+      gCta1.appendChild(inpCta1);
+      var gCta2 = createEl("div", { className: "form-group" });
+      gCta2.appendChild(createEl("label", null, "Secondary Button Text"));
+      var inpCta2 = createEl("input", { type: "text", value: page.cta_secondary || "" });
+      gCta2.appendChild(inpCta2);
+      rCta.appendChild(gCta1);
+      rCta.appendChild(gCta2);
+      s1.appendChild(rCta);
+      form.appendChild(s1);
 
-        var rStats1 = createEl("div", { className: "form-row" });
-        var gS1Val = createEl("div", { className: "form-group" });
-        gS1Val.appendChild(createEl("label", null, "Stat 1 Value"));
-        var inpS1Val = createEl("input", { type: "text", value: page.stat_1_val || "3–50 HP" });
-        gS1Val.appendChild(inpS1Val);
-        var gS1Lbl = createEl("div", { className: "form-group" });
-        gS1Lbl.appendChild(createEl("label", null, "Stat 1 Label"));
-        var inpS1Lbl = createEl("input", { type: "text", value: page.stat_1_lbl || "Power Spectrum" });
-        gS1Lbl.appendChild(inpS1Lbl);
-        rStats1.appendChild(gS1Val);
-        rStats1.appendChild(gS1Lbl);
-        sStats.appendChild(rStats1);
+      // Section 2: Headline Metrics
+      var s2 = createEl("div", { className: "cms-section-card" });
+      var h2 = createEl("div", { className: "cms-section-header" });
+      var h2Left = createEl("div", { className: "cms-section-title-wrap" });
+      h2Left.appendChild(createEl("span", { className: "cms-section-number" }, "2"));
+      h2Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Headline Performance Statistics"));
+      h2.appendChild(h2Left);
+      s2.appendChild(h2);
+      s2.appendChild(createEl("p", { className: "cms-section-desc" }, "The 4 headline statistics displayed directly below the hero banner."));
 
-        var rStats2 = createEl("div", { className: "form-row" });
-        var gS2Val = createEl("div", { className: "form-group" });
-        gS2Val.appendChild(createEl("label", null, "Stat 2 Value"));
-        var inpS2Val = createEl("input", { type: "text", value: page.stat_2_val || "80%" });
-        gS2Val.appendChild(inpS2Val);
-        var gS2Lbl = createEl("div", { className: "form-group" });
-        gS2Lbl.appendChild(createEl("label", null, "Stat 2 Label"));
-        var inpS2Lbl = createEl("input", { type: "text", value: page.stat_2_lbl || "Fuel & Lube Savings" });
-        gS2Lbl.appendChild(inpS2Lbl);
-        rStats2.appendChild(gS2Val);
-        rStats2.appendChild(gS2Lbl);
-        sStats.appendChild(rStats2);
+      var rS1 = createEl("div", { className: "form-row" });
+      var gS1Val = createEl("div", { className: "form-group" });
+      gS1Val.appendChild(createEl("label", null, "Stat 1 Value"));
+      var inpS1Val = createEl("input", { type: "text", value: page.stat_1_val || "3–50 HP" });
+      gS1Val.appendChild(inpS1Val);
+      var gS1Lbl = createEl("div", { className: "form-group" });
+      gS1Lbl.appendChild(createEl("label", null, "Stat 1 Label"));
+      var inpS1Lbl = createEl("input", { type: "text", value: page.stat_1_lbl || "Power Spectrum" });
+      gS1Lbl.appendChild(inpS1Lbl);
+      rS1.appendChild(gS1Val);
+      rS1.appendChild(gS1Lbl);
+      s2.appendChild(rS1);
 
-        var rStats3 = createEl("div", { className: "form-row" });
-        var gS3Val = createEl("div", { className: "form-group" });
-        gS3Val.appendChild(createEl("label", null, "Stat 3 Value"));
-        var inpS3Val = createEl("input", { type: "text", value: page.stat_3_val || "100%" });
-        gS3Val.appendChild(inpS3Val);
-        var gS3Lbl = createEl("div", { className: "form-group" });
-        gS3Lbl.appendChild(createEl("label", null, "Stat 3 Label"));
-        var inpS3Lbl = createEl("input", { type: "text", value: page.stat_3_lbl || "Zero Emissions" });
-        gS3Lbl.appendChild(inpS3Lbl);
-        rStats3.appendChild(gS3Val);
-        rStats3.appendChild(gS3Lbl);
-        sStats.appendChild(rStats3);
+      var rS2 = createEl("div", { className: "form-row" });
+      var gS2Val = createEl("div", { className: "form-group" });
+      gS2Val.appendChild(createEl("label", null, "Stat 2 Value"));
+      var inpS2Val = createEl("input", { type: "text", value: page.stat_2_val || "80%" });
+      gS2Val.appendChild(inpS2Val);
+      var gS2Lbl = createEl("div", { className: "form-group" });
+      gS2Lbl.appendChild(createEl("label", null, "Stat 2 Label"));
+      var inpS2Lbl = createEl("input", { type: "text", value: page.stat_2_lbl || "Fuel & Lube Savings" });
+      gS2Lbl.appendChild(inpS2Lbl);
+      rS2.appendChild(gS2Val);
+      rS2.appendChild(gS2Lbl);
+      s2.appendChild(rS2);
 
-        var rStats4 = createEl("div", { className: "form-row" });
-        var gS4Val = createEl("div", { className: "form-group" });
-        gS4Val.appendChild(createEl("label", null, "Stat 4 Value"));
-        var inpS4Val = createEl("input", { type: "text", value: page.stat_4_val || "5+ States" });
-        gS4Val.appendChild(inpS4Val);
-        var gS4Lbl = createEl("div", { className: "form-group" });
-        gS4Lbl.appendChild(createEl("label", null, "Stat 4 Label"));
-        var inpS4Lbl = createEl("input", { type: "text", value: page.stat_4_lbl || "Active Deployments" });
-        gS4Lbl.appendChild(inpS4Lbl);
-        rStats4.appendChild(gS4Val);
-        rStats4.appendChild(gS4Lbl);
-        sStats.appendChild(rStats4);
-        form.appendChild(sStats);
+      var rS3 = createEl("div", { className: "form-row" });
+      var gS3Val = createEl("div", { className: "form-group" });
+      gS3Val.appendChild(createEl("label", null, "Stat 3 Value"));
+      var inpS3Val = createEl("input", { type: "text", value: page.stat_3_val || "100%" });
+      gS3Val.appendChild(inpS3Val);
+      var gS3Lbl = createEl("div", { className: "form-group" });
+      gS3Lbl.appendChild(createEl("label", null, "Stat 3 Label"));
+      var inpS3Lbl = createEl("input", { type: "text", value: page.stat_3_lbl || "Zero Emissions" });
+      gS3Lbl.appendChild(inpS3Lbl);
+      rS3.appendChild(gS3Val);
+      rS3.appendChild(gS3Lbl);
+      s2.appendChild(rS3);
 
-        // SEO
-        var sSeo = createEl("div", { className: "form-section" });
-        var gMeta = createEl("div", { className: "form-group" });
-        gMeta.appendChild(createEl("label", null, "Meta Search Description"));
-        var inpMeta = createEl("textarea", { rows: "2" }, page.meta_desc || "");
-        gMeta.appendChild(inpMeta);
-        sSeo.appendChild(gMeta);
-        form.appendChild(sSeo);
+      var rS4 = createEl("div", { className: "form-row" });
+      var gS4Val = createEl("div", { className: "form-group" });
+      gS4Val.appendChild(createEl("label", null, "Stat 4 Value"));
+      var inpS4Val = createEl("input", { type: "text", value: page.stat_4_val || "5+ States" });
+      gS4Val.appendChild(inpS4Val);
+      var gS4Lbl = createEl("div", { className: "form-group" });
+      gS4Lbl.appendChild(createEl("label", null, "Stat 4 Label"));
+      var inpS4Lbl = createEl("input", { type: "text", value: page.stat_4_lbl || "Active Deployments" });
+      gS4Lbl.appendChild(inpS4Lbl);
+      rS4.appendChild(gS4Val);
+      rS4.appendChild(gS4Lbl);
+      s2.appendChild(rS4);
+      form.appendChild(s2);
 
-        form.addEventListener("submit", function(e){
-          e.preventDefault();
-          page.badge = inpBadge.value.trim();
-          page.headline = inpHead.value.trim();
-          page.subheadline = inpSub.value.trim();
-          page.cta_primary = inpCta1.value.trim();
-          page.cta_secondary = inpCta2.value.trim();
-          page.stat_1_val = inpS1Val.value.trim();
-          page.stat_1_lbl = inpS1Lbl.value.trim();
-          page.stat_2_val = inpS2Val.value.trim();
-          page.stat_2_lbl = inpS2Lbl.value.trim();
-          page.stat_3_val = inpS3Val.value.trim();
-          page.stat_3_lbl = inpS3Lbl.value.trim();
-          page.stat_4_val = inpS4Val.value.trim();
-          page.stat_4_lbl = inpS4Lbl.value.trim();
-          page.meta_desc = inpMeta.value.trim();
-          page.updated_at = new Date().toISOString();
+      // Section 3: Trust & Deployment Partners
+      var s3 = createEl("div", { className: "cms-section-card" });
+      var h3 = createEl("div", { className: "cms-section-header" });
+      var h3Left = createEl("div", { className: "cms-section-title-wrap" });
+      h3Left.appendChild(createEl("span", { className: "cms-section-number" }, "3"));
+      h3Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Deployment Partners & Trust"));
+      h3.appendChild(h3Left);
+      s3.appendChild(h3);
 
-          window.SeagoStore.save("pages", page, function(sErr){
-            if (!sErr) {
-              isDirty = false;
-              showToast("Home Page copy saved successfully!", "success");
-            } else {
-              showToast("Error saving page: " + sErr.message, "error");
+      var gTrustHead = createEl("div", { className: "form-group" });
+      gTrustHead.appendChild(createEl("label", null, "Trust Section Heading"));
+      var inpTrustHead = createEl("input", { type: "text", value: page.trust_heading || "" });
+      gTrustHead.appendChild(inpTrustHead);
+      s3.appendChild(gTrustHead);
+
+      var gTrustList = createEl("div", { className: "form-group" });
+      gTrustList.appendChild(createEl("label", null, "Partner Organizations (separated by bullet ·)"));
+      var inpTrustList = createEl("input", { type: "text", value: page.trust_partners || "" });
+      gTrustList.appendChild(inpTrustList);
+      s3.appendChild(gTrustList);
+      form.appendChild(s3);
+
+      // Section 4: Narrative / Why Electric
+      var s4 = createEl("div", { className: "cms-section-card" });
+      var h4 = createEl("div", { className: "cms-section-header" });
+      var h4Left = createEl("div", { className: "cms-section-title-wrap" });
+      h4Left.appendChild(createEl("span", { className: "cms-section-number" }, "4"));
+      h4Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Why Transition Narrative"));
+      h4.appendChild(h4Left);
+      s4.appendChild(h4);
+
+      var gWhyHead = createEl("div", { className: "form-group" });
+      gWhyHead.appendChild(createEl("label", null, "Section Headline"));
+      var inpWhyHead = createEl("input", { type: "text", value: page.why_heading || "" });
+      gWhyHead.appendChild(inpWhyHead);
+      s4.appendChild(gWhyHead);
+
+      var gWhyBody = createEl("div", { className: "form-group" });
+      gWhyBody.appendChild(createEl("label", null, "Story & Market Problem Paragraph"));
+      var inpWhyBody = createEl("textarea", { rows: "4" }, page.why_body || "");
+      gWhyBody.appendChild(inpWhyBody);
+      s4.appendChild(gWhyBody);
+      form.appendChild(s4);
+
+      // Section 5: Bottom CTA Banner
+      var s5 = createEl("div", { className: "cms-section-card" });
+      var h5 = createEl("div", { className: "cms-section-header" });
+      var h5Left = createEl("div", { className: "cms-section-title-wrap" });
+      h5Left.appendChild(createEl("span", { className: "cms-section-number" }, "5"));
+      h5Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Bottom Call-To-Action Banner"));
+      h5.appendChild(h5Left);
+      s5.appendChild(h5);
+
+      var rCtaBan = createEl("div", { className: "form-row" });
+      var gCtaTitle = createEl("div", { className: "form-group" });
+      gCtaTitle.appendChild(createEl("label", null, "Banner Title"));
+      var inpCtaTitle = createEl("input", { type: "text", value: page.cta_banner_title || "" });
+      gCtaTitle.appendChild(inpCtaTitle);
+      var gCtaBtn = createEl("div", { className: "form-group" });
+      gCtaBtn.appendChild(createEl("label", null, "Button Label"));
+      var inpCtaBtn = createEl("input", { type: "text", value: page.cta_banner_btn || "" });
+      gCtaBtn.appendChild(inpCtaBtn);
+      rCtaBan.appendChild(gCtaTitle);
+      rCtaBan.appendChild(gCtaBtn);
+      s5.appendChild(rCtaBan);
+      form.appendChild(s5);
+
+      // Section 6: SEO
+      var s6 = createEl("div", { className: "cms-section-card" });
+      var h6 = createEl("div", { className: "cms-section-header" });
+      var h6Left = createEl("div", { className: "cms-section-title-wrap" });
+      h6Left.appendChild(createEl("span", { className: "cms-section-number" }, "6"));
+      h6Left.appendChild(createEl("h3", { className: "cms-section-title" }, "SEO Search Metadata"));
+      h6.appendChild(h6Left);
+      s6.appendChild(h6);
+
+      var gMeta = createEl("div", { className: "form-group" });
+      gMeta.appendChild(createEl("label", null, "Google Search Meta Description"));
+      var inpMeta = createEl("textarea", { rows: "2" }, page.meta_desc || "");
+      gMeta.appendChild(inpMeta);
+      s6.appendChild(gMeta);
+      form.appendChild(s6);
+
+      // Submit Bar
+      var actions = createEl("div", { className: "form-actions" });
+      var cancel = createEl("a", { className: "btn btn-secondary", href: "#/dashboard" }, "Cancel");
+      var save = createEl("button", { type: "submit", className: "btn btn-primary" }, "Save Home Page Changes");
+      actions.appendChild(cancel);
+      actions.appendChild(save);
+      form.appendChild(actions);
+
+      form.addEventListener("input", function(){ isDirty = true; });
+
+      form.addEventListener("submit", function(e){
+        e.preventDefault();
+        page.badge = inpBadge.value.trim();
+        page.headline = inpHead.value.trim();
+        page.subheadline = inpSub.value.trim();
+        page.cta_primary = inpCta1.value.trim();
+        page.cta_secondary = inpCta2.value.trim();
+        page.stat_1_val = inpS1Val.value.trim();
+        page.stat_1_lbl = inpS1Lbl.value.trim();
+        page.stat_2_val = inpS2Val.value.trim();
+        page.stat_2_lbl = inpS2Lbl.value.trim();
+        page.stat_3_val = inpS3Val.value.trim();
+        page.stat_3_lbl = inpS3Lbl.value.trim();
+        page.stat_4_val = inpS4Val.value.trim();
+        page.stat_4_lbl = inpS4Lbl.value.trim();
+        page.trust_heading = inpTrustHead.value.trim();
+        page.trust_partners = inpTrustList.value.trim();
+        page.why_heading = inpWhyHead.value.trim();
+        page.why_body = inpWhyBody.value.trim();
+        page.cta_banner_title = inpCtaTitle.value.trim();
+        page.cta_banner_btn = inpCtaBtn.value.trim();
+        page.meta_desc = inpMeta.value.trim();
+        savePageData(page);
+      });
+
+      formCard.appendChild(form);
+      pageRoot.appendChild(formCard);
+    });
+  }
+
+  // 2. PRODUCTS & MOTORS PAGE CMS (products.html)
+  function renderProductsPageEditor() {
+    pageRoot.innerHTML = "";
+    loadPageData("products", function(err, page){
+      if (!page) return;
+
+      var form = createEl("form", { novalidate: "novalidate" });
+      var header = createPageHeader("Products & Outboard Fleet", "products.html", function(){
+        if (typeof form.requestSubmit === "function") {
+          form.requestSubmit();
+        } else {
+          form.dispatchEvent(new Event("submit", { cancelable: true }));
+        }
+      });
+      pageRoot.appendChild(header);
+
+      var formCard = createEl("div", { className: "form-card" });
+
+      // Section 1: Hero
+      var s1 = createEl("div", { className: "cms-section-card" });
+      var h1 = createEl("div", { className: "cms-section-header" });
+      var h1Left = createEl("div", { className: "cms-section-title-wrap" });
+      h1Left.appendChild(createEl("span", { className: "cms-section-number" }, "1"));
+      h1Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Products Page Hero"));
+      h1.appendChild(h1Left);
+      s1.appendChild(h1);
+
+      var gBadge = createEl("div", { className: "form-group" });
+      gBadge.appendChild(createEl("label", null, "Category Badge"));
+      var inpBadge = createEl("input", { type: "text", value: page.badge || "" });
+      gBadge.appendChild(inpBadge);
+      s1.appendChild(gBadge);
+
+      var gHead = createEl("div", { className: "form-group" });
+      gHead.appendChild(createEl("label", null, "Headline"));
+      var inpHead = createEl("input", { type: "text", value: page.headline || "" });
+      gHead.appendChild(inpHead);
+      s1.appendChild(gHead);
+
+      var gSub = createEl("div", { className: "form-group" });
+      gSub.appendChild(createEl("label", null, "Introductory Narrative"));
+      var inpSub = createEl("textarea", { rows: "3" }, page.subheadline || "");
+      gSub.appendChild(inpSub);
+      s1.appendChild(gSub);
+      form.appendChild(s1);
+
+      // Section 2: Outboard Motors Lineup (3–50 HP)
+      var s2 = createEl("div", { className: "cms-section-card" });
+      var h2 = createEl("div", { className: "cms-section-header" });
+      var h2Left = createEl("div", { className: "cms-section-title-wrap" });
+      h2Left.appendChild(createEl("span", { className: "cms-section-number" }, "2"));
+      h2Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Outboard Motors Lineup (3–50 HP)"));
+      h2.appendChild(h2Left);
+
+      var addMotorBtn = createEl("a", { className: "btn btn-sm btn-primary", href: "#/motors/new" }, "+ Add New Motor");
+      h2.appendChild(addMotorBtn);
+      s2.appendChild(h2);
+
+      var gMIntro = createEl("div", { className: "form-group" });
+      gMIntro.appendChild(createEl("label", null, "Outboard Range Description"));
+      var inpMIntro = createEl("textarea", { rows: "2" }, page.motors_intro || "");
+      gMIntro.appendChild(inpMIntro);
+      s2.appendChild(gMIntro);
+
+      // Active Motors List Cards
+      var motorTableWrap = createEl("div", { style: { marginTop: "16px" } });
+      window.SeagoStore.list("motors", function(mErr, motors){
+        if (motors && motors.length > 0) {
+          var mGrid = createEl("div", {
+            style: {
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+              gap: "12px",
+              marginTop: "12px"
             }
           });
-        });
 
-      } else if (pageId === "about") {
-        var sAbout = createEl("div", { className: "form-section" });
-        var hAbout = createEl("div", { className: "form-section__header" });
-        hAbout.appendChild(createEl("span", { className: "form-section__badge" }, "1"));
-        hAbout.appendChild(createEl("h3", { className: "form-section__title" }, "Mission & Company Narrative"));
-        sAbout.appendChild(hAbout);
+          motors.forEach(function(m){
+            var mCard = createEl("div", {
+              style: {
+                background: "#F8FAFC",
+                border: "1px solid var(--line)",
+                borderRadius: "8px",
+                padding: "14px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between"
+              }
+            });
 
-        var gMissTitle = createEl("div", { className: "form-group" });
-        gMissTitle.appendChild(createEl("label", null, "Mission Title"));
-        var inpMissTitle = createEl("input", { type: "text", value: page.mission_title || "" });
-        gMissTitle.appendChild(inpMissTitle);
-        sAbout.appendChild(gMissTitle);
+            var mTop = createEl("div");
+            var mHeader = createEl("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" } });
+            var mTitle = createEl("h4", { style: { margin: "0", fontSize: "14px", color: "var(--navy)" } }, m.title || (m.hp + " HP"));
+            var mHpBadge = createEl("span", { className: "badge badge-success" }, m.hp + " HP");
+            mHeader.appendChild(mTitle);
+            mHeader.appendChild(mHpBadge);
+            mTop.appendChild(mHeader);
 
-        var gMissBody = createEl("div", { className: "form-group" });
-        gMissBody.appendChild(createEl("label", null, "Mission Statement & Story"));
-        var inpMissBody = createEl("textarea", { rows: "5" }, page.mission_body || "");
-        gMissBody.appendChild(inpMissBody);
-        sAbout.appendChild(gMissBody);
+            var mMeta = createEl("div", { style: { fontSize: "11.5px", color: "var(--text-muted)", marginTop: "6px" } });
+            mMeta.textContent = (m.kw || "") + " · " + (m.voltage || "") + " · " + (m.cooling || "Liquid Cooled");
+            mTop.appendChild(mMeta);
+            mCard.appendChild(mTop);
 
-        var gFac = createEl("div", { className: "form-group" });
-        gFac.appendChild(createEl("label", null, "Manufacturing & Testing Facilities"));
-        var inpFac = createEl("textarea", { rows: "3" }, page.manufacturing_location || "");
-        gFac.appendChild(inpFac);
-        sAbout.appendChild(gFac);
+            var mFooter = createEl("div", { style: { marginTop: "12px", display: "flex", justifyContent: "space-between", alignItems: "center" } });
+            var editBtn = createEl("a", { className: "btn btn-secondary btn-sm", href: "#/motors/edit/" + m.id }, "✎ Edit Specs");
+            var previewLink = createEl("a", { className: "btn btn-outline-topbar btn-sm", href: m.catalog_path || "products.html", target: "_blank", rel: "noopener" }, "Datasheet ↗");
+            mFooter.appendChild(editBtn);
+            mFooter.appendChild(previewLink);
+            mCard.appendChild(mFooter);
 
-        var gHigh = createEl("div", { className: "form-group" });
-        gHigh.appendChild(createEl("label", null, "Engineering & Technology Highlights"));
-        var inpHigh = createEl("textarea", { rows: "3" }, page.engineering_highlights || "");
-        gHigh.appendChild(inpHigh);
-        sAbout.appendChild(gHigh);
-        form.appendChild(sAbout);
-
-        form.addEventListener("submit", function(e){
-          e.preventDefault();
-          page.mission_title = inpMissTitle.value.trim();
-          page.mission_body = inpMissBody.value.trim();
-          page.manufacturing_location = inpFac.value.trim();
-          page.engineering_highlights = inpHigh.value.trim();
-          page.updated_at = new Date().toISOString();
-
-          window.SeagoStore.save("pages", page, function(sErr){
-            if (!sErr) {
-              isDirty = false;
-              showToast("About Seagö content saved successfully!", "success");
-            } else {
-              showToast("Error saving page: " + sErr.message, "error");
-            }
+            mGrid.appendChild(mCard);
           });
-        });
+          motorTableWrap.appendChild(mGrid);
+        }
+      });
+      s2.appendChild(motorTableWrap);
+      form.appendChild(s2);
 
-      } else if (pageId === "contact") {
-        var sContact = createEl("div", { className: "form-section" });
-        var hContact = createEl("div", { className: "form-section__header" });
-        hContact.appendChild(createEl("span", { className: "form-section__badge" }, "1"));
-        hContact.appendChild(createEl("h3", { className: "form-section__title" }, "Direct Channels & Showroom"));
-        sContact.appendChild(hContact);
+      // Section 3: Marine LiFePO4 Battery Energy Storage
+      var s3 = createEl("div", { className: "cms-section-card" });
+      var h3 = createEl("div", { className: "cms-section-header" });
+      var h3Left = createEl("div", { className: "cms-section-title-wrap" });
+      h3Left.appendChild(createEl("span", { className: "cms-section-number" }, "3"));
+      h3Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Marine LiFePO4 Energy Storage Section"));
+      h3.appendChild(h3Left);
+      s3.appendChild(h3);
 
-        var rComms = createEl("div", { className: "form-row" });
-        var gEmail = createEl("div", { className: "form-group" });
-        gEmail.appendChild(createEl("label", null, "Sales Email Address"));
-        var inpEmail = createEl("input", { type: "email", value: page.sales_email || "" });
-        gEmail.appendChild(inpEmail);
-        var gPhone = createEl("div", { className: "form-group" });
-        gPhone.appendChild(createEl("label", null, "Direct Phone Hotline"));
-        var inpPhone = createEl("input", { type: "text", value: page.support_phone || "" });
-        gPhone.appendChild(inpPhone);
-        var gWa = createEl("div", { className: "form-group" });
-        gWa.appendChild(createEl("label", null, "WhatsApp Hotline"));
-        var inpWa = createEl("input", { type: "text", value: page.whatsapp_number || "" });
-        gWa.appendChild(inpWa);
-        rComms.appendChild(gEmail);
-        rComms.appendChild(gPhone);
-        rComms.appendChild(gWa);
-        sContact.appendChild(rComms);
+      var gBIntro = createEl("div", { className: "form-group" });
+      gBIntro.appendChild(createEl("label", null, "Battery Architecture & Chemistry Description"));
+      var inpBIntro = createEl("textarea", { rows: "3" }, page.batteries_intro || "");
+      gBIntro.appendChild(inpBIntro);
+      s3.appendChild(gBIntro);
+      form.appendChild(s3);
 
-        var gAddr1 = createEl("div", { className: "form-group" });
-        gAddr1.appendChild(createEl("label", null, "Sales & Experience Center Address (Kerala)"));
-        var inpAddr1 = createEl("textarea", { rows: "2" }, page.sales_address || "");
-        gAddr1.appendChild(inpAddr1);
-        sContact.appendChild(gAddr1);
+      // Section 4: Custom Electric & Solar Hybrid Vessels
+      var s4 = createEl("div", { className: "cms-section-card" });
+      var h4 = createEl("div", { className: "cms-section-header" });
+      var h4Left = createEl("div", { className: "cms-section-title-wrap" });
+      h4Left.appendChild(createEl("span", { className: "cms-section-number" }, "4"));
+      h4Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Electric & Solar Vessels Section"));
+      h4.appendChild(h4Left);
+      s4.appendChild(h4);
 
-        var gAddr2 = createEl("div", { className: "form-group" });
-        gAddr2.appendChild(createEl("label", null, "Manufacturing Facility (Chennai)"));
-        var inpAddr2 = createEl("textarea", { rows: "2" }, page.manufacturing_address || "");
-        gAddr2.appendChild(inpAddr2);
-        sContact.appendChild(gAddr2);
+      var gBoatIntro = createEl("div", { className: "form-group" });
+      gBoatIntro.appendChild(createEl("label", null, "Vessel Hull & Passenger Transport Narrative"));
+      var inpBoatIntro = createEl("textarea", { rows: "3" }, page.boats_intro || "");
+      gBoatIntro.appendChild(inpBoatIntro);
+      s4.appendChild(gBoatIntro);
+      form.appendChild(s4);
 
-        var gHours = createEl("div", { className: "form-group" });
-        gHours.appendChild(createEl("label", null, "Working Hours"));
-        var inpHours = createEl("input", { type: "text", value: page.hours || "" });
-        gHours.appendChild(inpHours);
-        sContact.appendChild(gHours);
-        form.appendChild(sContact);
+      // Section 5: SEO
+      var s5 = createEl("div", { className: "cms-section-card" });
+      var h5 = createEl("div", { className: "cms-section-header" });
+      var h5Left = createEl("div", { className: "cms-section-title-wrap" });
+      h5Left.appendChild(createEl("span", { className: "cms-section-number" }, "5"));
+      h5Left.appendChild(createEl("h3", { className: "cms-section-title" }, "SEO Search Metadata"));
+      h5.appendChild(h5Left);
+      s5.appendChild(h5);
 
-        form.addEventListener("submit", function(e){
-          e.preventDefault();
-          page.sales_email = inpEmail.value.trim();
-          page.support_phone = inpPhone.value.trim();
-          page.whatsapp_number = inpWa.value.trim();
-          page.sales_address = inpAddr1.value.trim();
-          page.manufacturing_address = inpAddr2.value.trim();
-          page.hours = inpHours.value.trim();
-          page.updated_at = new Date().toISOString();
+      var gMeta = createEl("div", { className: "form-group" });
+      gMeta.appendChild(createEl("label", null, "Google Search Meta Description"));
+      var inpMeta = createEl("textarea", { rows: "2" }, page.meta_desc || "");
+      gMeta.appendChild(inpMeta);
+      s5.appendChild(gMeta);
+      form.appendChild(s5);
 
-          window.SeagoStore.save("pages", page, function(sErr){
-            if (!sErr) {
-              isDirty = false;
-              showToast("Contact channels updated successfully!", "success");
-            } else {
-              showToast("Error saving contact: " + sErr.message, "error");
-            }
-          });
-        });
-      }
+      // Submit Bar
+      var actions = createEl("div", { className: "form-actions" });
+      var cancel = createEl("a", { className: "btn btn-secondary", href: "#/dashboard" }, "Cancel");
+      var save = createEl("button", { type: "submit", className: "btn btn-primary" }, "Save Products Page Changes");
+      actions.appendChild(cancel);
+      actions.appendChild(save);
+      form.appendChild(actions);
 
-      var formActions = createEl("div", { className: "form-actions" });
-      var cancelBtn = createEl("a", { className: "btn btn-secondary", href: "#/pages" }, "Cancel");
-      var saveBtn = createEl("button", { type: "submit", className: "btn btn-primary" }, "Save Page Changes");
-      formActions.appendChild(cancelBtn);
-      formActions.appendChild(saveBtn);
-      form.appendChild(formActions);
+      form.addEventListener("input", function(){ isDirty = true; });
 
-      form.addEventListener("input", function(){
-        isDirty = true;
+      form.addEventListener("submit", function(e){
+        e.preventDefault();
+        page.badge = inpBadge.value.trim();
+        page.headline = inpHead.value.trim();
+        page.subheadline = inpSub.value.trim();
+        page.motors_intro = inpMIntro.value.trim();
+        page.batteries_intro = inpBIntro.value.trim();
+        page.boats_intro = inpBoatIntro.value.trim();
+        page.meta_desc = inpMeta.value.trim();
+        savePageData(page);
+      });
+
+      formCard.appendChild(form);
+      pageRoot.appendChild(formCard);
+    });
+  }
+
+  // 3. ABOUT US & LEADERSHIP PAGE CMS (about.html)
+  function renderAboutPageEditor() {
+    pageRoot.innerHTML = "";
+    loadPageData("about", function(err, page){
+      if (!page) return;
+
+      var form = createEl("form", { novalidate: "novalidate" });
+      var header = createPageHeader("About Seagö & Leadership", "about.html", function(){
+        if (typeof form.requestSubmit === "function") {
+          form.requestSubmit();
+        } else {
+          form.dispatchEvent(new Event("submit", { cancelable: true }));
+        }
+      });
+      pageRoot.appendChild(header);
+
+      var formCard = createEl("div", { className: "form-card" });
+
+      // Section 1: Hero
+      var s1 = createEl("div", { className: "cms-section-card" });
+      var h1 = createEl("div", { className: "cms-section-header" });
+      var h1Left = createEl("div", { className: "cms-section-title-wrap" });
+      h1Left.appendChild(createEl("span", { className: "cms-section-number" }, "1"));
+      h1Left.appendChild(createEl("h3", { className: "cms-section-title" }, "About Hero Narrative"));
+      h1.appendChild(h1Left);
+      s1.appendChild(h1);
+
+      var gBadge = createEl("div", { className: "form-group" });
+      gBadge.appendChild(createEl("label", null, "Banner Badge"));
+      var inpBadge = createEl("input", { type: "text", value: page.badge || "" });
+      gBadge.appendChild(inpBadge);
+      s1.appendChild(gBadge);
+
+      var gHead = createEl("div", { className: "form-group" });
+      gHead.appendChild(createEl("label", null, "Headline"));
+      var inpHead = createEl("input", { type: "text", value: page.headline || "" });
+      gHead.appendChild(inpHead);
+      s1.appendChild(gHead);
+
+      var gSub = createEl("div", { className: "form-group" });
+      gSub.appendChild(createEl("label", null, "Subtitle"));
+      var inpSub = createEl("textarea", { rows: "2" }, page.subheadline || "");
+      gSub.appendChild(inpSub);
+      s1.appendChild(gSub);
+      form.appendChild(s1);
+
+      // Section 2: Mission & Story
+      var s2 = createEl("div", { className: "cms-section-card" });
+      var h2 = createEl("div", { className: "cms-section-header" });
+      var h2Left = createEl("div", { className: "cms-section-title-wrap" });
+      h2Left.appendChild(createEl("span", { className: "cms-section-number" }, "2"));
+      h2Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Mission & Company Narrative"));
+      h2.appendChild(h2Left);
+      s2.appendChild(h2);
+
+      var gMissTitle = createEl("div", { className: "form-group" });
+      gMissTitle.appendChild(createEl("label", null, "Mission Title"));
+      var inpMissTitle = createEl("input", { type: "text", value: page.mission_title || "" });
+      gMissTitle.appendChild(inpMissTitle);
+      s2.appendChild(gMissTitle);
+
+      var gMissBody = createEl("div", { className: "form-group" });
+      gMissBody.appendChild(createEl("label", null, "Mission Statement & Story"));
+      var inpMissBody = createEl("textarea", { rows: "4" }, page.mission_body || "");
+      gMissBody.appendChild(inpMissBody);
+      s2.appendChild(gMissBody);
+      form.appendChild(s2);
+
+      // Section 3: Facilities & Testing
+      var s3 = createEl("div", { className: "cms-section-card" });
+      var h3 = createEl("div", { className: "cms-section-header" });
+      var h3Left = createEl("div", { className: "cms-section-title-wrap" });
+      h3Left.appendChild(createEl("span", { className: "cms-section-number" }, "3"));
+      h3Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Manufacturing & Watercraft Testing Facilities"));
+      h3.appendChild(h3Left);
+      s3.appendChild(h3);
+
+      var gFac = createEl("div", { className: "form-group" });
+      gFac.appendChild(createEl("label", null, "Chennai Propulsion Plant & Kollam Testing Location"));
+      var inpFac = createEl("textarea", { rows: "3" }, page.manufacturing_location || "");
+      gFac.appendChild(inpFac);
+      s3.appendChild(gFac);
+
+      var gHigh = createEl("div", { className: "form-group" });
+      gHigh.appendChild(createEl("label", null, "Engineering & Technology Core Pillars"));
+      var inpHigh = createEl("textarea", { rows: "3" }, page.engineering_highlights || "");
+      gHigh.appendChild(inpHigh);
+      s3.appendChild(gHigh);
+      form.appendChild(s3);
+
+      // Section 4: Leadership Profile
+      var s4 = createEl("div", { className: "cms-section-card" });
+      var h4 = createEl("div", { className: "cms-section-header" });
+      var h4Left = createEl("div", { className: "cms-section-title-wrap" });
+      h4Left.appendChild(createEl("span", { className: "cms-section-number" }, "4"));
+      h4Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Founder & Leadership Profile"));
+      h4.appendChild(h4Left);
+      s4.appendChild(h4);
+
+      var rLead = createEl("div", { className: "form-row" });
+      var gFName = createEl("div", { className: "form-group" });
+      gFName.appendChild(createEl("label", null, "Founder Full Name"));
+      var inpFName = createEl("input", { type: "text", value: page.founder_name || "" });
+      gFName.appendChild(inpFName);
+      var gFTitle = createEl("div", { className: "form-group" });
+      gFTitle.appendChild(createEl("label", null, "Official Title"));
+      var inpFTitle = createEl("input", { type: "text", value: page.founder_title || "" });
+      gFTitle.appendChild(inpFTitle);
+      rLead.appendChild(gFName);
+      rLead.appendChild(gFTitle);
+      s4.appendChild(rLead);
+
+      var gFBio = createEl("div", { className: "form-group" });
+      gFBio.appendChild(createEl("label", null, "Leadership Message / Biography"));
+      var inpFBio = createEl("textarea", { rows: "3" }, page.founder_bio || "");
+      gFBio.appendChild(inpFBio);
+      s4.appendChild(gFBio);
+      form.appendChild(s4);
+
+      // Section 5: SEO
+      var s5 = createEl("div", { className: "cms-section-card" });
+      var gMeta = createEl("div", { className: "form-group" });
+      gMeta.appendChild(createEl("label", null, "Google Search Meta Description"));
+      var inpMeta = createEl("textarea", { rows: "2" }, page.meta_desc || "");
+      gMeta.appendChild(inpMeta);
+      s5.appendChild(gMeta);
+      form.appendChild(s5);
+
+      // Submit Bar
+      var actions = createEl("div", { className: "form-actions" });
+      var cancel = createEl("a", { className: "btn btn-secondary", href: "#/dashboard" }, "Cancel");
+      var save = createEl("button", { type: "submit", className: "btn btn-primary" }, "Save About Page Changes");
+      actions.appendChild(cancel);
+      actions.appendChild(save);
+      form.appendChild(actions);
+
+      form.addEventListener("input", function(){ isDirty = true; });
+
+      form.addEventListener("submit", function(e){
+        e.preventDefault();
+        page.badge = inpBadge.value.trim();
+        page.headline = inpHead.value.trim();
+        page.subheadline = inpSub.value.trim();
+        page.mission_title = inpMissTitle.value.trim();
+        page.mission_body = inpMissBody.value.trim();
+        page.manufacturing_location = inpFac.value.trim();
+        page.engineering_highlights = inpHigh.value.trim();
+        page.founder_name = inpFName.value.trim();
+        page.founder_title = inpFTitle.value.trim();
+        page.founder_bio = inpFBio.value.trim();
+        page.meta_desc = inpMeta.value.trim();
+        savePageData(page);
+      });
+
+      formCard.appendChild(form);
+      pageRoot.appendChild(formCard);
+    });
+  }
+
+  // 4. CASE STUDIES PAGE CMS (case-studies.html)
+  function renderCaseStudiesPageEditor() {
+    pageRoot.innerHTML = "";
+    loadPageData("case_studies", function(err, page){
+      if (!page) return;
+
+      var form = createEl("form", { novalidate: "novalidate" });
+      var header = createPageHeader("Field Case Studies & Proof", "case-studies.html", function(){
+        if (typeof form.requestSubmit === "function") {
+          form.requestSubmit();
+        } else {
+          form.dispatchEvent(new Event("submit", { cancelable: true }));
+        }
+      });
+      pageRoot.appendChild(header);
+
+      var formCard = createEl("div", { className: "form-card" });
+
+      // Section 1: Hero
+      var s1 = createEl("div", { className: "cms-section-card" });
+      var h1 = createEl("div", { className: "cms-section-header" });
+      var h1Left = createEl("div", { className: "cms-section-title-wrap" });
+      h1Left.appendChild(createEl("span", { className: "cms-section-number" }, "1"));
+      h1Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Case Studies Page Hero"));
+      h1.appendChild(h1Left);
+      s1.appendChild(h1);
+
+      var gBadge = createEl("div", { className: "form-group" });
+      gBadge.appendChild(createEl("label", null, "Hero Badge"));
+      var inpBadge = createEl("input", { type: "text", value: page.badge || "" });
+      gBadge.appendChild(inpBadge);
+      s1.appendChild(gBadge);
+
+      var gHead = createEl("div", { className: "form-group" });
+      gHead.appendChild(createEl("label", null, "Headline"));
+      var inpHead = createEl("input", { type: "text", value: page.headline || "" });
+      gHead.appendChild(inpHead);
+      s1.appendChild(gHead);
+
+      var gSub = createEl("div", { className: "form-group" });
+      gSub.appendChild(createEl("label", null, "Introduction Subtitle"));
+      var inpSub = createEl("textarea", { rows: "3" }, page.subheadline || "");
+      gSub.appendChild(inpSub);
+      s1.appendChild(gSub);
+      form.appendChild(s1);
+
+      // Section 2: Deployment 1 - Vikalpika
+      var s2 = createEl("div", { className: "cms-section-card" });
+      var h2 = createEl("div", { className: "cms-section-header" });
+      var h2Left = createEl("div", { className: "cms-section-title-wrap" });
+      h2Left.appendChild(createEl("span", { className: "cms-section-number" }, "2"));
+      h2Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Deployment: ICAR-CIFT Vikalpika Solar Boat"));
+      h2.appendChild(h2Left);
+      s2.appendChild(h2);
+
+      var gVikTitle = createEl("div", { className: "form-group" });
+      gVikTitle.appendChild(createEl("label", null, "Craft Title"));
+      var inpVikTitle = createEl("input", { type: "text", value: page.vikalpika_title || "" });
+      gVikTitle.appendChild(inpVikTitle);
+      s2.appendChild(gVikTitle);
+
+      var gVikDesc = createEl("div", { className: "form-group" });
+      gVikDesc.appendChild(createEl("label", null, "Deployment Details & Fuel Savings Impact"));
+      var inpVikDesc = createEl("textarea", { rows: "3" }, page.vikalpika_desc || "");
+      gVikDesc.appendChild(inpVikDesc);
+      s2.appendChild(gVikDesc);
+      form.appendChild(s2);
+
+      // Section 3: Deployment 2 - Water Transport
+      var s3 = createEl("div", { className: "cms-section-card" });
+      var h3 = createEl("div", { className: "cms-section-header" });
+      var h3Left = createEl("div", { className: "cms-section-title-wrap" });
+      h3Left.appendChild(createEl("span", { className: "cms-section-number" }, "3"));
+      h3Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Deployment: Kerala SWTD Public Ferry"));
+      h3.appendChild(h3Left);
+      s3.appendChild(h3);
+
+      var gWtTitle = createEl("div", { className: "form-group" });
+      gWtTitle.appendChild(createEl("label", null, "Ferry Project Title"));
+      var inpWtTitle = createEl("input", { type: "text", value: page.water_transport_title || "" });
+      gWtTitle.appendChild(inpWtTitle);
+      s3.appendChild(gWtTitle);
+
+      var gWtDesc = createEl("div", { className: "form-group" });
+      gWtDesc.appendChild(createEl("label", null, "Transit Routes & Fleet Efficiency"));
+      var inpWtDesc = createEl("textarea", { rows: "3" }, page.water_transport_desc || "");
+      gWtDesc.appendChild(inpWtDesc);
+      s3.appendChild(gWtDesc);
+      form.appendChild(s3);
+
+      // Section 4: Deployment 3 - Karnataka Tourism
+      var s4 = createEl("div", { className: "cms-section-card" });
+      var h4 = createEl("div", { className: "cms-section-header" });
+      var h4Left = createEl("div", { className: "cms-section-title-wrap" });
+      h4Left.appendChild(createEl("span", { className: "cms-section-number" }, "4"));
+      h4Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Deployment: Eco-Tourism Sanctuary Craft"));
+      h4.appendChild(h4Left);
+      s4.appendChild(h4);
+
+      var gTourTitle = createEl("div", { className: "form-group" });
+      gTourTitle.appendChild(createEl("label", null, "Sanctuary Craft Title"));
+      var inpTourTitle = createEl("input", { type: "text", value: page.tourism_title || "" });
+      gTourTitle.appendChild(inpTourTitle);
+      s4.appendChild(gTourTitle);
+
+      var gTourDesc = createEl("div", { className: "form-group" });
+      gTourDesc.appendChild(createEl("label", null, "Wildlife Reserve Impact & Quiet Propulsion"));
+      var inpTourDesc = createEl("textarea", { rows: "3" }, page.tourism_desc || "");
+      gTourDesc.appendChild(inpTourDesc);
+      s4.appendChild(gTourDesc);
+      form.appendChild(s4);
+
+      // Section 5: Deployment 4 - Hydrogen Fuel Cell
+      var s5 = createEl("div", { className: "cms-section-card" });
+      var h5 = createEl("div", { className: "cms-section-header" });
+      var h5Left = createEl("div", { className: "cms-section-title-wrap" });
+      h5Left.appendChild(createEl("span", { className: "cms-section-number" }, "5"));
+      h5Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Deployment: Hydrogen Fuel Cell Hybrid Prototype"));
+      h5.appendChild(h5Left);
+      s5.appendChild(h5);
+
+      var gH2Title = createEl("div", { className: "form-group" });
+      gH2Title.appendChild(createEl("label", null, "Vessel Prototype Title"));
+      var inpH2Title = createEl("input", { type: "text", value: page.hydrogen_title || "" });
+      gH2Title.appendChild(inpH2Title);
+      s5.appendChild(gH2Title);
+
+      var gH2Desc = createEl("div", { className: "form-group" });
+      gH2Desc.appendChild(createEl("label", null, "Fuel Cell Powertrain Architecture"));
+      var inpH2Desc = createEl("textarea", { rows: "3" }, page.hydrogen_desc || "");
+      gH2Desc.appendChild(inpH2Desc);
+      s5.appendChild(gH2Desc);
+      form.appendChild(s5);
+
+      // Section 6: SEO
+      var s6 = createEl("div", { className: "cms-section-card" });
+      var gMeta = createEl("div", { className: "form-group" });
+      gMeta.appendChild(createEl("label", null, "Google Search Meta Description"));
+      var inpMeta = createEl("textarea", { rows: "2" }, page.meta_desc || "");
+      gMeta.appendChild(inpMeta);
+      s6.appendChild(gMeta);
+      form.appendChild(s6);
+
+      // Submit Bar
+      var actions = createEl("div", { className: "form-actions" });
+      var cancel = createEl("a", { className: "btn btn-secondary", href: "#/dashboard" }, "Cancel");
+      var save = createEl("button", { type: "submit", className: "btn btn-primary" }, "Save Case Studies Changes");
+      actions.appendChild(cancel);
+      actions.appendChild(save);
+      form.appendChild(actions);
+
+      form.addEventListener("input", function(){ isDirty = true; });
+
+      form.addEventListener("submit", function(e){
+        e.preventDefault();
+        page.badge = inpBadge.value.trim();
+        page.headline = inpHead.value.trim();
+        page.subheadline = inpSub.value.trim();
+        page.vikalpika_title = inpVikTitle.value.trim();
+        page.vikalpika_desc = inpVikDesc.value.trim();
+        page.water_transport_title = inpWtTitle.value.trim();
+        page.water_transport_desc = inpWtDesc.value.trim();
+        page.tourism_title = inpTourTitle.value.trim();
+        page.tourism_desc = inpTourDesc.value.trim();
+        page.hydrogen_title = inpH2Title.value.trim();
+        page.hydrogen_desc = inpH2Desc.value.trim();
+        page.meta_desc = inpMeta.value.trim();
+        savePageData(page);
+      });
+
+      formCard.appendChild(form);
+      pageRoot.appendChild(formCard);
+    });
+  }
+
+  // 5. GALLERY PAGE CMS (gallery.html)
+  function renderGalleryPageEditor() {
+    pageRoot.innerHTML = "";
+    loadPageData("gallery", function(err, page){
+      if (!page) return;
+
+      var form = createEl("form", { novalidate: "novalidate" });
+      var header = createPageHeader("Media Gallery & Sea Trials", "gallery.html", function(){
+        if (typeof form.requestSubmit === "function") {
+          form.requestSubmit();
+        } else {
+          form.dispatchEvent(new Event("submit", { cancelable: true }));
+        }
+      });
+      pageRoot.appendChild(header);
+
+      var formCard = createEl("div", { className: "form-card" });
+
+      // Section 1: Hero
+      var s1 = createEl("div", { className: "cms-section-card" });
+      var h1 = createEl("div", { className: "cms-section-header" });
+      var h1Left = createEl("div", { className: "cms-section-title-wrap" });
+      h1Left.appendChild(createEl("span", { className: "cms-section-number" }, "1"));
+      h1Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Gallery Page Hero"));
+      h1.appendChild(h1Left);
+      s1.appendChild(h1);
+
+      var gBadge = createEl("div", { className: "form-group" });
+      gBadge.appendChild(createEl("label", null, "Hero Badge"));
+      var inpBadge = createEl("input", { type: "text", value: page.badge || "" });
+      gBadge.appendChild(inpBadge);
+      s1.appendChild(gBadge);
+
+      var gHead = createEl("div", { className: "form-group" });
+      gHead.appendChild(createEl("label", null, "Headline"));
+      var inpHead = createEl("input", { type: "text", value: page.headline || "" });
+      gHead.appendChild(inpHead);
+      s1.appendChild(gHead);
+
+      var gSub = createEl("div", { className: "form-group" });
+      gSub.appendChild(createEl("label", null, "Subheadline"));
+      var inpSub = createEl("textarea", { rows: "2" }, page.subheadline || "");
+      gSub.appendChild(inpSub);
+      s1.appendChild(gSub);
+      form.appendChild(s1);
+
+      // Section 2: Video Embed Link
+      var s2 = createEl("div", { className: "cms-section-card" });
+      var h2 = createEl("div", { className: "cms-section-header" });
+      var h2Left = createEl("div", { className: "cms-section-title-wrap" });
+      h2Left.appendChild(createEl("span", { className: "cms-section-number" }, "2"));
+      h2Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Featured Sea Trial Video"));
+      h2.appendChild(h2Left);
+      s2.appendChild(h2);
+
+      var gVid = createEl("div", { className: "form-group" });
+      gVid.appendChild(createEl("label", null, "YouTube / Video Embed URL"));
+      var inpVid = createEl("input", { type: "url", value: page.video_embed || "" });
+      gVid.appendChild(inpVid);
+      s2.appendChild(gVid);
+      form.appendChild(s2);
+
+      // Section 3: Photo Albums Narrative
+      var s3 = createEl("div", { className: "cms-section-card" });
+      var h3 = createEl("div", { className: "cms-section-header" });
+      var h3Left = createEl("div", { className: "cms-section-title-wrap" });
+      h3Left.appendChild(createEl("span", { className: "cms-section-number" }, "3"));
+      h3Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Footage Description"));
+      h3.appendChild(h3Left);
+      s3.appendChild(h3);
+
+      var gIntro = createEl("div", { className: "form-group" });
+      gIntro.appendChild(createEl("label", null, "Photo Album Narrative"));
+      var inpIntro = createEl("textarea", { rows: "3" }, page.intro_text || "");
+      gIntro.appendChild(inpIntro);
+      s3.appendChild(gIntro);
+      form.appendChild(s3);
+
+      // Section 4: SEO
+      var s4 = createEl("div", { className: "cms-section-card" });
+      var gMeta = createEl("div", { className: "form-group" });
+      gMeta.appendChild(createEl("label", null, "Google Search Meta Description"));
+      var inpMeta = createEl("textarea", { rows: "2" }, page.meta_desc || "");
+      gMeta.appendChild(inpMeta);
+      s4.appendChild(gMeta);
+      form.appendChild(s4);
+
+      // Submit Bar
+      var actions = createEl("div", { className: "form-actions" });
+      var cancel = createEl("a", { className: "btn btn-secondary", href: "#/dashboard" }, "Cancel");
+      var save = createEl("button", { type: "submit", className: "btn btn-primary" }, "Save Gallery Changes");
+      actions.appendChild(cancel);
+      actions.appendChild(save);
+      form.appendChild(actions);
+
+      form.addEventListener("input", function(){ isDirty = true; });
+
+      form.addEventListener("submit", function(e){
+        e.preventDefault();
+        page.badge = inpBadge.value.trim();
+        page.headline = inpHead.value.trim();
+        page.subheadline = inpSub.value.trim();
+        page.video_embed = inpVid.value.trim();
+        page.intro_text = inpIntro.value.trim();
+        page.meta_desc = inpMeta.value.trim();
+        savePageData(page);
+      });
+
+      formCard.appendChild(form);
+      pageRoot.appendChild(formCard);
+    });
+  }
+
+  // 6. TECH & ECONOMICS PAGE CMS (know-more.html)
+  function renderKnowMorePageEditor() {
+    pageRoot.innerHTML = "";
+    loadPageData("know_more", function(err, page){
+      if (!page) return;
+
+      var form = createEl("form", { novalidate: "novalidate" });
+      var header = createPageHeader("Technology & Economics (Know-More)", "know-more.html", function(){
+        if (typeof form.requestSubmit === "function") {
+          form.requestSubmit();
+        } else {
+          form.dispatchEvent(new Event("submit", { cancelable: true }));
+        }
+      });
+      pageRoot.appendChild(header);
+
+      var formCard = createEl("div", { className: "form-card" });
+
+      // Section 1: Hero
+      var s1 = createEl("div", { className: "cms-section-card" });
+      var h1 = createEl("div", { className: "cms-section-header" });
+      var h1Left = createEl("div", { className: "cms-section-title-wrap" });
+      h1Left.appendChild(createEl("span", { className: "cms-section-number" }, "1"));
+      h1Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Tech Page Hero"));
+      h1.appendChild(h1Left);
+      s1.appendChild(h1);
+
+      var gBadge = createEl("div", { className: "form-group" });
+      gBadge.appendChild(createEl("label", null, "Hero Badge"));
+      var inpBadge = createEl("input", { type: "text", value: page.badge || "" });
+      gBadge.appendChild(inpBadge);
+      s1.appendChild(gBadge);
+
+      var gHead = createEl("div", { className: "form-group" });
+      gHead.appendChild(createEl("label", null, "Main Headline"));
+      var inpHead = createEl("input", { type: "text", value: page.headline || "" });
+      gHead.appendChild(inpHead);
+      s1.appendChild(gHead);
+
+      var gSub = createEl("div", { className: "form-group" });
+      gSub.appendChild(createEl("label", null, "Subheadline"));
+      var inpSub = createEl("textarea", { rows: "3" }, page.subheadline || "");
+      gSub.appendChild(inpSub);
+      s1.appendChild(gSub);
+      form.appendChild(s1);
+
+      // Section 2: Economics & TCO Breakdown
+      var s2 = createEl("div", { className: "cms-section-card" });
+      var h2 = createEl("div", { className: "cms-section-header" });
+      var h2Left = createEl("div", { className: "cms-section-title-wrap" });
+      h2Left.appendChild(createEl("span", { className: "cms-section-number" }, "2"));
+      h2Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Total Cost of Ownership (TCO) Parameters"));
+      h2.appendChild(h2Left);
+      s2.appendChild(h2);
+
+      var rEco1 = createEl("div", { className: "form-row" });
+      var gFuelStat = createEl("div", { className: "form-group" });
+      gFuelStat.appendChild(createEl("label", null, "Fuel & Lube Savings Ratio"));
+      var inpFuelStat = createEl("input", { type: "text", value: page.fuel_saving_stat || "" });
+      gFuelStat.appendChild(inpFuelStat);
+      var gPayback = createEl("div", { className: "form-group" });
+      gPayback.appendChild(createEl("label", null, "Payback Period"));
+      var inpPayback = createEl("input", { type: "text", value: page.payback_period || "" });
+      gPayback.appendChild(inpPayback);
+      rEco1.appendChild(gFuelStat);
+      rEco1.appendChild(gPayback);
+      s2.appendChild(rEco1);
+
+      var rEco2 = createEl("div", { className: "form-row" });
+      var gMaint = createEl("div", { className: "form-group" });
+      gMaint.appendChild(createEl("label", null, "Maintenance Savings Narrative"));
+      var inpMaint = createEl("input", { type: "text", value: page.maintenance_savings || "" });
+      gMaint.appendChild(inpMaint);
+      var gEmiss = createEl("div", { className: "form-group" });
+      gEmiss.appendChild(createEl("label", null, "Annual CO2 Avoidance per Craft"));
+      var inpEmiss = createEl("input", { type: "text", value: page.emissions_reduction || "" });
+      gEmiss.appendChild(inpEmiss);
+      rEco2.appendChild(gMaint);
+      rEco2.appendChild(gEmiss);
+      s2.appendChild(rEco2);
+      form.appendChild(s2);
+
+      // Section 3: SEO
+      var s3 = createEl("div", { className: "cms-section-card" });
+      var gMeta = createEl("div", { className: "form-group" });
+      gMeta.appendChild(createEl("label", null, "Google Search Meta Description"));
+      var inpMeta = createEl("textarea", { rows: "2" }, page.meta_desc || "");
+      gMeta.appendChild(inpMeta);
+      s3.appendChild(gMeta);
+      form.appendChild(s3);
+
+      // Submit Bar
+      var actions = createEl("div", { className: "form-actions" });
+      var cancel = createEl("a", { className: "btn btn-secondary", href: "#/dashboard" }, "Cancel");
+      var save = createEl("button", { type: "submit", className: "btn btn-primary" }, "Save Tech Page Changes");
+      actions.appendChild(cancel);
+      actions.appendChild(save);
+      form.appendChild(actions);
+
+      form.addEventListener("input", function(){ isDirty = true; });
+
+      form.addEventListener("submit", function(e){
+        e.preventDefault();
+        page.badge = inpBadge.value.trim();
+        page.headline = inpHead.value.trim();
+        page.subheadline = inpSub.value.trim();
+        page.fuel_saving_stat = inpFuelStat.value.trim();
+        page.payback_period = inpPayback.value.trim();
+        page.maintenance_savings = inpMaint.value.trim();
+        page.emissions_reduction = inpEmiss.value.trim();
+        page.meta_desc = inpMeta.value.trim();
+        savePageData(page);
+      });
+
+      formCard.appendChild(form);
+      pageRoot.appendChild(formCard);
+    });
+  }
+
+  // 7. CONTACT & SHOWROOMS PAGE CMS (contact.html)
+  function renderContactPageEditor() {
+    pageRoot.innerHTML = "";
+    loadPageData("contact", function(err, page){
+      if (!page) return;
+
+      var form = createEl("form", { novalidate: "novalidate" });
+      var header = createPageHeader("Contact & Showrooms", "contact.html", function(){
+        if (typeof form.requestSubmit === "function") {
+          form.requestSubmit();
+        } else {
+          form.dispatchEvent(new Event("submit", { cancelable: true }));
+        }
+      });
+      pageRoot.appendChild(header);
+
+      var formCard = createEl("div", { className: "form-card" });
+
+      // Section 1: Hero
+      var s1 = createEl("div", { className: "cms-section-card" });
+      var h1 = createEl("div", { className: "cms-section-header" });
+      var h1Left = createEl("div", { className: "cms-section-title-wrap" });
+      h1Left.appendChild(createEl("span", { className: "cms-section-number" }, "1"));
+      h1Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Contact Page Hero"));
+      h1.appendChild(h1Left);
+      s1.appendChild(h1);
+
+      var gBadge = createEl("div", { className: "form-group" });
+      gBadge.appendChild(createEl("label", null, "Hero Badge"));
+      var inpBadge = createEl("input", { type: "text", value: page.badge || "" });
+      gBadge.appendChild(inpBadge);
+      s1.appendChild(gBadge);
+
+      var gHead = createEl("div", { className: "form-group" });
+      gHead.appendChild(createEl("label", null, "Headline"));
+      var inpHead = createEl("input", { type: "text", value: page.headline || "" });
+      gHead.appendChild(inpHead);
+      s1.appendChild(gHead);
+
+      var gSub = createEl("div", { className: "form-group" });
+      gSub.appendChild(createEl("label", null, "Subheadline"));
+      var inpSub = createEl("textarea", { rows: "2" }, page.subheadline || "");
+      gSub.appendChild(inpSub);
+      s1.appendChild(gSub);
+      form.appendChild(s1);
+
+      // Section 2: Direct Hotlines & Channels
+      var s2 = createEl("div", { className: "cms-section-card" });
+      var h2 = createEl("div", { className: "cms-section-header" });
+      var h2Left = createEl("div", { className: "cms-section-title-wrap" });
+      h2Left.appendChild(createEl("span", { className: "cms-section-number" }, "2"));
+      h2Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Direct Hotlines & Inquiries"));
+      h2.appendChild(h2Left);
+      s2.appendChild(h2);
+
+      var rChans = createEl("div", { className: "form-row" });
+      var gMail = createEl("div", { className: "form-group" });
+      gMail.appendChild(createEl("label", null, "Commercial Sales Email"));
+      var inpMail = createEl("input", { type: "email", value: page.sales_email || "" });
+      gMail.appendChild(inpMail);
+      var gPhone = createEl("div", { className: "form-group" });
+      gPhone.appendChild(createEl("label", null, "Support Phone Hotline"));
+      var inpPhone = createEl("input", { type: "text", value: page.support_phone || "" });
+      gPhone.appendChild(inpPhone);
+      var gWa = createEl("div", { className: "form-group" });
+      gWa.appendChild(createEl("label", null, "WhatsApp Hotline"));
+      var inpWa = createEl("input", { type: "text", value: page.whatsapp_number || "" });
+      gWa.appendChild(inpWa);
+      rChans.appendChild(gMail);
+      rChans.appendChild(gPhone);
+      rChans.appendChild(gWa);
+      s2.appendChild(rChans);
+      form.appendChild(s2);
+
+      // Section 3: Physical Facilities
+      var s3 = createEl("div", { className: "cms-section-card" });
+      var h3 = createEl("div", { className: "cms-section-header" });
+      var h3Left = createEl("div", { className: "cms-section-title-wrap" });
+      h3Left.appendChild(createEl("span", { className: "cms-section-number" }, "3"));
+      h3Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Showroom & Manufacturing Facilities"));
+      h3.appendChild(h3Left);
+      s3.appendChild(h3);
+
+      var gAddr1 = createEl("div", { className: "form-group" });
+      gAddr1.appendChild(createEl("label", null, "Kerala Showroom & Experience Center"));
+      var inpAddr1 = createEl("textarea", { rows: "2" }, page.sales_address || "");
+      gAddr1.appendChild(inpAddr1);
+      s3.appendChild(gAddr1);
+
+      var gAddr2 = createEl("div", { className: "form-group" });
+      gAddr2.appendChild(createEl("label", null, "Chennai Propulsion Manufacturing Plant"));
+      var inpAddr2 = createEl("textarea", { rows: "2" }, page.manufacturing_address || "");
+      gAddr2.appendChild(inpAddr2);
+      s3.appendChild(gAddr2);
+
+      var rHours = createEl("div", { className: "form-row" });
+      var gHours = createEl("div", { className: "form-group" });
+      gHours.appendChild(createEl("label", null, "Working Hours & Schedule"));
+      var inpHours = createEl("input", { type: "text", value: page.hours || "" });
+      gHours.appendChild(inpHours);
+      var gResp = createEl("div", { className: "form-group" });
+      gResp.appendChild(createEl("label", null, "Response SLA"));
+      var inpResp = createEl("input", { type: "text", value: page.response_time || "" });
+      gResp.appendChild(inpResp);
+      rHours.appendChild(gHours);
+      rHours.appendChild(gResp);
+      s3.appendChild(rHours);
+      form.appendChild(s3);
+
+      // Section 4: SEO
+      var s4 = createEl("div", { className: "cms-section-card" });
+      var gMeta = createEl("div", { className: "form-group" });
+      gMeta.appendChild(createEl("label", null, "Google Search Meta Description"));
+      var inpMeta = createEl("textarea", { rows: "2" }, page.meta_desc || "");
+      gMeta.appendChild(inpMeta);
+      s4.appendChild(gMeta);
+      form.appendChild(s4);
+
+      // Submit Bar
+      var actions = createEl("div", { className: "form-actions" });
+      var cancel = createEl("a", { className: "btn btn-secondary", href: "#/dashboard" }, "Cancel");
+      var save = createEl("button", { type: "submit", className: "btn btn-primary" }, "Save Contact Changes");
+      actions.appendChild(cancel);
+      actions.appendChild(save);
+      form.appendChild(actions);
+
+      form.addEventListener("input", function(){ isDirty = true; });
+
+      form.addEventListener("submit", function(e){
+        e.preventDefault();
+        page.badge = inpBadge.value.trim();
+        page.headline = inpHead.value.trim();
+        page.subheadline = inpSub.value.trim();
+        page.sales_email = inpMail.value.trim();
+        page.support_phone = inpPhone.value.trim();
+        page.whatsapp_number = inpWa.value.trim();
+        page.sales_address = inpAddr1.value.trim();
+        page.manufacturing_address = inpAddr2.value.trim();
+        page.hours = inpHours.value.trim();
+        page.response_time = inpResp.value.trim();
+        page.meta_desc = inpMeta.value.trim();
+        savePageData(page);
       });
 
       formCard.appendChild(form);
@@ -4105,21 +4947,17 @@
       matchedItems = [];
 
       var staticCommands = [
-        { title: "Dashboard Overview", group: "Studio", tag: "Nav", route: "#/dashboard" },
-        { title: "Outboard Motors (3–50 HP)", group: "Catalog", tag: "Fleet", route: "#/motors" },
+        { title: "CMS Overview & All Pages", group: "Studio", tag: "Hub", route: "#/dashboard" },
+        { title: "Home Page (index.html)", group: "Pages", tag: "Live CMS", route: "#/pages/home" },
+        { title: "Products & Motors (products.html)", group: "Pages", tag: "Live CMS", route: "#/pages/products" },
         { title: "+ Add New Outboard Motor", group: "Actions", tag: "Create", route: "#/motors/new" },
-        { title: "Marine Battery Packs", group: "Catalog", tag: "Fleet", route: "#/battery-packs" },
-        { title: "+ Add New Battery Pack", group: "Actions", tag: "Create", route: "#/battery-packs/new" },
-        { title: "Electric & Solar Boats", group: "Catalog", tag: "Fleet", route: "#/boats" },
-        { title: "Website Pages CMS", group: "Pages", tag: "CMS", route: "#/pages" },
-        { title: "Home Page Copy & Hero", group: "Pages", tag: "Page", route: "#/pages/edit/home" },
-        { title: "About Us & Engineering", group: "Pages", tag: "Page", route: "#/pages/edit/about" },
-        { title: "Contact & Showrooms", group: "Pages", tag: "Page", route: "#/pages/edit/contact" },
-        { title: "Digital Asset Manager (DAM)", group: "Assets", tag: "Files", route: "#/media" },
-        { title: "Field Deployments (Case Studies)", group: "Media", tag: "Proof", route: "#/case-studies" },
-        { title: "Photo & Video Gallery", group: "Media", tag: "Proof", route: "#/gallery" },
-        { title: "Site Settings", group: "System", tag: "Config", route: "#/site-settings" },
-        { title: "Backups & Data Management", group: "System", tag: "Data", route: "#/data" }
+        { title: "About & Leadership (about.html)", group: "Pages", tag: "Live CMS", route: "#/pages/about" },
+        { title: "Field Case Studies (case-studies.html)", group: "Pages", tag: "Live CMS", route: "#/pages/case-studies" },
+        { title: "Media Gallery (gallery.html)", group: "Pages", tag: "Live CMS", route: "#/pages/gallery" },
+        { title: "Tech & Economics (know-more.html)", group: "Pages", tag: "Live CMS", route: "#/pages/know-more" },
+        { title: "Contact & Showrooms (contact.html)", group: "Pages", tag: "Live CMS", route: "#/pages/contact" },
+        { title: "Header & Footer Settings", group: "Global", tag: "Config", route: "#/site-settings" },
+        { title: "Export & Data Backups", group: "System", tag: "Data", route: "#/data" }
       ];
 
       staticCommands.forEach(function(cmd){
