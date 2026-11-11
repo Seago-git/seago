@@ -340,7 +340,11 @@
     "gallery_items",
     "site_settings",
     "pages",
-    "assets"
+    "assets",
+    "crm_leads",
+    "crm_tasks",
+    "crm_integrations",
+    "crm_events"
   ];
 
   function exportAll(cb) {
@@ -425,14 +429,11 @@
       return;
     }
     window.SeagoStore._pendingSeed = seedData;
-    var motorsKey = LS_PREFIX + "motors";
-    if (localStorage.getItem(motorsKey) !== null) {
-      return;
-    }
     for (var i = 0; i < KNOWN_COLLECTIONS.length; i++) {
       var col = KNOWN_COLLECTIONS[i];
-      if (Object.prototype.hasOwnProperty.call(seedData, col)) {
-        lsSet(LS_PREFIX + col, seedData[col]);
+      var colKey = LS_PREFIX + col;
+      if (localStorage.getItem(colKey) === null && Object.prototype.hasOwnProperty.call(seedData, col)) {
+        lsSet(colKey, seedData[col]);
       }
     }
   }

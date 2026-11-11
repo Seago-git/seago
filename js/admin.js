@@ -617,6 +617,11 @@
     if (root === "dashboard") {
       pageTitle.textContent = "CMS Overview · All Website Pages";
       renderDashboard();
+    } else if (root === "crm") {
+      pageTitle.textContent = "CRM & Customer Acquisition Hub · Phase 2";
+      if (window.SeagoCRM && typeof window.SeagoCRM.renderCrmScreen === "function") {
+        window.SeagoCRM.renderCrmScreen(action, id);
+      }
     } else if (root === "pages") {
       var targetPage = action || "home";
       if (targetPage === "home") {
@@ -713,7 +718,22 @@
     statsRow.appendChild(chip1);
     statsRow.appendChild(chip2);
     statsRow.appendChild(chip3);
+
+    var chip4 = createEl("a", { className: "cms-hub-stat-chip", href: "#/crm", style: { textDecoration: "none", color: "inherit", cursor: "pointer", border: "1px solid rgba(40,212,200,0.3)" } });
+    chip4.innerHTML = '<span style="width:7px; height:7px; border-radius:50%; background:#28D4C8; display:inline-block;"></span><span><strong>Phase 2 CRM</strong> Active &rarr;</span>';
+    statsRow.appendChild(chip4);
+
     wrap.appendChild(statsRow);
+
+    var crmBanner = createEl("div", { className: "crm-phase2-banner", style: { marginTop: "16px", marginBottom: "20px" } });
+    var cbLeft = createEl("div");
+    cbLeft.innerHTML = '<div class="crm-phase2-title"><span>Phase 2 CRM &amp; WhatsApp Sales Hub</span> <span class="crm-phase2-badge">CONNECTED</span></div>' +
+      '<div class="crm-phase2-desc">Unified multi-channel lead ingestion from WhatsApp Cloud API, website quote submissions, and social channels. Manage inquiries, human handover, customer 360, and follow-ups.</div>';
+    var cbRight = createEl("div", { className: "crm-phase2-actions" });
+    cbRight.innerHTML = '<a href="#/crm" class="btn btn-primary btn-sm" style="display:inline-flex; align-items:center; gap:6px;"><span>Open CRM Workspace</span> <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></a>';
+    crmBanner.appendChild(cbLeft);
+    crmBanner.appendChild(cbRight);
+    wrap.appendChild(crmBanner);
 
     // All 6 Live Website Pages Compact Grid
     var hubGrid = createEl("div", { className: "cms-page-hub" });
@@ -6281,6 +6301,10 @@
 
       var staticCommands = [
         { title: "CMS Overview & All Pages", group: "Studio", tag: "Hub", route: "#/dashboard" },
+        { title: "CRM & Sales Hub (Phase 2)", group: "CRM", tag: "Inquiries", route: "#/crm" },
+        { title: "WhatsApp & Unified Inbox", group: "CRM", tag: "Messages", route: "#/crm" },
+        { title: "Lead Pipeline & Opportunities", group: "CRM", tag: "Pipeline", route: "#/crm" },
+        { title: "Channel Integrations & Webhooks", group: "CRM", tag: "Config", route: "#/crm" },
         { title: "Home Page (index.html)", group: "Pages", tag: "Live CMS", route: "#/pages/home" },
         { title: "Products & Motors (products.html)", group: "Pages", tag: "Live CMS", route: "#/pages/products" },
         { title: "+ Add New Outboard Motor", group: "Actions", tag: "Create", route: "#/motors/new" },
