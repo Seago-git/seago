@@ -324,21 +324,172 @@ footer{ background:var(--navy); color:#B9C3D4; padding:76px 0 30px; margin-top:4
 .footer-social a:hover{ border-color:#fff; background:rgba(255,255,255,.06); }
 .footer-social svg{ width:15px; height:15px; }
 
-/* ================= WHATSAPP FLOAT ================= */
-.wa-float{
-  position:fixed; right:26px; bottom:26px; width:58px; height:58px; border-radius:50%;
-  background:#25D366; display:flex; align-items:center; justify-content:center;
-  box-shadow:0 12px 26px -8px rgba(37,211,102,.6); z-index:60; cursor:pointer;
-  animation:pulse 2.6s ease-in-out infinite;
+/* ================= WHATSAPP FLOAT — MARINE ENGINE, WATER & MOTOR THEME ================= */
+.wa-float {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  width: 76px;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 90;
+  text-decoration: none;
+  background: transparent;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.wa-float svg{ width:28px; height:28px; fill:#fff; }
-.wa-tip{
-  position:absolute; right:70px; top:50%; transform:translateY(-50%) translateX(6px);
-  background:#12161C; color:#fff; font-size:12.5px; font-weight:600; padding:8px 13px; border-radius:8px;
-  white-space:nowrap; opacity:0; pointer-events:none; transition:opacity .2s, transform .2s;
+
+.wa-float:hover {
+  transform: scale(1.08);
 }
-.wa-float:hover .wa-tip{ opacity:1; transform:translateY(-50%) translateX(0); }
-@keyframes pulse{ 0%,100%{ box-shadow:0 12px 26px -8px rgba(37,211,102,.6);} 50%{ box-shadow:0 12px 30px -4px rgba(37,211,102,.9);} }
+
+/* Concentric Marine Water Waves & Wake Cavitation */
+.wa-water-wave {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(40, 212, 200, 0.65);
+  pointer-events: none;
+  animation: waWaterWake 3s cubic-bezier(0.1, 0.6, 0.3, 1) infinite;
+  box-shadow: 0 0 14px rgba(40, 212, 200, 0.35);
+}
+
+.wa-water-wave-2 {
+  animation-delay: 1.5s;
+  border-color: rgba(44, 123, 229, 0.5);
+  box-shadow: 0 0 14px rgba(44, 123, 229, 0.25);
+}
+
+@keyframes waWaterWake {
+  0% {
+    width: 50px;
+    height: 50px;
+    opacity: 0.95;
+    border-width: 2.5px;
+  }
+  50% {
+    opacity: 0.45;
+  }
+  100% {
+    width: 108px;
+    height: 108px;
+    opacity: 0;
+    border-width: 1px;
+  }
+}
+
+/* Rotating Marine Engine Propeller & Motor Cowling Ring */
+.wa-engine-ring {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  animation: waEnginePropSpin 10s linear infinite;
+  filter: drop-shadow(0 3px 8px rgba(7, 15, 36, 0.4));
+}
+
+.wa-float:hover .wa-engine-ring {
+  animation-duration: 3.5s;
+}
+
+@keyframes waEnginePropSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.wa-engine-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.wa-stator-rim {
+  fill: none;
+  stroke: #07152D;
+  stroke-width: 3.5;
+  stroke-opacity: 0.95;
+}
+
+.wa-stator-dashes {
+  fill: none;
+  stroke: #28D4C8;
+  stroke-width: 2;
+  stroke-dasharray: 4 5;
+  stroke-opacity: 0.9;
+}
+
+.wa-prop-blades path {
+  fill: #0B2447;
+  stroke: #28D4C8;
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+  transition: fill 0.3s ease, stroke 0.3s ease;
+}
+
+.wa-float:hover .wa-prop-blades path {
+  fill: #0E356A;
+  stroke: #5FA6FF;
+}
+
+/* Original WhatsApp Core Button (Official #25D366 Green & Official White Logo) */
+.wa-core {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #25D366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px -4px rgba(37, 211, 102, 0.7), 0 2px 6px rgba(0, 0, 0, 0.25);
+  z-index: 2;
+  transition: box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.wa-float:hover .wa-core {
+  background: #20BA56;
+  box-shadow: 0 10px 28px -2px rgba(37, 211, 102, 0.9), 0 0 16px rgba(40, 212, 200, 0.6);
+}
+
+.wa-core .wa-icon {
+  width: 27px;
+  height: 27px;
+  fill: #FFFFFF;
+  display: block;
+}
+
+/* Tooltip */
+.wa-tip {
+  position: absolute;
+  right: 84px;
+  top: 50%;
+  transform: translateY(-50%) translateX(6px);
+  background: #0B1D3D;
+  color: #FFFFFF;
+  border: 1px solid rgba(40, 212, 200, 0.35);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s, transform .2s;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.wa-float:hover .wa-tip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
 
 /* ================= PAGE HEADER (mini hero for interior pages) ================= */
 .page-hero{ padding:150px 0 90px; }
