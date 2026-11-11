@@ -402,9 +402,9 @@
       modelDisplay: '20 Seater Custom Passenger / Tourism Vessel',
       chip: '03 · 20 Seater · Commercial Vessel',
       photos: [
-        { url: 'assets/photos/boat-custom-20seater.webp', caption: '20-Seater Commercial Passenger Ferry' },
-        { url: 'assets/photos/Publictransport.webp', caption: 'Public Transport Route Operations' },
-        { url: 'assets/photos/seago-electric-boat.webp', caption: 'High-Capacity Custom FRP Hull' }
+        { url: 'assets/photos/boat-20seater-blueprint.webp', caption: '20-Seater General Arrangement Profile' },
+        { url: 'assets/photos/boat-20seater-deckplan.webp', caption: '20-Seater Deck & Seating Plan' },
+        { url: 'assets/photos/boat-20seater-transom.webp', caption: 'Twin Outboard Propulsion Architecture' }
       ],
       specs: {
         length: 'Custom Commission (14 – 16 m)',

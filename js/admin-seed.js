@@ -334,7 +334,7 @@
           { key: "Status", value: "Custom Commission · Engineering to Spec" }
         ],
         image_ids: [],
-        image_urls: ["assets/photos/boat-custom-20seater.webp"],
+        image_urls: ["assets/photos/boat-20seater-blueprint.webp", "assets/photos/boat-20seater-deckplan.webp", "assets/photos/boat-20seater-transom.webp"],
         published: true,
         sort_order: 3,
         updated_at: "2026-11-11T00:00:00.000Z"
