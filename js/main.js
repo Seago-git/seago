@@ -346,9 +346,13 @@
       name: 'FREEDOM',
       tag: '8 Seater · Freedom',
       modelDisplay: 'FREEDOM — 8 Seater Electric Craft',
-      image: 'assets/photos/boat-freedom-8seater.webp',
-      alt: 'Seagö Freedom 8 Seater Electric Boat on the water',
       chip: '03 · 8 Seater · Freedom',
+      photos: [
+        { url: 'assets/photos/boat-freedom-8seater.webp', caption: 'Freedom 8-Seater Running Profile' },
+        { url: 'assets/photos/Freedom boat/freedom 8 seater.webp', caption: 'Freedom 8-Seater Water Cruise' },
+        { url: 'assets/photos/Freedom boat/freedom 8seater 1.webp', caption: 'Freedom Cockpit & Seating Layout' },
+        { url: 'assets/photos/Freedom boat/freedome 8 seater.webp', caption: 'Freedom Bow & Waterline' }
+      ],
       specs: {
         length: '5.48 m',
         beam: '1.72 m',
@@ -369,9 +373,13 @@
       name: 'ECSTASY',
       tag: '12 Seater · Ecstasy',
       modelDisplay: 'ECSTASY — 12 Seater Luxury Tourism Craft',
-      image: 'assets/photos/boat-ecstacy-12seater.webp',
-      alt: 'Seagö Ecstasy 12 Seater Electric Boat cruising silently',
       chip: '03 · 12 Seater · Ecstasy',
+      photos: [
+        { url: 'assets/photos/boat-ecstacy-12seater.webp', caption: 'Ecstasy 12-Seater Cruising Profile' },
+        { url: 'assets/photos/Ecstacy/Ecstacy 12 seater 3.webp', caption: 'Ecstasy Water Trials & Maneuvers' },
+        { url: 'assets/photos/Ecstacy/Ecstacy 12 seater.webp', caption: 'Ecstasy Passenger Seating Deck' },
+        { url: 'assets/photos/Ecstacy/Ecstacy 12 seater 1.webp', caption: 'Ecstasy Cockpit View' }
+      ],
       specs: {
         length: '12.7 m',
         beam: '2.2 m',
@@ -392,9 +400,12 @@
       name: 'CUSTOM 20',
       tag: '20 Seater · Commercial Vessel',
       modelDisplay: '20 Seater Custom Passenger / Tourism Vessel',
-      image: 'assets/photos/boat-custom-20seater.webp',
-      alt: 'Seagö 20 Seater Commercial Passenger Ferry',
       chip: '03 · 20 Seater · Commercial Vessel',
+      photos: [
+        { url: 'assets/photos/boat-custom-20seater.webp', caption: '20-Seater Commercial Passenger Ferry' },
+        { url: 'assets/photos/Publictransport.webp', caption: 'Public Transport Route Operations' },
+        { url: 'assets/photos/seago-electric-boat.webp', caption: 'High-Capacity Custom FRP Hull' }
+      ],
       specs: {
         length: 'Custom Commission (14 – 16 m)',
         beam: 'Custom (~3.2 – 3.8 m)',
@@ -418,6 +429,7 @@
   var boatSpecs = document.getElementById('boatSpecs');
   var boatImage = document.getElementById('boatImage');
   var boatChip = document.getElementById('boatChip');
+  var boatThumbs = document.getElementById('boatThumbs');
   var boatQuoteBtn = document.getElementById('boatQuoteBtn');
   var activeBoat = '8';
 
@@ -426,9 +438,11 @@
     if(!d) return;
     if(boatTag) boatTag.textContent = d.tag;
     if(boatModel) boatModel.textContent = d.modelDisplay;
-    if(boatImage){
-      boatImage.setAttribute('src', d.image);
-      boatImage.setAttribute('alt', d.alt);
+    if(boatImage && d.photos && d.photos.length > 0){
+      boatImage.style.opacity = '0.3';
+      boatImage.setAttribute('src', d.photos[0].url);
+      boatImage.setAttribute('alt', d.photos[0].caption);
+      setTimeout(function(){ boatImage.style.opacity = '1'; }, 100);
     }
     if(boatChip) boatChip.textContent = d.chip;
     if(boatSpecs){
@@ -438,6 +452,33 @@
       });
     }
     if(boatQuoteBtn) boatQuoteBtn.setAttribute('href', 'contact.html?boat=' + encodeURIComponent(d.name.toLowerCase()));
+
+    // Synchronize photo gallery thumbnails for this seater
+    if(boatThumbs && d.photos){
+      boatThumbs.innerHTML = '';
+      d.photos.forEach(function(p, idx){
+        var thumb = document.createElement('button');
+        thumb.type = 'button';
+        thumb.className = 'boat-thumb' + (idx === 0 ? ' is-active' : '');
+        thumb.setAttribute('aria-label', p.caption);
+        var tImg = document.createElement('img');
+        tImg.src = p.url;
+        tImg.alt = p.caption;
+        thumb.appendChild(tImg);
+        thumb.addEventListener('click', function(){
+          if(boatImage){
+            boatImage.style.opacity = '0.3';
+            boatImage.src = p.url;
+            boatImage.alt = p.caption;
+            setTimeout(function(){ boatImage.style.opacity = '1'; }, 100);
+          }
+          boatThumbs.querySelectorAll('.boat-thumb').forEach(function(b, bIdx){
+            b.classList.toggle('is-active', bIdx === idx);
+          });
+        });
+        boatThumbs.appendChild(thumb);
+      });
+    }
   }
 
   function selectBoat(seater){

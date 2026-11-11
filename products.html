@@ -33,8 +33,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-<script src="js/main.js" defer></script>
+<link rel="stylesheet" href="css/style.css?v=2.3">
+<script src="js/main.js?v=2.3" defer></script>
 
 <!-- Structured Data: Products & Breadcrumb Schema -->
 <script type="application/ld+json">
@@ -287,9 +287,10 @@
     </div>
     <div class="product-media reveal">
       <div class="ph photo-frame">
-        <img id="boatImage" src="assets/photos/boat-freedom-8seater.webp" alt="Seagö Freedom 8 Seater Electric Boat on the water">
+        <img id="boatImage" class="boat-image" src="assets/photos/boat-freedom-8seater.webp" alt="Seagö Freedom 8 Seater Electric Boat on the water">
         <span class="ph__chip" id="boatChip">03 · 8 Seater · Freedom</span>
       </div>
+      <div class="boat-thumbs" id="boatThumbs" role="group" aria-label="Boat photo gallery"></div>
     </div>
   </div>
 </section>
