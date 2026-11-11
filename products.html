@@ -252,23 +252,43 @@
 <section class="section product-block reverse" id="boats">
   <div class="wrap product-row">
     <div class="product-copy reveal">
-      <span class="case-tag">Custom Build</span>
+      <span class="case-tag" id="boatTag">8 Seater · Freedom</span>
       <h2>Electric &amp; Solar Boats</h2>
       <p>Full custom boats built on FRP (fibre-reinforced plastic) hulls, fitted with fully electric or solar-hybrid propulsion. We configure the hull, seating, canopy, and power system to your exact use case — fishing, tourism, or public transport — and it leaves our Chennai facility ready to launch.</p>
-      <div class="spec-grid">
-        <div class="spec-item"><span>Hull material</span><b>FRP (fibre-reinforced plastic)</b></div>
-        <div class="spec-item"><span>Propulsion</span><b>Electric or solar-hybrid</b></div>
-        <div class="spec-item"><span>Configurations</span><b>Fishing, tourism, ferry</b></div>
-        <div class="spec-item"><span>Customization</span><b>Seating, canopy &amp; capacity to spec</b></div>
-        <div class="spec-item"><span>Built &amp; delivered from</span><b>Chennai, Tamil Nadu</b></div>
-        <div class="spec-item"><span>Reference builds</span><b>Fishing &amp; public transport vessels</b></div>
+      
+      <div class="model-line">
+        <span class="model-line__label">Model</span>
+        <b class="model-line__value" id="boatModel">FREEDOM — 8 Seater Electric Craft</b>
       </div>
-      <a class="btn btn-primary magnetic" href="contact.html" data-quote-open>Request a Quote</a>
+      <div class="hp-picker boat-picker" id="boatPicker" role="group" aria-label="Select custom boat seating capacity">
+        <button type="button" class="hp-btn is-active" data-boat="8" aria-pressed="true">8</button>
+        <button type="button" class="hp-btn" data-boat="12" aria-pressed="false">12</button>
+        <button type="button" class="hp-btn" data-boat="20" aria-pressed="false">20</button>
+        <span class="hp-picker__unit">Seats</span>
+      </div>
+
+      <div class="spec-grid" id="boatSpecs">
+        <div class="spec-item"><span>Length</span><b data-bspec="length">5.48 m</b></div>
+        <div class="spec-item"><span>Beam</span><b data-bspec="beam">1.72 m</b></div>
+        <div class="spec-item"><span>Depth</span><b data-bspec="depth">0.75 m</b></div>
+        <div class="spec-item"><span>Draft</span><b data-bspec="draft">0.25 m</b></div>
+        <div class="spec-item"><span>Seating Capacity</span><b data-bspec="seating">8 Persons</b></div>
+        <div class="spec-item"><span>Propulsion Power</span><b data-bspec="power">50 HP Maximum</b></div>
+        <div class="spec-item"><span>Hull Material</span><b data-bspec="hull">High Impact Composite FRP</b></div>
+        <div class="spec-item"><span>Vessel Weight</span><b data-bspec="weight">350 – 500 Kg</b></div>
+        <div class="spec-item"><span>Propulsion</span><b data-bspec="propulsion">100% Electric / Solar Hybrid</b></div>
+        <div class="spec-item"><span>Customization</span><b data-bspec="customization">Seating layout, solar canopy &amp; deck trim</b></div>
+        <div class="spec-item"><span>Built &amp; Delivered</span><b data-bspec="origin">Chennai, Tamil Nadu</b></div>
+        <div class="spec-item"><span>Availability</span><b data-bspec="status">In Production · Built to Order</b></div>
+      </div>
+      <div class="product-actions">
+        <a class="btn btn-primary magnetic" id="boatQuoteBtn" href="contact.html?boat=freedom" data-quote-open>Request a Quote</a>
+      </div>
     </div>
     <div class="product-media reveal">
       <div class="ph photo-frame">
-        <img src="assets/photos/seago-solar-boat.webp" alt="Seagö electric passenger ferry on the water">
-        <span class="ph__chip">03 · Electric &amp; Solar Boats</span>
+        <img id="boatImage" src="assets/photos/boat-freedom-8seater.webp" alt="Seagö Freedom 8 Seater Electric Boat on the water">
+        <span class="ph__chip" id="boatChip">03 · 8 Seater · Freedom</span>
       </div>
     </div>
   </div>

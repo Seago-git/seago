@@ -280,38 +280,64 @@
     ],
     boats: [
       {
-        id: "boat-1",
-        name: "Seagö Commercial Electric Boat",
+        id: "boat-8",
+        name: "Freedom (8 Seater)",
         type: "electric",
-        description: "Zero-emission commercial passenger and transport vessel engineered for inland and backwater waterways.",
+        description: "High-impact composite FRP electric craft with 8-passenger capacity, 5.48m length, 1.72m beam, 0.25m draft, and up to 50 HP propulsion.",
         specs: [
-          { key: "Hull Material", value: "FRP Composite Marine Grade" },
-          { key: "Passenger Capacity", value: "8 - 14 Persons" },
-          { key: "Recommended Motor", value: "Seagö 10–20 HP Electric Outboard" },
-          { key: "Cruising Speed", value: "6 - 9 Knots" }
+          { key: "Seating Capacity", value: "8 Persons" },
+          { key: "Length", value: "5.48 m" },
+          { key: "Beam", value: "1.72 m" },
+          { key: "Depth", value: "0.75 m" },
+          { key: "Draft", value: "0.25 m" },
+          { key: "Power", value: "50 HP Maximum" },
+          { key: "Hull Material", value: "High Impact Composite FRP" },
+          { key: "Weight", value: "350 - 500 Kg" }
         ],
         image_ids: [],
-        image_urls: ["assets/photos/seago-electric-boat.webp"],
+        image_urls: ["assets/photos/boat-freedom-8seater.webp"],
         published: true,
         sort_order: 1,
-        updated_at: "2024-01-01T00:00:00.000Z"
+        updated_at: "2026-11-11T00:00:00.000Z"
       },
       {
-        id: "boat-2",
-        name: "Seagö Solar-Electric Cruiser",
+        id: "boat-12",
+        name: "Ecstasy (12 Seater)",
         type: "solar-electric",
-        description: "Silent solar-hybrid day cruiser with integrated solar canopy for continuous battery replenishment during daylight voyages.",
+        description: "12-passenger luxury composite FRP eco-tourism and passenger vessel, 12.7m length, 2.2m beam, 1.1m depth, 0.33-0.45m draft, 50 HP electric propulsion.",
         specs: [
-          { key: "Hull Material", value: "High-strength Composite FRP" },
-          { key: "Solar Array", value: "1.2 kW Marine Monocrystalline Canopy" },
-          { key: "Battery Bank", value: "73.6V 210Ah LiFePO4" },
-          { key: "Endurance", value: "All-day quiet backwater cruising" }
+          { key: "Seating Capacity", value: "12 Persons" },
+          { key: "Length", value: "12.7 m" },
+          { key: "Beam", value: "2.2 m" },
+          { key: "Depth", value: "1.1 m" },
+          { key: "Draft", value: "0.33 - 0.45 m" },
+          { key: "Power", value: "50 HP" },
+          { key: "Hull Material", value: "High Impact Composite FRP" }
         ],
         image_ids: [],
-        image_urls: ["assets/photos/seago-solar-boat.webp"],
+        image_urls: ["assets/photos/boat-ecstacy-12seater.webp"],
         published: true,
         sort_order: 2,
-        updated_at: "2024-01-01T00:00:00.000Z"
+        updated_at: "2026-11-11T00:00:00.000Z"
+      },
+      {
+        id: "boat-20",
+        name: "Custom Commercial (20 Seater)",
+        type: "electric",
+        description: "Commercial 20-passenger catamaran / transport ferry built to specification for high-volume waterways, eco-resorts, and scheduled ferry lines.",
+        specs: [
+          { key: "Seating Capacity", value: "20 Persons" },
+          { key: "Length", value: "Custom Commission (14 - 16 m)" },
+          { key: "Beam", value: "Custom (~3.2 - 3.8 m)" },
+          { key: "Power", value: "Twin Outboards (Up to 2x 50 HP)" },
+          { key: "Hull Material", value: "High Impact Composite FRP" },
+          { key: "Status", value: "Custom Commission · Engineering to Spec" }
+        ],
+        image_ids: [],
+        image_urls: ["assets/photos/boat-custom-20seater.webp"],
+        published: true,
+        sort_order: 3,
+        updated_at: "2026-11-11T00:00:00.000Z"
       }
     ],
     case_studies: [

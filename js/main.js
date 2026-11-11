@@ -339,6 +339,129 @@
     });
   }
 
+  /* ---------- custom electric & solar boat selector ---------- */
+  var BOAT_DATA = {
+    '8': {
+      seater: '8',
+      name: 'FREEDOM',
+      tag: '8 Seater · Freedom',
+      modelDisplay: 'FREEDOM — 8 Seater Electric Craft',
+      image: 'assets/photos/boat-freedom-8seater.webp',
+      alt: 'Seagö Freedom 8 Seater Electric Boat on the water',
+      chip: '03 · 8 Seater · Freedom',
+      specs: {
+        length: '5.48 m',
+        beam: '1.72 m',
+        depth: '0.75 m',
+        draft: '0.25 m',
+        seating: '8 Persons',
+        power: '50 HP Maximum',
+        hull: 'High Impact Composite FRP',
+        weight: '350 – 500 Kg',
+        propulsion: '100% Electric / Solar Hybrid',
+        customization: 'Seating layout, solar canopy & deck trim',
+        origin: 'Chennai, Tamil Nadu',
+        status: 'In Production · Built to Order'
+      }
+    },
+    '12': {
+      seater: '12',
+      name: 'ECSTASY',
+      tag: '12 Seater · Ecstasy',
+      modelDisplay: 'ECSTASY — 12 Seater Luxury Tourism Craft',
+      image: 'assets/photos/boat-ecstacy-12seater.webp',
+      alt: 'Seagö Ecstasy 12 Seater Electric Boat cruising silently',
+      chip: '03 · 12 Seater · Ecstasy',
+      specs: {
+        length: '12.7 m',
+        beam: '2.2 m',
+        depth: '1.1 m',
+        draft: '0.33 – 0.45 m',
+        seating: '12 Persons',
+        power: '50 HP',
+        hull: 'High Impact Composite FRP',
+        weight: 'Commercial Specification',
+        propulsion: 'Electric or Solar-Hybrid Propulsion',
+        customization: 'Luxury tourism canopy, lounge seating & audio',
+        origin: 'Chennai, Tamil Nadu',
+        status: 'In Production · Built to Order'
+      }
+    },
+    '20': {
+      seater: '20',
+      name: 'CUSTOM 20',
+      tag: '20 Seater · Commercial Vessel',
+      modelDisplay: '20 Seater Custom Passenger / Tourism Vessel',
+      image: 'assets/photos/boat-custom-20seater.webp',
+      alt: 'Seagö 20 Seater Commercial Passenger Ferry',
+      chip: '03 · 20 Seater · Commercial Vessel',
+      specs: {
+        length: 'Custom Commission (14 – 16 m)',
+        beam: 'Custom (~3.2 – 3.8 m)',
+        depth: '1.2 – 1.4 m',
+        draft: 'Shallow water draft to route spec',
+        seating: '20 Persons',
+        power: 'Twin Outboard (Up to 2x 50 HP)',
+        hull: 'High Impact Composite FRP',
+        weight: 'Built to passenger payload requirements',
+        propulsion: 'Commercial Electric / Solar Ferry System',
+        customization: 'Custom passenger tiers, solar canopy & ramps',
+        origin: 'Chennai, Tamil Nadu',
+        status: 'Custom Commission · Engineering to Spec'
+      }
+    }
+  };
+
+  var boatPicker = document.getElementById('boatPicker');
+  var boatModel = document.getElementById('boatModel');
+  var boatTag = document.getElementById('boatTag');
+  var boatSpecs = document.getElementById('boatSpecs');
+  var boatImage = document.getElementById('boatImage');
+  var boatChip = document.getElementById('boatChip');
+  var boatQuoteBtn = document.getElementById('boatQuoteBtn');
+  var activeBoat = '8';
+
+  function renderBoat(seater){
+    var d = BOAT_DATA[seater];
+    if(!d) return;
+    if(boatTag) boatTag.textContent = d.tag;
+    if(boatModel) boatModel.textContent = d.modelDisplay;
+    if(boatImage){
+      boatImage.setAttribute('src', d.image);
+      boatImage.setAttribute('alt', d.alt);
+    }
+    if(boatChip) boatChip.textContent = d.chip;
+    if(boatSpecs){
+      Object.keys(d.specs).forEach(function(k){
+        var el = boatSpecs.querySelector('[data-bspec="' + k + '"]');
+        if(el) el.textContent = d.specs[k] || '—';
+      });
+    }
+    if(boatQuoteBtn) boatQuoteBtn.setAttribute('href', 'contact.html?boat=' + encodeURIComponent(d.name.toLowerCase()));
+  }
+
+  function selectBoat(seater){
+    if(!BOAT_DATA[seater]) return;
+    activeBoat = seater;
+    if(boatPicker){
+      boatPicker.querySelectorAll('.hp-btn').forEach(function(btn){
+        var on = btn.getAttribute('data-boat') === seater;
+        btn.classList.toggle('is-active', on);
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+    }
+    renderBoat(seater);
+  }
+
+  if(boatPicker){
+    selectBoat(activeBoat);
+    boatPicker.addEventListener('click', function(e){
+      var btn = e.target.closest('.hp-btn');
+      if(btn && btn.getAttribute('data-boat')) selectBoat(btn.getAttribute('data-boat'));
+    });
+  }
+
+
   /* ---------- desktop-only motion: magnetic buttons, hero parallax, cursor glow, card tilt ---------- */
   if(window.matchMedia('(hover:hover)').matches){
 
