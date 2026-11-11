@@ -820,271 +820,96 @@
 
     crm_leads: [
       {
-        id: "lead-wa-101",
+        id: "lead-1",
         name: "Capt. Rajesh Varma",
         phone: "+91 98470 23145",
         email: "rajesh.varma@backwatercruises.in",
-        company: "Backwater Cruises & Charters Ltd.",
-        customer_type: "Commercial Ferry / Tourism Operator",
+        company: "Backwater Cruises",
+        customer_type: "Commercial Ferry Operator",
         location: "Kochi, Kerala",
         channel: "whatsapp",
-        source_ref: "WA Business QR / Lake Demo Brochure",
-        product_category: "Custom Electric Boat & Outboard",
-        product_model: "Ecstasy 12-Seater + Twin 50 HP (36.8 kW) PMSM + 96V 20kWh LiFePO4",
-        quantity: 2,
-        boat_details: "12.7m FRP Catamaran, Vembanad Lake tourist route",
-        purchase_timeline: "1–3 Months",
-        estimated_value: 2450000,
+        source_ref: "WhatsApp Business Direct",
+        product_category: "Outboard Motor",
+        product_model: "Seagö 50 HP (36.8 kW) PMSM Outboard",
+        quantity: 1,
+        boat_details: "12m passenger vessel, Vembanad Lake",
+        purchase_timeline: "Immediate",
+        estimated_value: 1250000,
         currency: "INR",
-        stage: "quotation_demo",
-        priority: "urgent",
-        assigned_to: "Anand R. (Marine Sales)",
+        stage: "new",
+        priority: "high",
+        assigned_to: "Anand R.",
         opt_in_whatsapp: true,
-        opt_in_timestamp: "2026-11-09T09:12:00.000Z",
-        bot_status: "paused",
-        tags: ["High Value", "Kerala Tourism", "Demo Scheduled", "Handover Active"],
+        opt_in_timestamp: "2026-11-10T09:12:00.000Z",
+        bot_status: "active",
+        tags: ["50 HP", "Kochi"],
         notes: [
-          { author: "Anand R.", text: "Sea trial demo scheduled at Kochi Marine Drive on Friday 11 AM. Client is replacing 2 aging 60HP petrol 2-stroke outboards to cut fuel expenditure by 85%.", created_at: "2026-11-10T11:45:00.000Z" }
+          { author: "Anand R.", text: "Client requested technical dimensions and delivery timeline for 50 HP motor.", created_at: "2026-11-10T10:00:00.000Z" }
         ],
         conversation: [
-          { id: "m1", direction: "inbound", sender: "Capt. Rajesh Varma", text: "Hello Seagö team, we operate luxury passenger charters in Kochi. We want to convert two 12-seater boats to clean electric propulsion.", time: "09:14 AM", status: "read" },
-          { id: "m2", direction: "bot", sender: "Seagö Assistant (Bot)", text: "Welcome to Seagö Marine Propulsion! We build 100% electric outboards (3 HP–50 HP) and custom passenger vessels. To help our marine engineering team configure the right system: what is your operating water body and daily runtime?", time: "09:14 AM", status: "delivered" },
-          { id: "m3", direction: "inbound", sender: "Capt. Rajesh Varma", text: "Vembanad Lake, around 6 to 8 hours daily cruising at 8-10 knots. Need zero vibration and silent propulsion.", time: "09:16 AM", status: "read" },
-          { id: "m4", direction: "bot", sender: "Seagö Assistant (Bot)", text: "Understood! For 12-seater passenger charters, we recommend our Ecstasy 12-Seater FRP hull paired with our 50 HP (36.8 kW) PMSM Outboard and 96V / 20kWh marine LiFePO4 battery pack. Would you like a preliminary quotation or a sea trial demonstration?", time: "09:16 AM", status: "delivered" },
-          { id: "m5", direction: "inbound", sender: "Capt. Rajesh Varma", text: "Yes, please share the quote and schedule a sea trial in Kochi if possible.", time: "09:18 AM", status: "read" },
-          { id: "m6", direction: "bot", sender: "Seagö Assistant (Bot)", text: "Connecting you with Anand R. from our Commercial Fleet Solutions team. Human handover active — our team will reply shortly.", time: "09:18 AM", status: "delivered" },
-          { id: "m7", direction: "outbound", sender: "Anand R. (Marine Sales)", text: "Hello Captain Rajesh, I have prepared our twin 50 HP propulsion technical pack and commercial estimate for Backwater Cruises. Are you available for a 15-minute briefing tomorrow at 11 AM?", time: "09:30 AM", status: "read" },
-          { id: "m8", direction: "inbound", sender: "Capt. Rajesh Varma", text: "Yes Anand, 11 AM works well. Please send the meeting invite and quote to my email.", time: "09:35 AM", status: "read" }
+          { id: "m1", direction: "inbound", sender: "Capt. Rajesh Varma", text: "Hello, we are looking for a 50 HP electric outboard motor for our passenger boat in Kochi. Please share pricing and specifications.", time: "10:14 AM", status: "read" },
+          { id: "m2", direction: "bot", sender: "Seagö Assistant", text: "Welcome to Seagö Marine Propulsion! We build 100% electric outboards from 3 HP to 50 HP. An executive from our sales team will connect with you shortly.", time: "10:14 AM", status: "delivered" }
         ],
-        created_at: "2026-11-09T09:14:00.000Z",
-        updated_at: "2026-11-10T14:30:00.000Z"
+        created_at: "2026-11-10T10:14:00.000Z",
+        updated_at: "2026-11-10T10:14:00.000Z"
       },
       {
-        id: "lead-web-102",
+        id: "lead-2",
         name: "Arunachalam S.",
         phone: "+91 94342 88910",
         email: "arun@coralbayresort.com",
-        company: "Coral Bay Eco-Resort & Marina",
+        company: "Coral Bay Resort",
         customer_type: "Eco-Resort / Hotel",
-        location: "Port Blair, Andaman & Nicobar",
+        location: "Port Blair, Andaman",
         channel: "website",
-        source_ref: "Web3Forms · Products Page RFQ",
+        source_ref: "Website Quote Form",
         product_category: "Outboard Motor",
-        product_model: "30 HP Electric Outboard (Air/Liquid Cooled) + 72V 15kWh Battery",
-        quantity: 3,
-        boat_details: "6.5m FRP resort transfer tenders",
-        purchase_timeline: "Immediate (< 30 days)",
-        estimated_value: 1420000,
-        currency: "INR",
-        stage: "qualified",
-        priority: "high",
-        assigned_to: "Divya K. (Fleet Solutions)",
-        opt_in_whatsapp: true,
-        opt_in_timestamp: "2026-11-10T04:22:00.000Z",
-        bot_status: "active",
-        tags: ["Eco-Resort", "Island Logistics", "316 Stainless Hardware"],
-        notes: [
-          { author: "Divya K.", text: "Marine sanctuary zone strictly prohibits diesel discharge. Client needs IP67 ingress certification and salt-spray resistance specs for Andaman waters.", created_at: "2026-11-10T08:15:00.000Z" }
-        ],
-        conversation: [
-          { id: "mw1", direction: "inbound", sender: "Arunachalam S.", text: "Submitted Web3Forms RFQ: Interested in 3x 30 HP electric outboards for transfer boats at Havelock/Port Blair. What is delivery timeline?", time: "09:52 AM", status: "read" },
-          { id: "mw2", direction: "outbound", sender: "Divya K.", text: "Dear Mr. Arunachalam, our 30 HP PMSM outboards are in production at our Chennai facility with a 2-week dispatch window to Port Blair. I have emailed our marine salt-fog test report.", time: "10:15 AM", status: "delivered" }
-        ],
-        created_at: "2026-11-10T04:22:00.000Z",
-        updated_at: "2026-11-10T10:15:00.000Z"
-      },
-      {
-        id: "lead-ig-103",
-        name: "Vikramaditya Rao",
-        phone: "+91 98221 44520",
-        email: "vikram@mandoviwatersports.in",
-        company: "Mandovi Adventure Watersports",
-        customer_type: "Tourism / Charter",
-        location: "Panaji, Goa",
-        channel: "instagram",
-        source_ref: "@seago.marine IG Direct · Goa Boating Reel",
-        product_category: "Custom Electric Boat",
-        product_model: "Freedom 8-Seater Solar Hybrid",
-        quantity: 1,
-        boat_details: "5.48m high impact FRP sightseeing craft",
+        product_model: "Seagö 30 HP Electric Outboard",
+        quantity: 2,
+        boat_details: "Island resort transfer boat",
         purchase_timeline: "1–3 Months",
-        estimated_value: 1650000,
+        estimated_value: 850000,
         currency: "INR",
         stage: "contacted",
-        priority: "medium",
-        assigned_to: "Anand R. (Marine Sales)",
+        priority: "normal",
+        assigned_to: "Divya K.",
         opt_in_whatsapp: true,
-        opt_in_timestamp: "2026-11-08T15:20:00.000Z",
+        opt_in_timestamp: "2026-11-10T11:00:00.000Z",
         bot_status: "active",
-        tags: ["Goa Tourism", "Solar Canopy", "Quiet Cruising"],
+        tags: ["30 HP", "Andaman"],
         notes: [
-          { author: "Anand R.", text: "Followed up via WhatsApp. Client wants rooftop solar canopy to extend cruising runtime during sunny Goa afternoon sightseeing runs.", created_at: "2026-11-09T14:10:00.000Z" }
+          { author: "Divya K.", text: "Quote sent via email with battery sizing guidelines.", created_at: "2026-11-10T11:30:00.000Z" }
         ],
         conversation: [
-          { id: "mi1", direction: "inbound", sender: "@vikram_watersports", text: "Loved the video of the Freedom 8-seater cruising silently! How much does a full turn-key setup with solar roof cost?", time: "Nov 8, 08:50 PM", status: "read" },
-          { id: "mi2", direction: "outbound", sender: "Seagö Team", text: "Thanks Vikram! The Freedom 8-Seater turn-key package starts at ₹14.5L to ₹16.5L depending on battery pack capacity and solar canopy configuration. We've connected on WhatsApp as well.", time: "Nov 8, 09:10 PM", status: "delivered" }
+          { id: "m3", direction: "inbound", sender: "Arunachalam S.", text: "Quote form submitted from website: Looking for 2 units of 30 HP electric outboards for island transfers.", time: "11:00 AM", status: "read" }
         ],
-        created_at: "2026-11-08T15:20:00.000Z",
-        updated_at: "2026-11-09T14:10:00.000Z"
-      },
-      {
-        id: "lead-li-104",
-        name: "Sanjay K. Nair",
-        phone: "+91 98300 77190",
-        email: "sanjay.nair@iwda.gov.in",
-        company: "National Waterways Transport Directorate",
-        customer_type: "Government / Port Authority",
-        location: "Kolkata, West Bengal",
-        channel: "linkedin",
-        source_ref: "LinkedIn Lead Gen Form · Clean Waterways RFP",
-        product_category: "Custom Commercial Fleet",
-        product_model: "Custom Commercial (20 Seater Ferry) - Fleet of 4",
-        quantity: 4,
-        boat_details: "15m twin hull commuter ferries, Hooghly River route",
-        purchase_timeline: "3–6 Months",
-        estimated_value: 9500000,
-        currency: "INR",
-        stage: "negotiation",
-        priority: "urgent",
-        assigned_to: "Divya K. (Fleet Solutions)",
-        opt_in_whatsapp: true,
-        opt_in_timestamp: "2026-11-05T10:00:00.000Z",
-        bot_status: "paused",
-        tags: ["Govt RFP", "Hooghly Transit", "High Capacity", "Fleet Procurement"],
-        notes: [
-          { author: "Divya K.", text: "Technical tender committee reviewed our twin 50HP PMSM architecture and 144V battery rack blueprints. Cleared Phase 1 technical evaluation.", created_at: "2026-11-08T16:40:00.000Z" }
-        ],
-        conversation: [
-          { id: "ml1", direction: "inbound", sender: "Sanjay K. Nair", text: "Inquiry on behalf of NWTD regarding electric ferry fleet procurement for National Waterway 1. Please submit technical capabilities brochure.", time: "Nov 5, 03:30 PM", status: "read" },
-          { id: "ml2", direction: "outbound", sender: "Divya K.", text: "Official submission transmitted with GA blueprints, battery crashworthiness certifications, and lifecycle cost analyses.", time: "Nov 6, 11:00 AM", status: "read" }
-        ],
-        created_at: "2026-11-05T10:00:00.000Z",
-        updated_at: "2026-11-08T16:40:00.000Z"
-      },
-      {
-        id: "lead-fb-105",
-        name: "Meera Sundaram",
-        phone: "+91 98401 55670",
-        email: "meera.sundaram@gmail.com",
-        company: "Private Yacht Owner",
-        customer_type: "Private Yacht / Boat Owner",
-        location: "Chennai, Tamil Nadu",
-        channel: "facebook",
-        source_ref: "Meta Lead Form · Zero Emission Marine Motors",
-        product_category: "Outboard Motor",
-        product_model: "10 HP (7.5 kW) Electric Outboard",
-        quantity: 1,
-        boat_details: "4m rigid inflatable yacht tender",
-        purchase_timeline: "Immediate (< 30 days)",
-        estimated_value: 340000,
-        currency: "INR",
-        stage: "new",
-        priority: "medium",
-        assigned_to: "Unassigned",
-        opt_in_whatsapp: false,
-        opt_in_timestamp: null,
-        bot_status: "active",
-        tags: ["Tender Motor", "Yacht Tender", "Direct Purchase"],
-        notes: [
-          { author: "System", text: "New lead ingested via Meta Facebook Lead Form API webhook.", created_at: "2026-11-11T02:15:00.000Z" }
-        ],
-        conversation: [
-          { id: "mf1", direction: "inbound", sender: "Meera Sundaram", text: "Lead form submitted: Need clean electric motor to replace 9.9hp petrol outboard on sailboat tender berthed at Royal Madras Yacht Club.", time: "Today 07:45 AM", status: "delivered" }
-        ],
-        created_at: "2026-11-11T02:15:00.000Z",
-        updated_at: "2026-11-11T02:15:00.000Z"
-      },
-      {
-        id: "lead-x-106",
-        name: "Karthik Menon",
-        phone: "+91 97450 11289",
-        email: "karthik@kavvayiretreat.com",
-        company: "Kavvayi Eco-Retreat",
-        customer_type: "Eco-Resort / Hotel",
-        location: "Kannur, Kerala",
-        channel: "x",
-        source_ref: "@seago_marine X Mention & Direct Message",
-        product_category: "Outboard Motor & Battery",
-        product_model: "6 HP Quiet Outboard + 48V 50AH Battery",
-        quantity: 2,
-        boat_details: "Traditional country canoes converted to electric",
-        purchase_timeline: "Completed",
-        estimated_value: 480000,
-        currency: "INR",
-        stage: "won",
-        priority: "low",
-        assigned_to: "Priya M. (Technical Support)",
-        opt_in_whatsapp: true,
-        opt_in_timestamp: "2026-10-25T11:00:00.000Z",
-        bot_status: "active",
-        tags: ["Order Completed", "Backwater Silence", "LiFePO4"],
-        notes: [
-          { author: "Priya M.", text: "Motors delivered and commissioned on site. Client shared testimonial on quiet morning birdwatching tours.", created_at: "2026-11-04T12:00:00.000Z" }
-        ],
-        conversation: [
-          { id: "mx1", direction: "inbound", sender: "@kavvayiretreat", text: "Motors are running beautifully on our backwater canoes. Guests are amazed by the complete silence!", time: "Nov 4, 11:20 AM", status: "read" },
-          { id: "mx2", direction: "outbound", sender: "Seagö Support", text: "Delighted to hear that, Karthik! Your 2-year commercial warranty certificate has been registered.", time: "Nov 4, 11:45 AM", status: "delivered" }
-        ],
-        created_at: "2026-10-25T11:00:00.000Z",
-        updated_at: "2026-11-04T12:00:00.000Z"
+        created_at: "2026-11-10T11:00:00.000Z",
+        updated_at: "2026-11-10T11:30:00.000Z"
       }
     ],
 
     crm_tasks: [
       {
         id: "task-1",
-        title: "Kochi Sea Trial: Prepare 50 HP demonstration craft & charge 96V pack",
-        due_date: "2026-11-14",
-        assigned_to: "Anand R. (Marine Sales)",
-        lead_id: "lead-wa-101",
+        title: "Send 50 HP motor specs and pricing to Capt. Rajesh Varma",
+        due_date: "Today",
+        assigned_to: "Anand R.",
+        lead_id: "lead-1",
         lead_name: "Capt. Rajesh Varma",
-        priority: "urgent",
+        priority: "high",
         status: "pending",
-        created_at: "2026-11-10T10:00:00.000Z"
+        created_at: "2026-11-10T10:15:00.000Z"
       },
       {
         id: "task-2",
-        title: "Review NWTD Hooghly River RFP technical compliance matrices with marine design team",
-        due_date: "2026-11-15",
-        assigned_to: "Divya K. (Fleet Solutions)",
-        lead_id: "lead-li-104",
-        lead_name: "Sanjay K. Nair",
-        priority: "urgent",
-        status: "pending",
-        created_at: "2026-11-09T14:30:00.000Z"
-      },
-      {
-        id: "task-3",
-        title: "Confirm shipping container freight quote for 3x 30HP outboards to Port Blair",
-        due_date: "2026-11-16",
-        assigned_to: "Divya K. (Fleet Solutions)",
-        lead_id: "lead-web-102",
+        title: "Follow up on 30 HP battery configuration with Coral Bay Resort",
+        due_date: "Tomorrow",
+        assigned_to: "Divya K.",
+        lead_id: "lead-2",
         lead_name: "Arunachalam S.",
-        priority: "high",
+        priority: "normal",
         status: "pending",
-        created_at: "2026-11-10T11:00:00.000Z"
-      },
-      {
-        id: "task-4",
-        title: "First contact call for Meera Sundaram (10 HP Yacht Tender)",
-        due_date: "2026-11-12",
-        assigned_to: "Anand R. (Marine Sales)",
-        lead_id: "lead-fb-105",
-        lead_name: "Meera Sundaram",
-        priority: "medium",
-        status: "pending",
-        created_at: "2026-11-11T03:00:00.000Z"
-      },
-      {
-        id: "task-5",
-        title: "Dispatch annual service manual and battery safety placard to Kavvayi Retreat",
-        due_date: "2026-11-08",
-        assigned_to: "Priya M. (Technical Support)",
-        lead_id: "lead-x-106",
-        lead_name: "Karthik Menon",
-        priority: "low",
-        status: "completed",
-        created_at: "2026-11-04T13:00:00.000Z"
+        created_at: "2026-11-10T11:35:00.000Z"
       }
     ],
 
@@ -1092,82 +917,24 @@
       {
         id: "int-wa",
         channel: "whatsapp",
-        title: "WhatsApp Business Cloud API",
-        provider: "Meta Business Platform v21.0",
-        phone_number: "+91 98400 12345 (Verified)",
-        account_id: "waba_seago_marine_99482",
-        webhook_url: "https://api.seago.in/webhooks/whatsapp",
+        title: "WhatsApp Business",
+        provider: "Official Cloud API",
+        phone_number: "+91 98400 12345",
         status: "connected",
-        health: "100% Operational · Webhook Latency 142ms",
-        events_count: 148,
-        last_sync: "2 minutes ago",
-        features: ["Auto FAQ Bot", "Lead Qualification Flow", "Human Handover", "Template Messaging"]
+        health: "Active"
       },
       {
         id: "int-web",
         channel: "website",
-        title: "Website Web3Forms & Quote Engine",
-        provider: "Web3Forms Pro Webhook API",
+        title: "Website Inquiries",
+        provider: "Web3Forms",
         phone_number: "contact.html & products.html",
-        account_id: "w3f_seago_form_2026",
-        webhook_url: "https://api.seago.in/webhooks/web3forms",
         status: "connected",
-        health: "Active · Real-time Submission Sync",
-        events_count: 86,
-        last_sync: "6 hours ago",
-        features: ["Automatic Lead Creation", "Motor Specification Mapping", "Duplicate Phone Check"]
-      },
-      {
-        id: "int-meta",
-        channel: "meta",
-        title: "Meta Facebook & Instagram Leads",
-        provider: "Meta Graph API v21.0",
-        phone_number: "FB: Seagö Marine Propulsion | IG: @seago.marine",
-        account_id: "act_meta_seago_in",
-        webhook_url: "https://api.seago.in/webhooks/meta-social",
-        status: "connected",
-        health: "Active · Token valid for 58 days",
-        events_count: 42,
-        last_sync: "8 hours ago",
-        features: ["Lead Ads Ingestion", "Instagram Business DM Sync", "Page Messenger Integration"]
-      },
-      {
-        id: "int-li",
-        channel: "linkedin",
-        title: "LinkedIn Lead Sync API",
-        provider: "LinkedIn Marketing Developer Platform",
-        phone_number: "Org: Seagö Marine Propulsion Private Limited",
-        account_id: "li_org_92019482",
-        webhook_url: "https://api.seago.in/webhooks/linkedin",
-        status: "connected",
-        health: "Active · Enterprise Tier Access",
-        events_count: 19,
-        last_sync: "1 day ago",
-        features: ["B2B Fleet Lead Gen Form Sync", "Corporate RFP Ingestion", "Executive Profile Lookup"]
-      },
-      {
-        id: "int-x",
-        channel: "x",
-        title: "X / Twitter Developer API",
-        provider: "X API v2 Pro App",
-        phone_number: "Handle: @seago_marine",
-        account_id: "x_app_seago_marine_bot",
-        webhook_url: "https://api.seago.in/webhooks/x-events",
-        status: "connected",
-        health: "Active · Rate limit normal (298/300 remaining)",
-        events_count: 12,
-        last_sync: "2 days ago",
-        features: ["Direct Message Sync", "Public Brand Mentions", "Inquiry Routing"]
+        health: "Active"
       }
     ],
 
-    crm_events: [
-      { id: "ev-1", type: "whatsapp.message_received", channel: "whatsapp", description: "Inbound message from Capt. Rajesh Varma (+91 98470 23145): 'Yes Anand, 11 AM works well...'", timestamp: "2026-11-10T14:05:00.000Z", status: "success" },
-      { id: "ev-2", type: "web3forms.lead_submitted", channel: "website", description: "Quote Form submitted from Arunachalam S. (Coral Bay Eco-Resort · 3x 30HP)", timestamp: "2026-11-10T04:22:00.000Z", status: "success" },
-      { id: "ev-3", type: "meta.leadgen_delivered", channel: "facebook", description: "Facebook Lead Ad response: Meera Sundaram (10 HP Yacht Tender)", timestamp: "2026-11-11T02:15:00.000Z", status: "success" },
-      { id: "ev-4", type: "whatsapp.handover_toggled", channel: "whatsapp", description: "Bot paused / Human Handover activated for lead Capt. Rajesh Varma by Anand R.", timestamp: "2026-11-09T09:20:00.000Z", status: "success" },
-      { id: "ev-5", type: "linkedin.form_response", channel: "linkedin", description: "B2B RFP received: Sanjay K. Nair (National Waterways Transport Directorate)", timestamp: "2026-11-05T10:00:00.000Z", status: "success" }
-    ]
+    crm_events: []
   };
 
   if (window.SeagoStore && typeof window.SeagoStore._seedIfEmpty === "function") {
