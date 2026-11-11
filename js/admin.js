@@ -694,10 +694,13 @@
     header.appendChild(info);
 
     var headerActions = createEl("div", { className: "page-header-actions" });
+    var crmBtn = createEl("a", { className: "btn btn-primary btn-sm", href: "#/crm", style: { display: "inline-flex", alignItems: "center", gap: "6px" } });
+    crmBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg><span>CRM &amp; Inquiries</span>';
     var liveBtn = createEl("a", { className: "btn btn-outline-topbar btn-sm", href: "index.html", target: "_blank", rel: "noopener" });
     liveBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px; vertical-align:middle;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg><span>Public Website</span>';
     var backupBtn = createEl("a", { className: "btn btn-secondary btn-sm", href: "#/data" });
     backupBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px; vertical-align:middle;"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg><span>Backup JSON</span>';
+    headerActions.appendChild(crmBtn);
     headerActions.appendChild(liveBtn);
     headerActions.appendChild(backupBtn);
     header.appendChild(headerActions);
