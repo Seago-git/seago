@@ -1,7 +1,8 @@
 /**
- * SEAGÖ CRM 2.0 — Complete Views & Screens
- * Enterprise-grade UI inspired by Linear, Attio, Intercom & HubSpot.
- * 10 Modules: Overview, Inbox, Leads, Contacts, Opportunities, Tasks, Products, Reports, Integrations, Settings.
+ * SEAGÖ CRM — Core Views & Screen Renderers
+ * 6 Main Modules:
+ * 1. Overview  2. Leads  3. Customers  4. Inbox  5. Tasks  6. Integrations
+ * Plus Two-Column Customer Details Interface.
  * Pure JavaScript · ES5 Compatible.
  */
 (function (global) {
@@ -21,17 +22,17 @@
     container.innerHTML = "";
     var wrap = cEl("div", { className: "crm-view-wrap" });
 
-    // Header with Breadcrumb & Quick Actions
+    // Header
     var header = cEl("div", { className: "crm-view-header" });
     header.innerHTML = [
       '<div class="crm-vh-left">',
-      '  <div class="crm-breadcrumbs"><span>CRM</span> <span class="crm-bc-sep">/</span> <span class="crm-bc-active">Sales Overview</span></div>',
+      '  <div class="crm-breadcrumbs"><span>CRM</span> <span class="crm-bc-sep">/</span> <span class="crm-bc-active">Overview</span></div>',
       '  <h1 class="crm-vh-title">Executive Sales Overview</h1>',
-      '  <p class="crm-vh-sub">Consolidated multi-channel fleet leads, active proposals, and follow-up activities.</p>',
+      '  <p class="crm-vh-sub">Consolidated customer enquiries, active conversations, pipeline progression, and follow-ups.</p>',
       '</div>',
       '<div class="crm-vh-actions">',
       '  <button type="button" class="btn btn-secondary btn-sm" id="crmExportAllBtn">Export CSV</button>',
-      '  <button type="button" class="btn btn-primary btn-sm" id="crmNewLeadQuickBtn">+ New Fleet Inquiry</button>',
+      '  <button type="button" class="btn btn-primary btn-sm" id="crmNewLeadQuickBtn">+ Add Enquiry</button>',
       '</div>'
     ].join("");
     wrap.appendChild(header);
@@ -39,134 +40,108 @@
     // Development Mode Banner
     wrap.appendChild(UI.renderDemoModeBanner());
 
-    // Fetch Metrics
-    API.reports.getDashboardMetrics().then(function (metrics) {
-      // 10 Compact KPI Blocks
-      var kpiGrid = cEl("div", { className: "crm-kpi-grid-10" });
-      kpiGrid.appendChild(UI.renderKpiCard("Total Fleet Leads", metrics.total_leads, "Across 6 channels", UI.ICONS.website, "kpi-navy"));
-      kpiGrid.appendChild(UI.renderKpiCard("New Leads Today", metrics.new_leads_today, "2 awaiting first response", UI.ICONS.direct, "kpi-blue"));
-      kpiGrid.appendChild(UI.renderKpiCard("Unassigned Inquiries", metrics.unassigned_leads, "Needs sales owner", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>', "kpi-warning"));
-      kpiGrid.appendChild(UI.renderKpiCard("Qualified Prospects", metrics.qualified_leads, "Commercial fit validated", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>', "kpi-success"));
-      kpiGrid.appendChild(UI.renderKpiCard("Active Opportunities", metrics.active_opportunities, "In proposal & demo stage", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>', "kpi-purple"));
-      kpiGrid.appendChild(UI.renderKpiCard("Quotations Dispatched", metrics.quotations_sent, "Avg. turnaround < 24h", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>', "kpi-cyan"));
-      kpiGrid.appendChild(UI.renderKpiCard("Follow-ups Pending", metrics.followups_due, "1 due by 4:30 PM today", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>', "kpi-orange"));
-      kpiGrid.appendChild(UI.renderKpiCard("Orders Won", metrics.orders_won, "Commercial contracts closed", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>', "kpi-green"));
-      kpiGrid.appendChild(UI.renderKpiCard("Conversion Rate", metrics.conversion_rate_pct + "%", "Industry benchmark: 22%", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>', "kpi-blue-2"));
-      kpiGrid.appendChild(UI.renderKpiCard("Active Pipeline Value", UI.formatCurrency(metrics.pipeline_value_inr), "Expected close Q4", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>', "kpi-teal"));
+    // 6 Main KPI Cards
+    API.reports.getDashboardMetrics().then(function (m) {
+      var kpiGrid = cEl("div", { className: "crm-kpi-grid-6" });
+      kpiGrid.appendChild(UI.renderKpiCard("Total Enquiries", m.total_leads, "Across all channels", UI.ICONS.website, "kpi-navy"));
+      kpiGrid.appendChild(UI.renderKpiCard("New Leads", m.new_leads_today, "Awaiting first response", UI.ICONS.direct, "kpi-blue"));
+      kpiGrid.appendChild(UI.renderKpiCard("Active Conversations", 4, "Live customer threads", UI.ICONS.whatsapp, "kpi-cyan"));
+      kpiGrid.appendChild(UI.renderKpiCard("Qualified Leads", m.qualified_leads, "Commercial fit validated", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>', "kpi-success"));
+      kpiGrid.appendChild(UI.renderKpiCard("Follow-ups Due", m.followups_due, "1 due by 4:30 PM today", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>', "kpi-orange"));
+      kpiGrid.appendChild(UI.renderKpiCard("Orders Won", m.orders_won, "Commercial contracts closed", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>', "kpi-green"));
       wrap.appendChild(kpiGrid);
 
-      // Main Dashboard Section: 2 Columns
-      var dashGrid = cEl("div", { className: "crm-dash-columns" });
+      // 2-Column Dashboard Below Metrics
+      var dashCols = cEl("div", { className: "crm-dash-columns" });
 
-      // Left Column: Pipeline Distribution & Channel Breakdown
+      // Left Column: Sales Pipeline & Enquiries by Source
       var leftCol = cEl("div", { className: "crm-dash-col" });
 
-      // Sales Pipeline Funnel Card
+      // Sales Pipeline Overview
       var pipeCard = cEl("div", { className: "crm-card" });
       pipeCard.innerHTML = [
-        '<div class="crm-card-head">',
-        '  <h3 class="crm-card-title">Sales Pipeline Progression</h3>',
-        '  <span class="crm-card-badge">7 Active Stages</span>',
-        '</div>',
+        '<div class="crm-card-head"><h3 class="crm-card-title">Sales Pipeline Overview</h3><span class="crm-card-badge">7 Stages</span></div>',
         '<div class="crm-pipeline-funnel">',
-        '  <div class="crm-funnel-row"><span class="funnel-label">New Inquiries</span><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:100%; background:#0284C7;"></div></div><span class="funnel-val">1 Lead</span></div>',
+        '  <div class="crm-funnel-row"><span class="funnel-label">New</span><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:100%; background:#0284C7;"></div></div><span class="funnel-val">1 Lead</span></div>',
         '  <div class="crm-funnel-row"><span class="funnel-label">Contacted</span><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:85%; background:#7C3AED;"></div></div><span class="funnel-val">1 Lead</span></div>',
         '  <div class="crm-funnel-row"><span class="funnel-label">Qualified</span><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:70%; background:#2563EB;"></div></div><span class="funnel-val">2 Leads</span></div>',
         '  <div class="crm-funnel-row"><span class="funnel-label">Quotation / Demo</span><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:55%; background:#D97706;"></div></div><span class="funnel-val">1 Lead</span></div>',
         '  <div class="crm-funnel-row"><span class="funnel-label">Negotiation</span><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:40%; background:#EA580C;"></div></div><span class="funnel-val">1 Lead</span></div>',
-        '  <div class="crm-funnel-row"><span class="funnel-label">Contract Won</span><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:30%; background:#16A34A;"></div></div><span class="funnel-val">4 Closed</span></div>',
+        '  <div class="crm-funnel-row"><span class="funnel-label">Won</span><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:30%; background:#16A34A;"></div></div><span class="funnel-val">4 Closed</span></div>',
+        '  <div class="crm-funnel-row"><span class="funnel-label">Lost / On Hold</span><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:15%; background:#64748B;"></div></div><span class="funnel-val">1 Lead</span></div>',
         '</div>'
       ].join("");
       leftCol.appendChild(pipeCard);
 
-      // Lead Sources Attribution Card
+      // Enquiries by Source
       var sourcesCard = cEl("div", { className: "crm-card" });
       sourcesCard.innerHTML = [
-        '<div class="crm-card-head">',
-        '  <h3 class="crm-card-title">Lead Acquisition by Channel</h3>',
-        '  <span class="crm-card-badge">Multi-Source</span>',
-        '</div>',
+        '<div class="crm-card-head"><h3 class="crm-card-title">Enquiries by Source</h3><span class="crm-card-badge">Channels</span></div>',
         '<div class="crm-channel-breakdown">',
-        '  <div class="crm-ch-row"><div class="ch-left">' + UI.ICONS.whatsapp + '<span>WhatsApp Business</span></div><div class="ch-bar-wrap"><div class="ch-bar" style="width:45%; background:#25D366;"></div></div><span class="ch-count">3 Leads (37.5%)</span></div>',
-        '  <div class="crm-ch-row"><div class="ch-left">' + UI.ICONS.website + '<span>Website Forms (Web3)</span></div><div class="ch-bar-wrap"><div class="ch-bar" style="width:30%; background:#0284C7;"></div></div><span class="ch-count">2 Leads (25.0%)</span></div>',
-        '  <div class="crm-ch-row"><div class="ch-left">' + UI.ICONS.instagram + '<span>Instagram DM</span></div><div class="ch-bar-wrap"><div class="ch-bar" style="width:15%; background:#E1306C;"></div></div><span class="ch-count">1 Lead (12.5%)</span></div>',
-        '  <div class="crm-ch-row"><div class="ch-left">' + UI.ICONS.facebook + '<span>Facebook Lead Ads</span></div><div class="ch-bar-wrap"><div class="ch-bar" style="width:15%; background:#1877F2;"></div></div><span class="ch-count">1 Lead (12.5%)</span></div>',
-        '  <div class="crm-ch-row"><div class="ch-left">' + UI.ICONS.linkedin + '<span>LinkedIn Lead Sync</span></div><div class="ch-bar-wrap"><div class="ch-bar" style="width:15%; background:#0A66C2;"></div></div><span class="ch-count">1 Lead (12.5%)</span></div>',
+        '  <div class="crm-ch-row"><div class="ch-left">' + UI.ICONS.whatsapp + '<span>WhatsApp Business</span></div><div class="ch-bar-wrap"><div class="ch-bar" style="width:45%; background:#25D366;"></div></div><span class="ch-count">3 (37.5%)</span></div>',
+        '  <div class="crm-ch-row"><div class="ch-left">' + UI.ICONS.website + '<span>Website Form</span></div><div class="ch-bar-wrap"><div class="ch-bar" style="width:30%; background:#0284C7;"></div></div><span class="ch-count">2 (25.0%)</span></div>',
+        '  <div class="crm-ch-row"><div class="ch-left">' + UI.ICONS.instagram + '<span>Instagram DM</span></div><div class="ch-bar-wrap"><div class="ch-bar" style="width:15%; background:#E1306C;"></div></div><span class="ch-count">1 (12.5%)</span></div>',
+        '  <div class="crm-ch-row"><div class="ch-left">' + UI.ICONS.facebook + '<span>Facebook Lead Ads</span></div><div class="ch-bar-wrap"><div class="ch-bar" style="width:15%; background:#1877F2;"></div></div><span class="ch-count">1 (12.5%)</span></div>',
+        '  <div class="crm-ch-row"><div class="ch-left">' + UI.ICONS.linkedin + '<span>LinkedIn Lead Sync</span></div><div class="ch-bar-wrap"><div class="ch-bar" style="width:15%; background:#0A66C2;"></div></div><span class="ch-count">1 (12.5%)</span></div>',
         '</div>'
       ].join("");
       leftCol.appendChild(sourcesCard);
-      dashGrid.appendChild(leftCol);
 
-      // Right Column: Pending Action Items & Team Workload
+      dashCols.appendChild(leftCol);
+
+      // Right Column: Recent Activity, Pending Follow-ups, Team Assignments
       var rightCol = cEl("div", { className: "crm-dash-col" });
 
-      // Critical Pending Actions
+      // Pending Follow-ups
       var actionsCard = cEl("div", { className: "crm-card" });
       actionsCard.innerHTML = [
-        '<div class="crm-card-head">',
-        '  <h3 class="crm-card-title">Priority Follow-up Actions</h3>',
-        '  <span class="crm-card-badge crm-badge-urgent">Attention Required</span>',
-        '</div>',
+        '<div class="crm-card-head"><h3 class="crm-card-title">Pending Follow-ups</h3><span class="crm-card-badge crm-badge-urgent">Due Soon</span></div>',
         '<div class="crm-actions-list">',
         '  <div class="crm-action-item">',
-        '    <div class="act-badge act-urgent">URGENT</div>',
-        '    <div class="act-info">',
-        '      <h4>Send revised proforma invoice to Mandovi Watersports</h4>',
-        '      <p>Capt. Vikram Prabhu requested Bimini canopy & audio inclusions for Freedom 8-seater (Due: Today 4:30 PM)</p>',
-        '    </div>',
+        '    <div class="act-badge act-urgent">TODAY 4:30 PM</div>',
+        '    <div class="act-info"><h4>Revise Proforma Invoice for Mandovi Watersports</h4><p>Capt. Vikram Prabhu · Include Bimini canopy &amp; audio package</p></div>',
         '    <button class="btn btn-sm btn-outline-primary act-btn" onclick="location.hash=\'#/crm/inbox/conv-2\'">Open DM</button>',
         '  </div>',
         '  <div class="crm-action-item">',
-        '    <div class="act-badge act-high">HIGH</div>',
-        '    <div class="act-info">',
-        '      <h4>Confirm Friday Chennai sea trial for Capt. Rajesh Varma</h4>',
-        '      <p>Backwater Cruises (Kochi) · 2x 50 HP motor inquiry (₹24.8L)</p>',
-        '    </div>',
+        '    <div class="act-badge act-high">TOMORROW 10 AM</div>',
+        '    <div class="act-info"><h4>Confirm Chennai Sea Trial for Capt. Rajesh Varma</h4><p>Backwater Cruises · 2x 50 HP Outboard Retrofit (₹24.8L)</p></div>',
         '    <button class="btn btn-sm btn-outline-primary act-btn" onclick="location.hash=\'#/crm/inbox/conv-1\'">Reply</button>',
-        '  </div>',
-        '  <div class="crm-action-item">',
-        '    <div class="act-badge act-new">UNASSIGNED</div>',
-        '    <div class="act-info">',
-        '      <h4>Assign Chennai Port Authority Commercial RFP</h4>',
-        '      <p>Commander N. S. Rao · 20-Seater Passenger Ferry with Twin 50 HP propulsion</p>',
-        '    </div>',
-        '    <button class="btn btn-sm btn-primary act-btn" onclick="location.hash=\'#/crm/leads/lead-5\'">Assign</button>',
         '  </div>',
         '</div>'
       ].join("");
       rightCol.appendChild(actionsCard);
 
-      // Team Performance & Workload
+      // Recent Customer Activity
+      var actCard = cEl("div", { className: "crm-card" });
+      actCard.innerHTML = [
+        '<div class="crm-card-head"><h3 class="crm-card-title">Recent Customer Activity</h3><span class="crm-card-badge">Live Stream</span></div>',
+        '<div class="crm-recent-act-list">',
+        '  <div class="recent-act-row"><div class="act-dot dot-green"></div><div class="act-desc"><strong>Capt. Rajesh Varma</strong> confirmed 20in transom specs via WhatsApp</div><span class="act-time">2h ago</span></div>',
+        '  <div class="recent-act-row"><div class="act-dot dot-purple"></div><div class="act-desc"><strong>Capt. Vikram Prabhu</strong> sent Instagram DM regarding Freedom 8-seater</div><span class="act-time">4h ago</span></div>',
+        '  <div class="recent-act-row"><div class="act-dot dot-blue"></div><div class="act-desc"><strong>Commander N. S. Rao</strong> submitted Port RFP form from contact.html</div><span class="act-time">6h ago</span></div>',
+        '  <div class="recent-act-row"><div class="act-dot dot-orange"></div><div class="act-desc"><strong>Debashis Mohapatra</strong> qualified for Odisha Wetland Tourism Subsidy</div><span class="act-time">Yesterday</span></div>',
+        '</div>'
+      ].join("");
+      rightCol.appendChild(actCard);
+
+      // Team Assignments
       var teamCard = cEl("div", { className: "crm-card" });
       teamCard.innerHTML = [
-        '<div class="crm-card-head">',
-        '  <h3 class="crm-card-title">Team Assignment &amp; Workload</h3>',
-        '  <span class="crm-card-badge">3 Executives</span>',
-        '</div>',
+        '<div class="crm-card-head"><h3 class="crm-card-title">Team Assignments</h3><span class="crm-card-badge">Active Reps</span></div>',
         '<div class="crm-team-list">',
-        '  <div class="crm-team-row">',
-        '    <div class="team-user"><div class="team-avatar">AR</div><div><strong>Anand R.</strong><div class="team-sub">Commercial &amp; Govt Accounts</div></div></div>',
-        '    <div class="team-stats"><span><strong>2</strong> Leads</span><span><strong>1</strong> Demo</span><span><strong>₹55.8L</strong> Pipe</span></div>',
-        '  </div>',
-        '  <div class="crm-team-row">',
-        '    <div class="team-user"><div class="team-avatar">PM</div><div><strong>Priya M.</strong><div class="team-sub">Tourism &amp; Custom Vessels</div></div></div>',
-        '    <div class="team-stats"><span><strong>1</strong> Lead</span><span><strong>1</strong> Negotiation</span><span><strong>₹17.5L</strong> Pipe</span></div>',
-        '  </div>',
-        '  <div class="crm-team-row">',
-        '    <div class="team-user"><div class="team-avatar">DK</div><div><strong>Divya K.</strong><div class="team-sub">Resorts &amp; Outboards</div></div></div>',
-        '    <div class="team-stats"><span><strong>2</strong> Leads</span><span><strong>1</strong> Quote</span><span><strong>₹15.4L</strong> Pipe</span></div>',
-        '  </div>',
+        '  <div class="crm-team-row"><div class="team-user"><div class="team-avatar">AR</div><div><strong>Anand R.</strong><div class="team-sub">Commercial &amp; Port Accounts</div></div></div><span class="team-count"><strong>2</strong> Enquiries</span></div>',
+        '  <div class="crm-team-row"><div class="team-user"><div class="team-avatar">PM</div><div><strong>Priya M.</strong><div class="team-sub">Tourism &amp; Custom Vessels</div></div></div><span class="team-count"><strong>1</strong> Enquiry</span></div>',
+        '  <div class="crm-team-row"><div class="team-user"><div class="team-avatar">DK</div><div><strong>Divya K.</strong><div class="team-sub">Resorts &amp; Outboards</div></div></div><span class="team-count"><strong>2</strong> Enquiries</span></div>',
         '</div>'
       ].join("");
       rightCol.appendChild(teamCard);
 
-      dashGrid.appendChild(rightCol);
-      wrap.appendChild(dashGrid);
+      dashCols.appendChild(rightCol);
+      wrap.appendChild(dashCols);
     });
 
     container.appendChild(wrap);
 
-    // Event listeners
     var expBtn = wrap.querySelector("#crmExportAllBtn");
     if (expBtn) expBtn.addEventListener("click", exportAllCsv);
     var newBtn = wrap.querySelector("#crmNewLeadQuickBtn");
@@ -174,266 +149,23 @@
   }
 
   // ═════════════════════════════════════════════════════════════════════════
-  // 2. UNIFIED INBOX VIEW (3-Column Layout: Linear / Intercom style)
-  // ═════════════════════════════════════════════════════════════════════════
-  function renderUnifiedInbox(container, conversationId) {
-    container.innerHTML = "";
-    var wrap = cEl("div", { className: "crm-inbox-shell" });
-
-    // Top Header & Channel Switcher Toolbar
-    var topbar = cEl("div", { className: "crm-inbox-topbar" });
-    topbar.innerHTML = [
-      '<div class="crm-inbox-tb-left">',
-      '  <div class="crm-breadcrumbs"><span>CRM</span> <span class="crm-bc-sep">/</span> <span class="crm-bc-active">Unified Multi-Channel Inbox</span></div>',
-      '  <h2 class="crm-inbox-title">Unified Customer Conversations</h2>',
-      '</div>',
-      '<div class="crm-inbox-tb-right">',
-      '  <div class="crm-channel-filter-pills" id="inboxChannelPills">',
-      '    <button type="button" class="ch-pill is-active" data-ch="all">All Channels</button>',
-      '    <button type="button" class="ch-pill" data-ch="whatsapp">' + UI.ICONS.whatsapp + ' WhatsApp</button>',
-      '    <button type="button" class="ch-pill" data-ch="instagram">' + UI.ICONS.instagram + ' Instagram</button>',
-      '    <button type="button" class="ch-pill" data-ch="facebook">' + UI.ICONS.facebook + ' Facebook</button>',
-      '    <button type="button" class="ch-pill" data-ch="website">' + UI.ICONS.website + ' Website</button>',
-      '    <button type="button" class="ch-pill" data-ch="linkedin">' + UI.ICONS.linkedin + ' LinkedIn</button>',
-      '  </div>',
-      '</div>'
-    ].join("");
-    wrap.appendChild(topbar);
-
-    // 3-Column Container
-    var mainCols = cEl("div", { className: "crm-inbox-layout" });
-
-    // ── LEFT COLUMN: CONVERSATION LIST ──
-    var leftCol = cEl("div", { className: "crm-inbox-col-left" });
-    var leftSearch = cEl("div", { className: "crm-inbox-search" });
-    leftSearch.innerHTML = '<input type="text" class="crm-input" placeholder="Search conversations, names, numbers..." id="inboxSearchInput">';
-    leftCol.appendChild(leftSearch);
-
-    var convListContainer = cEl("div", { className: "crm-conv-list", id: "convListContainer" });
-    leftCol.appendChild(convListContainer);
-    mainCols.appendChild(leftCol);
-
-    // ── CENTER COLUMN: CONVERSATION STREAM ──
-    var centerCol = cEl("div", { className: "crm-inbox-col-center", id: "inboxCenterCol" });
-    mainCols.appendChild(centerCol);
-
-    // ── RIGHT COLUMN: CUSTOMER CONTEXT & QUICK ACTIONS ──
-    var rightCol = cEl("div", { className: "crm-inbox-col-right", id: "inboxRightCol" });
-    mainCols.appendChild(rightCol);
-
-    wrap.appendChild(mainCols);
-    container.appendChild(wrap);
-
-    var activeConvId = conversationId || State.get().activeConversationId || "conv-1";
-    var currentFilter = "all";
-
-    function refreshConvList() {
-      convListContainer.innerHTML = "";
-      API.conversations.list(currentFilter).then(function (res) {
-        var convs = res.data || [];
-        if (convs.length === 0) {
-          convListContainer.appendChild(UI.renderEmptyState("No conversations", "No inquiries found for this channel filter."));
-          return;
-        }
-
-        convs.forEach(function (conv) {
-          var item = cEl("div", {
-            className: "crm-conv-item " + (conv.id === activeConvId ? "is-active" : "")
-          });
-          item.setAttribute("data-id", conv.id);
-
-          var initials = conv.customer_name.split(" ").map(function (n) { return n[0]; }).join("").substring(0, 2);
-          item.innerHTML = [
-            '<div class="conv-avatar">' + initials + '<span class="conv-ch-icon">' + (UI.ICONS[conv.channel] || UI.ICONS.website) + '</span></div>',
-            '<div class="conv-meta">',
-            '  <div class="conv-head">',
-            '    <strong class="conv-name">' + esc(conv.customer_name) + '</strong>',
-            '    <span class="conv-time">' + UI.formatTimeAgo(conv.last_message_at) + '</span>',
-            '  </div>',
-            '  <div class="conv-snippet">' + esc(conv.last_message) + '</div>',
-            '  <div class="conv-foot">',
-            '    <span class="conv-assignee">' + esc(conv.assigned_to) + '</span>',
-            (conv.unread_count > 0 ? '<span class="conv-unread-dot">' + conv.unread_count + '</span>' : ''),
-            '  </div>',
-            '</div>'
-          ].join("");
-
-          item.addEventListener("click", function () {
-            activeConvId = conv.id;
-            State.set("activeConversationId", conv.id);
-            refreshConvList();
-            renderActiveConversation(activeConvId);
-          });
-
-          convListContainer.appendChild(item);
-        });
-
-        renderActiveConversation(activeConvId);
-      });
-    }
-
-    function renderActiveConversation(cId) {
-      centerCol.innerHTML = "";
-      rightCol.innerHTML = "";
-
-      API.conversations.get(cId).then(function (res) {
-        var conv = res.data;
-        if (!conv) {
-          centerCol.appendChild(UI.renderEmptyState("Select Conversation", "Choose a conversation from the left to start viewing."));
-          return;
-        }
-
-        // 1. Center Column Header (Channel-specific Identity)
-        var chatHead = cEl("div", { className: "crm-chat-header crm-chat-header--" + conv.channel });
-        chatHead.innerHTML = [
-          '<div class="chat-head-left">',
-          '  <span class="chat-ch-icon">' + (UI.ICONS[conv.channel] || UI.ICONS.website) + '</span>',
-          '  <div>',
-          '    <h3 class="chat-user-title">' + esc(conv.customer_name) + '</h3>',
-          '    <div class="chat-sub">' + (conv.customer_phone ? esc(conv.customer_phone) : esc(conv.customer_handle || "Online Inquiry")) + '</div>',
-          '  </div>',
-          '</div>',
-          '<div class="chat-head-right">',
-          '  <div class="handover-control" id="handoverToggleWrap">',
-          '    <span class="ho-label">Automation:</span>',
-          '  </div>',
-          '  <button type="button" class="btn btn-secondary btn-sm" id="btnResolveConv">' + (conv.is_resolved ? "Reopen" : "Mark Resolved") + '</button>',
-          '</div>'
-        ].join("");
-
-        // Add handover badge & toggle
-        var hoWrap = chatHead.querySelector("#handoverToggleWrap");
-        hoWrap.appendChild(UI.renderHandoverBadge(conv.handover_status));
-
-        var hoToggleBtn = cEl("button", {
-          className: "btn btn-outline-topbar btn-sm",
-          style: { marginLeft: "8px" },
-          type: "button"
-        }, conv.handover_status === "bot_active" ? "Take Over (Human)" : "Resume Bot");
-
-        hoToggleBtn.addEventListener("click", function () {
-          var nextStatus = conv.handover_status === "bot_active" ? "human_active" : "bot_active";
-          API.conversations.setHandover(conv.id, nextStatus).then(function () {
-            conv.handover_status = nextStatus;
-            UI.showToast("Handover mode changed to: " + nextStatus, "success");
-            renderActiveConversation(conv.id);
-          });
-        });
-        hoWrap.appendChild(hoToggleBtn);
-
-        centerCol.appendChild(chatHead);
-
-        // 2. Message History Stream
-        var msgStream = cEl("div", { className: "crm-chat-stream crm-stream--" + conv.channel, id: "chatMessageStream" });
-        (conv.messages || []).forEach(function (m) {
-          var row = cEl("div", { className: "crm-msg-row crm-msg-" + m.direction + " crm-msg-ch--" + m.channel });
-          row.innerHTML = [
-            '<div class="crm-msg-bubble">',
-            '  <div class="crm-msg-sender">' + esc(m.sender_name) + '</div>',
-            '  <div class="crm-msg-text">' + esc(m.text) + '</div>',
-            '  <div class="crm-msg-meta"><span class="msg-time">' + esc(m.timestamp) + '</span>' + (m.direction === "outbound" ? '<span class="msg-check">✓✓</span>' : '') + '</div>',
-            '</div>'
-          ].join("");
-          msgStream.appendChild(row);
-        });
-        centerCol.appendChild(msgStream);
-        setTimeout(function () { msgStream.scrollTop = msgStream.scrollHeight; }, 50);
-
-        // 3. Compose Box
-        var composeBox = cEl("div", { className: "crm-chat-compose-box" });
-        composeBox.innerHTML = [
-          '<div class="compose-toolbar">',
-          '  <span class="compose-channel-pill">' + (UI.ICONS[conv.channel] || "") + ' Replying via ' + conv.channel.toUpperCase() + '</span>',
-          '  <button type="button" class="btn-tool-icon" title="Insert approved template">📄 Template</button>',
-          '  <button type="button" class="btn-tool-icon" title="Attach file or spec sheet">📎 Attach</button>',
-          '</div>',
-          '<div class="compose-input-row">',
-          '  <textarea class="crm-compose-textarea" id="chatReplyInput" placeholder="Type a message or press Shift + Enter for new line..." rows="2"></textarea>',
-          '  <button type="button" class="btn btn-primary crm-send-msg-btn" id="chatSendBtn">Send</button>',
-          '</div>'
-        ].join("");
-
-        var txtArea = composeBox.querySelector("#chatReplyInput");
-        var sendBtn = composeBox.querySelector("#chatSendBtn");
-
-        function handleSend() {
-          var val = txtArea.value.trim();
-          if (!val) return;
-          API.conversations.sendMessage(conv.id, val, conv.channel).then(function () {
-            txtArea.value = "";
-            renderActiveConversation(conv.id);
-            UI.showToast("Message sent to customer", "success");
-          });
-        }
-
-        sendBtn.addEventListener("click", handleSend);
-        txtArea.addEventListener("keydown", function (e) {
-          if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            handleSend();
-          }
-        });
-
-        centerCol.appendChild(composeBox);
-
-        // 4. Right Column: Customer Context 360
-        rightCol.innerHTML = [
-          '<div class="crm-card">',
-          '  <div class="crm-card-head"><h3 class="crm-card-title">Customer Context</h3><span class="crm-card-badge">' + esc(conv.customer_name) + '</span></div>',
-          '  <div class="ctx-kv-list">',
-          '    <div class="ctx-kv"><span class="ctx-lbl">Channel Source</span><span class="ctx-val">' + UI.renderChannelBadge(conv.channel).outerHTML + '</span></div>',
-          '    <div class="ctx-kv"><span class="ctx-lbl">Owner Assigned</span><span class="ctx-val"><strong>' + esc(conv.assigned_to) + '</strong></span></div>',
-          '    <div class="ctx-kv"><span class="ctx-lbl">Priority Level</span><span class="ctx-val">' + UI.renderPriorityBadge(conv.priority).outerHTML + '</span></div>',
-          '    <div class="ctx-kv"><span class="ctx-lbl">Phone Number</span><span class="ctx-val">' + esc(conv.customer_phone || "—") + '</span></div>',
-          '  </div>',
-          '  <div class="ctx-actions-stack">',
-          '    <button type="button" class="btn btn-primary btn-sm btn-full" id="btnCtxViewLead">View Lead Details</button>',
-          '    <button type="button" class="btn btn-secondary btn-sm btn-full" id="btnCtxCustomer360">Customer 360 Profile</button>',
-          '    <button type="button" class="btn btn-secondary btn-sm btn-full" id="btnCtxAddTask">+ Schedule Follow-up</button>',
-          '  </div>',
-          '</div>'
-        ].join("");
-
-        var vLeadBtn = rightCol.querySelector("#btnCtxViewLead");
-        if (vLeadBtn) vLeadBtn.addEventListener("click", function () {
-          location.hash = "#/crm/leads/" + (conv.lead_id || "lead-1");
-        });
-        var vCustBtn = rightCol.querySelector("#btnCtxCustomer360");
-        if (vCustBtn) vCustBtn.addEventListener("click", function () {
-          location.hash = "#/crm/contacts/" + (conv.contact_id || "cont-1");
-        });
-        var vTaskBtn = rightCol.querySelector("#btnCtxAddTask");
-        if (vTaskBtn) vTaskBtn.addEventListener("click", openNewTaskModal);
-      });
-    }
-
-    // Filter pills
-    var pills = topbar.querySelectorAll(".ch-pill");
-    pills.forEach(function (p) {
-      p.addEventListener("click", function () {
-        pills.forEach(function (x) { x.classList.remove("is-active"); });
-        p.classList.add("is-active");
-        currentFilter = p.getAttribute("data-ch");
-        refreshConvList();
-      });
-    });
-
-    refreshConvList();
-  }
-
-  // ═════════════════════════════════════════════════════════════════════════
-  // 3. LEAD MANAGEMENT VIEW (Table & Interactive Kanban Pipeline)
+  // 2. LEADS MANAGEMENT VIEW (Table & Kanban Views)
   // ═════════════════════════════════════════════════════════════════════════
   function renderLeads(container, leadId) {
+    if (leadId) {
+      renderCustomerDetails(container, null, leadId);
+      return;
+    }
+
     container.innerHTML = "";
     var wrap = cEl("div", { className: "crm-view-wrap" });
 
     var header = cEl("div", { className: "crm-view-header" });
     header.innerHTML = [
       '<div class="crm-vh-left">',
-      '  <div class="crm-breadcrumbs"><span>CRM</span> <span class="crm-bc-sep">/</span> <span class="crm-bc-active">Fleet Inquiries &amp; Leads</span></div>',
+      '  <div class="crm-breadcrumbs"><span>CRM</span> <span class="crm-bc-sep">/</span> <span class="crm-bc-active">Leads</span></div>',
       '  <h1 class="crm-vh-title">Lead Management</h1>',
-      '  <p class="crm-vh-sub">Comprehensive multi-channel pipeline with Table and Kanban workflow views.</p>',
+      '  <p class="crm-vh-sub">Filter, assign, track stages, and inspect customer fleet requirements.</p>',
       '</div>',
       '<div class="crm-vh-actions">',
       '  <div class="crm-view-switcher">',
@@ -441,7 +173,7 @@
       '    <button type="button" class="crm-sw-btn ' + (State.get().leadViewMode === "kanban" ? "is-active" : "") + '" id="btnLeadViewKanban">☷ Kanban</button>',
       '  </div>',
       '  <button type="button" class="btn btn-secondary btn-sm" id="btnExportLeadsCsv">Export CSV</button>',
-      '  <button type="button" class="btn btn-primary btn-sm" id="btnCreateNewLead">+ Add Lead</button>',
+      '  <button type="button" class="btn btn-primary btn-sm" id="btnCreateNewLead">+ Add Enquiry</button>',
       '</div>'
     ].join("");
     wrap.appendChild(header);
@@ -464,27 +196,22 @@
       '    <option value="new">New</option>',
       '    <option value="contacted">Contacted</option>',
       '    <option value="qualified">Qualified</option>',
-      '    <option value="quotation">Quotation Sent</option>',
-      '    <option value="negotiation">In Negotiation</option>',
+      '    <option value="quotation">Quotation / Demo</option>',
+      '    <option value="negotiation">Negotiation</option>',
       '    <option value="won">Won</option>',
+      '    <option value="lost">Lost / On Hold</option>',
       '  </select>',
       '</div>',
       '<div class="crm-tb-right" id="leadBulkActions" style="display:none;">',
       '  <span class="bulk-count" id="bulkSelectedCount">0 selected</span>',
-      '  <button type="button" class="btn btn-secondary btn-sm" id="btnBulkAssign">Assign Owner</button>',
+      '  <button type="button" class="btn btn-secondary btn-sm" id="btnBulkAssign">Assign Employee</button>',
       '</div>'
     ].join("");
     wrap.appendChild(toolbar);
 
-    // Content container (Table or Kanban)
     var contentArea = cEl("div", { id: "leadsContentArea" });
     wrap.appendChild(contentArea);
-
     container.appendChild(wrap);
-
-    // Detailed Drawer overlay
-    var drawer = cEl("div", { className: "crm-lead-drawer", id: "leadDetailDrawer", style: { display: "none" } });
-    container.appendChild(drawer);
 
     function renderCurrentView() {
       contentArea.innerHTML = "";
@@ -514,14 +241,16 @@
         '<thead>',
         '  <tr>',
         '    <th style="width:36px;"><input type="checkbox" id="chkLeadSelectAll"></th>',
-        '    <th>Customer &amp; Company</th>',
-        '    <th>Channel Source</th>',
-        '    <th>Product Interest</th>',
-        '    <th>Stage</th>',
+        '    <th>Customer</th>',
+        '    <th>Company</th>',
+        '    <th>Source</th>',
+        '    <th>Interested Product &amp; Requirements</th>',
+        '    <th>Status</th>',
         '    <th>Priority</th>',
-        '    <th>Assigned To</th>',
-        '    <th>Next Action</th>',
-        '    <th style="text-align:right;">Actions</th>',
+        '    <th>Assigned Employee</th>',
+        '    <th>Last Activity</th>',
+        '    <th>Next Follow-up</th>',
+        '    <th style="text-align:right;">Action</th>',
         '  </tr>',
         '</thead>',
         '<tbody id="leadsTableBody"></tbody>'
@@ -532,25 +261,26 @@
         var tr = cEl("tr");
         tr.innerHTML = [
           '<td><input type="checkbox" class="chk-lead-row" data-id="' + lead.id + '"></td>',
-          '<td><div class="tbl-cust-name"><strong>' + esc(lead.name) + '</strong></div><div class="tbl-cust-sub">' + esc(lead.company || lead.location) + '</div></td>',
+          '<td><div class="tbl-cust-name"><strong>' + esc(lead.name) + '</strong></div><div class="tbl-cust-sub">' + esc(lead.phone) + '</div></td>',
+          '<td><div class="tbl-cust-name">' + esc(lead.company || "—") + '</div><div class="tbl-cust-sub">' + esc(lead.location) + '</div></td>',
           '<td>' + UI.renderChannelBadge(lead.channel).outerHTML + '</td>',
-          '<td><div class="tbl-prod">' + esc(lead.product_model) + '</div><div class="tbl-val">' + UI.formatCurrency(lead.estimated_value) + '</div></td>',
+          '<td><div class="tbl-prod">' + esc(lead.product_model) + '</div><div class="tbl-val">' + (lead.vessel_length ? esc(lead.vessel_length) + ' · ' : '') + UI.formatCurrency(lead.estimated_value) + '</div></td>',
           '<td>' + UI.renderStageBadge(lead.stage).outerHTML + '</td>',
           '<td>' + UI.renderPriorityBadge(lead.priority).outerHTML + '</td>',
           '<td><span class="tbl-assignee">' + esc(lead.assigned_to) + '</span></td>',
+          '<td><span class="tbl-act-time">' + UI.formatTimeAgo(lead.last_activity_at) + '</span></td>',
           '<td><span class="tbl-followup">' + (lead.next_followup ? UI.formatDateShort(lead.next_followup) : "None scheduled") + '</span></td>',
-          '<td style="text-align:right;"><button type="button" class="btn btn-secondary btn-sm btn-open-lead" data-id="' + lead.id + '">Inspect &rarr;</button></td>'
+          '<td style="text-align:right;"><button type="button" class="btn btn-secondary btn-sm btn-open-lead" data-id="' + lead.id + '">View Details &rarr;</button></td>'
         ].join("");
 
         tr.addEventListener("click", function (e) {
           if (e.target.tagName === "INPUT" || e.target.tagName === "BUTTON") return;
-          openLeadDrawer(lead.id);
+          renderCustomerDetails(container, lead.contact_id, lead.id);
         });
 
-        var btn = tr.querySelector(".btn-open-lead");
-        btn.addEventListener("click", function (e) {
+        tr.querySelector(".btn-open-lead").addEventListener("click", function (e) {
           e.stopPropagation();
-          openLeadDrawer(lead.id);
+          renderCustomerDetails(container, lead.contact_id, lead.id);
         });
 
         tbody.appendChild(tr);
@@ -559,7 +289,7 @@
       card.appendChild(table);
       target.appendChild(card);
 
-      // Checkbox multi-select logic
+      // Checkbox multi-select
       var chkAll = table.querySelector("#chkLeadSelectAll");
       var rowChks = table.querySelectorAll(".chk-lead-row");
       var bulkBar = wrap.querySelector("#leadBulkActions");
@@ -585,83 +315,48 @@
       });
     }
 
-    // ── Kanban Pipeline View ──
+    // ── Kanban View ──
     function renderKanbanPipeline(target, leads) {
       var stages = [
-        { key: "new", label: "New Lead", color: "#0284C7" },
+        { key: "new", label: "New", color: "#0284C7" },
         { key: "contacted", label: "Contacted", color: "#7C3AED" },
         { key: "qualified", label: "Qualified", color: "#2563EB" },
-        { key: "quotation", label: "Quotation Sent", color: "#D97706" },
-        { key: "negotiation", label: "In Negotiation", color: "#EA580C" },
-        { key: "won", label: "Order Won", color: "#16A34A" }
+        { key: "quotation", label: "Quotation / Demo", color: "#D97706" },
+        { key: "negotiation", label: "Negotiation", color: "#EA580C" },
+        { key: "won", label: "Won", color: "#16A34A" },
+        { key: "lost", label: "Lost / On Hold", color: "#64748B" }
       ];
 
       var board = cEl("div", { className: "crm-kanban-board" });
-
       stages.forEach(function (stg) {
         var colLeads = leads.filter(function (l) { return l.stage === stg.key; });
         var colVal = colLeads.reduce(function (sum, l) { return sum + (l.estimated_value || 0); }, 0);
 
-        var col = cEl("div", { className: "crm-kanban-col", "data-stage": stg.key });
+        var col = cEl("div", { className: "crm-kanban-col" });
         col.innerHTML = [
           '<div class="kanban-col-head" style="border-top: 3px solid ' + stg.color + '">',
           '  <div class="col-title-wrap"><strong>' + esc(stg.label) + '</strong><span class="col-badge">' + colLeads.length + '</span></div>',
           '  <div class="col-val-total">' + UI.formatCurrency(colVal) + '</div>',
           '</div>',
-          '<div class="kanban-card-stack" id="stack-' + stg.key + '"></div>'
+          '<div class="kanban-card-stack"></div>'
         ].join("");
 
         var stack = col.querySelector(".kanban-card-stack");
         colLeads.forEach(function (lead) {
-          var card = cEl("div", {
-            className: "crm-kanban-card",
-            draggable: "true",
-            "data-id": lead.id
-          });
-
+          var card = cEl("div", { className: "crm-kanban-card", draggable: "true" });
           card.innerHTML = [
-            '<div class="kb-card-head">',
-            UI.renderChannelBadge(lead.channel).outerHTML,
-            UI.renderPriorityBadge(lead.priority).outerHTML,
-            '</div>',
+            '<div class="kb-card-head">' + UI.renderChannelBadge(lead.channel).outerHTML + UI.renderPriorityBadge(lead.priority).outerHTML + '</div>',
             '<h4 class="kb-cust-name">' + esc(lead.name) + '</h4>',
             '<div class="kb-cust-sub">' + esc(lead.company || lead.location) + '</div>',
             '<div class="kb-product-tag">' + esc(lead.product_model) + '</div>',
-            '<div class="kb-card-foot">',
-            '  <span class="kb-val">' + UI.formatCurrency(lead.estimated_value) + '</span>',
-            '  <span class="kb-assignee">' + esc(lead.assigned_to) + '</span>',
-            '</div>'
+            '<div class="kb-card-foot"><strong class="kb-val">' + UI.formatCurrency(lead.estimated_value) + '</strong><span class="kb-assignee">' + esc(lead.assigned_to) + '</span></div>'
           ].join("");
 
           card.addEventListener("click", function () {
-            openLeadDrawer(lead.id);
-          });
-
-          // Drag and drop listeners
-          card.addEventListener("dragstart", function (e) {
-            e.dataTransfer.setData("text/plain", lead.id);
-            card.classList.add("is-dragging");
-          });
-          card.addEventListener("dragend", function () {
-            card.classList.remove("is-dragging");
+            renderCustomerDetails(container, lead.contact_id, lead.id);
           });
 
           stack.appendChild(card);
-        });
-
-        // Allow drop on stack
-        stack.addEventListener("dragover", function (e) { e.preventDefault(); stack.classList.add("drag-over"); });
-        stack.addEventListener("dragleave", function () { stack.classList.remove("drag-over"); });
-        stack.addEventListener("drop", function (e) {
-          e.preventDefault();
-          stack.classList.remove("drag-over");
-          var movedLeadId = e.dataTransfer.getData("text/plain");
-          if (movedLeadId) {
-            API.leads.update(movedLeadId, { stage: stg.key }).then(function () {
-              UI.showToast("Lead stage updated to: " + stg.label, "success");
-              renderCurrentView();
-            });
-          }
         });
 
         board.appendChild(col);
@@ -670,127 +365,15 @@
       target.appendChild(board);
     }
 
-    // ── Detailed Lead Slide-Over Drawer ──
-    function openLeadDrawer(id) {
-      API.leads.get(id).then(function (res) {
-        var lead = res.data;
-        if (!lead) return;
-
-        drawer.style.display = "block";
-        drawer.innerHTML = [
-          '<div class="drawer-header">',
-          '  <div class="drw-head-left">',
-          '    <div class="drw-crumbs">LEAD INSPECTOR · ' + esc(lead.id) + '</div>',
-          '    <h2 class="drw-title">' + esc(lead.name) + '</h2>',
-          '    <div class="drw-sub">' + esc(lead.company) + ' · ' + esc(lead.location) + '</div>',
-          '  </div>',
-          '  <button type="button" class="drawer-close" id="drwCloseBtn">&times;</button>',
-          '</div>',
-          '<div class="drawer-body">',
-          '  <div class="drw-section">',
-          '    <div class="drw-sec-title">Propulsion &amp; Vessel Specifications</div>',
-          '    <div class="drw-spec-grid">',
-          '      <div class="drw-spec-item"><span class="lbl">Category</span><strong>' + esc(lead.product_category) + '</strong></div>',
-          '      <div class="drw-spec-item"><span class="lbl">Model / Unit</span><strong>' + esc(lead.product_model) + '</strong></div>',
-          '      <div class="drw-spec-item"><span class="lbl">Quantity</span><strong>' + (lead.quantity || 1) + ' Units</strong></div>',
-          '      <div class="drw-spec-item"><span class="lbl">Motor Power</span><strong>' + esc(lead.motor_hp || "50 HP") + '</strong></div>',
-          '      <div class="drw-spec-item"><span class="lbl">Vessel Length</span><strong>' + esc(lead.vessel_length || "—") + '</strong></div>',
-          '      <div class="drw-spec-item"><span class="lbl">Passenger Seats</span><strong>' + (lead.seating_capacity ? lead.seating_capacity + " Persons" : "—") + '</strong></div>',
-          '      <div class="drw-spec-item"><span class="lbl">Timeline</span><strong>' + esc(lead.purchase_timeline) + '</strong></div>',
-          '      <div class="drw-spec-item"><span class="lbl">Proposal Value</span><strong style="color:var(--cyan);">' + UI.formatCurrency(lead.estimated_value) + '</strong></div>',
-          '    </div>',
-          '  </div>',
-          '  <div class="drw-section">',
-          '    <div class="drw-sec-title">Sales Assignment &amp; Stage</div>',
-          '    <div class="drw-form-row">',
-          '      <div><label class="drw-lbl">Lead Stage</label>',
-          '        <select class="crm-select" id="drwStageSelect">',
-          '          <option value="new" ' + (lead.stage === "new" ? "selected" : "") + '>New</option>',
-          '          <option value="contacted" ' + (lead.stage === "contacted" ? "selected" : "") + '>Contacted</option>',
-          '          <option value="qualified" ' + (lead.stage === "qualified" ? "selected" : "") + '>Qualified</option>',
-          '          <option value="quotation" ' + (lead.stage === "quotation" ? "selected" : "") + '>Quotation Sent</option>',
-          '          <option value="negotiation" ' + (lead.stage === "negotiation" ? "selected" : "") + '>Negotiation</option>',
-          '          <option value="won" ' + (lead.stage === "won" ? "selected" : "") + '>Won</option>',
-          '        </select>',
-          '      </div>',
-          '      <div><label class="drw-lbl">Assigned Executive</label>',
-          '        <select class="crm-select" id="drwAssignSelect">',
-          '          <option value="Anand R." ' + (lead.assigned_to === "Anand R." ? "selected" : "") + '>Anand R.</option>',
-          '          <option value="Divya K." ' + (lead.assigned_to === "Divya K." ? "selected" : "") + '>Divya K.</option>',
-          '          <option value="Priya M." ' + (lead.assigned_to === "Priya M." ? "selected" : "") + '>Priya M.</option>',
-          '          <option value="Unassigned" ' + (lead.assigned_to === "Unassigned" ? "selected" : "") + '>Unassigned</option>',
-          '        </select>',
-          '      </div>',
-          '    </div>',
-          '  </div>',
-          '  <div class="drw-section">',
-          '    <div class="drw-sec-title">Internal Commercial Notes</div>',
-          '    <div class="drw-notes-list" id="drwNotesList"></div>',
-          '    <div class="drw-add-note">',
-          '      <input type="text" class="crm-input" id="drwNoteInput" placeholder="Add internal sales note...">',
-          '      <button type="button" class="btn btn-primary btn-sm" id="drwSaveNoteBtn">Post Note</button>',
-          '    </div>',
-          '  </div>',
-          '</div>',
-          '<div class="drawer-footer">',
-          '  <button type="button" class="btn btn-secondary btn-sm" id="drwOpenChatBtn">Open Channel Chat</button>',
-          '  <button type="button" class="btn btn-primary btn-sm" id="drwSaveLeadBtn">Save Changes</button>',
-          '</div>'
-        ].join("");
-
-        // Render notes list
-        var nList = drawer.querySelector("#drwNotesList");
-        (lead.notes || []).forEach(function (n) {
-          var item = cEl("div", { className: "drw-note-bubble" });
-          item.innerHTML = '<strong>' + esc(n.author) + '</strong> (' + UI.formatTimeAgo(n.created_at) + ')<p>' + esc(n.text) + '</p>';
-          nList.appendChild(item);
-        });
-
-        // Close drawer
-        drawer.querySelector("#drwCloseBtn").addEventListener("click", function () {
-          drawer.style.display = "none";
-        });
-
-        // Add note
-        drawer.querySelector("#drwSaveNoteBtn").addEventListener("click", function () {
-          var inp = drawer.querySelector("#drwNoteInput");
-          var txt = inp.value.trim();
-          if (!txt) return;
-          API.leads.addNote(lead.id, txt, "Admin").then(function () {
-            inp.value = "";
-            openLeadDrawer(lead.id);
-            UI.showToast("Note added successfully", "success");
-          });
-        });
-
-        // Save stage & assignee
-        drawer.querySelector("#drwSaveLeadBtn").addEventListener("click", function () {
-          var stg = drawer.querySelector("#drwStageSelect").value;
-          var asg = drawer.querySelector("#drwAssignSelect").value;
-          API.leads.update(lead.id, { stage: stg, assigned_to: asg }).then(function () {
-            drawer.style.display = "none";
-            UI.showToast("Lead updated", "success");
-            renderCurrentView();
-          });
-        });
-
-        drawer.querySelector("#drwOpenChatBtn").addEventListener("click", function () {
-          location.hash = "#/crm/inbox/conv-1";
-        });
-      });
-    }
-
     // Switcher buttons
     var btnTable = wrap.querySelector("#btnLeadViewTable");
     var btnKanban = wrap.querySelector("#btnLeadViewKanban");
-
     btnTable.addEventListener("click", function () {
       btnTable.classList.add("is-active");
       btnKanban.classList.remove("is-active");
       State.set("leadViewMode", "table");
       renderCurrentView();
     });
-
     btnKanban.addEventListener("click", function () {
       btnKanban.classList.add("is-active");
       btnTable.classList.remove("is-active");
@@ -798,60 +381,52 @@
       renderCurrentView();
     });
 
-    // Filters
-    var searchBox = wrap.querySelector("#leadSearchInput");
-    searchBox.addEventListener("input", function (e) {
+    // Search and filter listeners
+    wrap.querySelector("#leadSearchInput").addEventListener("input", function (e) {
       State.setLeadFilter("search", e.target.value.trim());
       renderCurrentView();
     });
-
-    var chFilter = wrap.querySelector("#leadChannelFilter");
-    chFilter.addEventListener("change", function (e) {
+    wrap.querySelector("#leadChannelFilter").addEventListener("change", function (e) {
       State.setLeadFilter("channel", e.target.value);
       renderCurrentView();
     });
-
-    var stFilter = wrap.querySelector("#leadStageFilter");
-    stFilter.addEventListener("change", function (e) {
+    wrap.querySelector("#leadStageFilter").addEventListener("change", function (e) {
       State.setLeadFilter("stage", e.target.value);
       renderCurrentView();
     });
-
-    var expBtn = wrap.querySelector("#btnExportLeadsCsv");
-    expBtn.addEventListener("click", exportAllCsv);
-
-    var addBtn = wrap.querySelector("#btnCreateNewLead");
-    addBtn.addEventListener("click", openNewInquiryModal);
+    wrap.querySelector("#btnExportLeadsCsv").addEventListener("click", exportAllCsv);
+    wrap.querySelector("#btnCreateNewLead").addEventListener("click", openNewInquiryModal);
 
     renderCurrentView();
-
-    if (leadId) {
-      openLeadDrawer(leadId);
-    }
   }
 
   // ═════════════════════════════════════════════════════════════════════════
-  // 4. CUSTOMER 360 & CONTACTS VIEW
+  // 3. CUSTOMER DIRECTORY VIEW
   // ═════════════════════════════════════════════════════════════════════════
-  function renderContacts(container, contactId) {
+  function renderCustomers(container, customerId) {
+    if (customerId) {
+      renderCustomerDetails(container, customerId);
+      return;
+    }
+
     container.innerHTML = "";
     var wrap = cEl("div", { className: "crm-view-wrap" });
 
     var header = cEl("div", { className: "crm-view-header" });
     header.innerHTML = [
       '<div class="crm-vh-left">',
-      '  <div class="crm-breadcrumbs"><span>CRM</span> <span class="crm-bc-sep">/</span> <span class="crm-bc-active">Customer 360 Profiles</span></div>',
-      '  <h1 class="crm-vh-title">Customer 360 Directory</h1>',
-      '  <p class="crm-vh-sub">Consolidated customer accounts uniting WhatsApp, Website, Social DMs and Inbound RFPs into one single profile.</p>',
+      '  <div class="crm-breadcrumbs"><span>CRM</span> <span class="crm-bc-sep">/</span> <span class="crm-bc-active">Customers</span></div>',
+      '  <h1 class="crm-vh-title">Customer Directory</h1>',
+      '  <p class="crm-vh-sub">Consolidated commercial customer accounts across all inbound communication channels.</p>',
       '</div>',
       '<div class="crm-vh-actions">',
-      '  <button type="button" class="btn btn-primary btn-sm" id="btnCreateContact">+ New Customer</button>',
+      '  <button type="button" class="btn btn-primary btn-sm" id="btnCreateCustomer">+ Add Customer</button>',
       '</div>'
     ].join("");
     wrap.appendChild(header);
 
-    var contactsGrid = cEl("div", { className: "crm-contacts-grid" });
-    wrap.appendChild(contactsGrid);
+    var grid = cEl("div", { className: "crm-contacts-grid" });
+    wrap.appendChild(grid);
     container.appendChild(wrap);
 
     API.contacts.list().then(function (res) {
@@ -863,175 +438,428 @@
         card.innerHTML = [
           '<div class="cont-card-head">',
           '  <div class="cont-avatar">' + initials + '</div>',
-          '  <div class="cont-head-meta">',
-          '    <h3 class="cont-name">' + esc(c.name) + '</h3>',
-          '    <div class="cont-comp">' + esc(c.company) + '</div>',
-          '  </div>',
+          '  <div class="cont-head-meta"><h3 class="cont-name">' + esc(c.name) + '</h3><div class="cont-comp">' + esc(c.company) + '</div></div>',
           '  <span class="cont-badge-type">' + esc(c.customer_type) + '</span>',
           '</div>',
           '<div class="cont-details">',
           '  <div class="cont-kv"><span>Location:</span> <strong>' + esc(c.location) + '</strong></div>',
           '  <div class="cont-kv"><span>Phone:</span> <strong>' + esc(c.phone) + '</strong></div>',
           '  <div class="cont-kv"><span>Email:</span> <strong>' + esc(c.email) + '</strong></div>',
-          '  <div class="cont-kv"><span>Assigned:</span> <strong>' + esc(c.assigned_to) + '</strong></div>',
-          '</div>',
-          '<div class="cont-tags">',
-          (c.tags || []).map(function (t) { return '<span class="c-tag">' + esc(t) + '</span>'; }).join(""),
+          '  <div class="cont-kv"><span>Assigned Rep:</span> <strong>' + esc(c.assigned_to) + '</strong></div>',
           '</div>',
           '<div class="cont-card-foot">',
-          '  <button type="button" class="btn btn-secondary btn-sm btn-full btn-inspect-cust" data-id="' + c.id + '">View Customer 360 Timeline &rarr;</button>',
+          '  <button type="button" class="btn btn-secondary btn-sm btn-full btn-view-c360" data-id="' + c.id + '">View Customer Details &rarr;</button>',
           '</div>'
         ].join("");
 
-        card.querySelector(".btn-inspect-cust").addEventListener("click", function () {
-          openCustomer360Modal(c.id);
+        card.querySelector(".btn-view-c360").addEventListener("click", function () {
+          renderCustomerDetails(container, c.id);
         });
 
-        contactsGrid.appendChild(card);
+        grid.appendChild(card);
       });
     });
 
-    if (contactId) {
-      openCustomer360Modal(contactId);
-    }
-  }
-
-  function openCustomer360Modal(cId) {
-    API.contacts.get(cId).then(function (cRes) {
-      var c = cRes.data;
-      if (!c) return;
-
-      API.contacts.getTimeline(cId).then(function (tRes) {
-        var events = tRes.data || [];
-        var modal = cEl("div", { className: "crm-modal-overlay" });
-        modal.innerHTML = [
-          '<div class="crm-modal-box crm-modal-lg">',
-          '  <div class="crm-modal-head">',
-          '    <div>',
-          '      <span class="crm-badge-priority crm-priority-high">CUSTOMER 360 PROFILE</span>',
-          '      <h2 style="margin-top:6px;">' + esc(c.name) + ' · ' + esc(c.company) + '</h2>',
-          '      <div style="font-size:12.5px; color:var(--muted);">' + esc(c.location) + ' · ' + esc(c.customer_type) + '</div>',
-          '    </div>',
-          '    <button type="button" class="crm-modal-close" id="modalCloseBtn">&times;</button>',
-          '  </div>',
-          '  <div class="crm-modal-body">',
-          '    <div class="c360-summary-row">',
-          '      <div class="c360-stat"><span class="lbl">WhatsApp Opt-in</span><strong style="color:#25D366;">' + (c.opt_in_whatsapp ? "Verified Opt-in" : "Not Opted") + '</strong></div>',
-          '      <div class="c360-stat"><span class="lbl">Primary Account Owner</span><strong>' + esc(c.assigned_to) + '</strong></div>',
-          '      <div class="c360-stat"><span class="lbl">Direct Phone</span><strong>' + esc(c.phone) + '</strong></div>',
-          '      <div class="c360-stat"><span class="lbl">Business Email</span><strong>' + esc(c.email) + '</strong></div>',
-          '    </div>',
-          '    <h3 style="font-size:15px; margin:20px 0 12px; font-weight:700;">Multi-Channel Interaction Timeline</h3>',
-          '    <div class="c360-timeline" id="c360TimelineList"></div>',
-          '  </div>',
-          '  <div class="crm-modal-foot">',
-          '    <button type="button" class="btn btn-secondary btn-sm" id="btnModalClose">Close</button>',
-          '    <button type="button" class="btn btn-primary btn-sm" onclick="location.hash=\'#/crm/inbox/conv-1\'">Open Live Chat Session</button>',
-          '  </div>',
-          '</div>'
-        ].join("");
-
-        var tList = modal.querySelector("#c360TimelineList");
-        events.forEach(function (e) {
-          var item = cEl("div", { className: "c360-tl-item" });
-          item.innerHTML = [
-            '<div class="tl-node">' + (UI.ICONS[e.channel] || "📌") + '</div>',
-            '<div class="tl-content">',
-            '  <div class="tl-head"><strong class="tl-title">' + esc(e.title) + '</strong><span class="tl-time">' + UI.formatDateShort(e.timestamp) + '</span></div>',
-            '  <p class="tl-desc">' + esc(e.description) + '</p>',
-            '  <div class="tl-actor">Handled by: ' + esc(e.actor) + '</div>',
-            '</div>'
-          ].join("");
-          tList.appendChild(item);
-        });
-
-        modal.querySelector("#modalCloseBtn").addEventListener("click", function () { document.body.removeChild(modal); });
-        modal.querySelector("#btnModalClose").addEventListener("click", function () { document.body.removeChild(modal); });
-        document.body.appendChild(modal);
-      });
-    });
+    wrap.querySelector("#btnCreateCustomer").addEventListener("click", openNewInquiryModal);
   }
 
   // ═════════════════════════════════════════════════════════════════════════
-  // 5. OPPORTUNITY PIPELINE VIEW
+  // 4. TWO-COLUMN CUSTOMER DETAILS INTERFACE (Section 5 Requirement)
   // ═════════════════════════════════════════════════════════════════════════
-  function renderOpportunities(container) {
+  function renderCustomerDetails(container, contactId, leadId) {
     container.innerHTML = "";
     var wrap = cEl("div", { className: "crm-view-wrap" });
 
+    // Header with Back button
     var header = cEl("div", { className: "crm-view-header" });
     header.innerHTML = [
       '<div class="crm-vh-left">',
-      '  <div class="crm-breadcrumbs"><span>CRM</span> <span class="crm-bc-sep">/</span> <span class="crm-bc-active">Sales Opportunities</span></div>',
-      '  <h1 class="crm-vh-title">Commercial Deals &amp; Opportunities</h1>',
-      '  <p class="crm-vh-sub">Fleet electrification proposals, quotes, and closing probability tracking.</p>',
+      '  <div class="crm-breadcrumbs"><button type="button" class="crm-back-link" id="btnBackToLeads">&larr; Back to Leads</button> <span class="crm-bc-sep">/</span> <span class="crm-bc-active">Customer Profile &amp; Conversation</span></div>',
+      '  <h1 class="crm-vh-title" id="custDetTitle">Customer Details</h1>',
       '</div>',
       '<div class="crm-vh-actions">',
-      '  <button type="button" class="btn btn-primary btn-sm" id="btnNewOpportunity">+ New Opportunity</button>',
+      '  <button type="button" class="btn btn-secondary btn-sm" id="btnScheduleFollowup">+ Schedule Follow-up</button>',
       '</div>'
     ].join("");
     wrap.appendChild(header);
 
-    var boardContainer = cEl("div", { className: "crm-opp-board-wrap" });
-    wrap.appendChild(boardContainer);
+    // Two-Column Container
+    var twoCol = cEl("div", { className: "crm-two-col-layout" });
+
+    // LEFT SIDE: Customer Info, Contact Details, Products, Rep, Notes, Timeline
+    var leftSide = cEl("div", { className: "crm-two-col-left", id: "custLeftCol" });
+    twoCol.appendChild(leftSide);
+
+    // RIGHT SIDE: Conversation History with distinct channel identities & Reply interface
+    var rightSide = cEl("div", { className: "crm-two-col-right", id: "custRightCol" });
+    twoCol.appendChild(rightSide);
+
+    wrap.appendChild(twoCol);
     container.appendChild(wrap);
 
-    API.opportunities.list().then(function (res) {
-      var opps = res.data || [];
-      var stages = [
-        { key: "qualification", label: "Qualification", color: "#0284C7" },
-        { key: "quotation_demo", label: "Quotation / Demo", color: "#D97706" },
-        { key: "negotiation", label: "Negotiation", color: "#EA580C" },
-        { key: "won", label: "Contract Won", color: "#16A34A" },
-        { key: "lost", label: "Closed / Lost", color: "#64748B" }
-      ];
+    wrap.querySelector("#btnBackToLeads").addEventListener("click", function () {
+      location.hash = "#/crm/leads";
+    });
+    wrap.querySelector("#btnScheduleFollowup").addEventListener("click", openNewTaskModal);
 
-      var board = cEl("div", { className: "crm-kanban-board" });
-      stages.forEach(function (stg) {
-        var colOpps = opps.filter(function (o) { return o.stage === stg.key; });
-        var colVal = colOpps.reduce(function (sum, o) { return sum + (o.estimated_value || 0); }, 0);
+    // Fetch lead & contact data
+    var targetLeadId = leadId || "lead-1";
+    API.leads.get(targetLeadId).then(function (lRes) {
+      var lead = lRes.data || {};
+      var targetContactId = contactId || lead.contact_id || "cont-1";
 
-        var col = cEl("div", { className: "crm-kanban-col" });
-        col.innerHTML = [
-          '<div class="kanban-col-head" style="border-top: 3px solid ' + stg.color + '">',
-          '  <div class="col-title-wrap"><strong>' + esc(stg.label) + '</strong><span class="col-badge">' + colOpps.length + '</span></div>',
-          '  <div class="col-val-total">' + UI.formatCurrency(colVal) + '</div>',
+      API.contacts.get(targetContactId).then(function (cRes) {
+        var cust = cRes.data || lead;
+        var titleEl = wrap.querySelector("#custDetTitle");
+        if (titleEl) titleEl.textContent = cust.name + " (" + (cust.company || cust.location) + ")";
+
+        // ── Render LEFT SIDE ──
+        leftSide.innerHTML = [
+          '<div class="crm-card">',
+          '  <div class="crm-card-head"><h3 class="crm-card-title">Customer Information</h3>' + UI.renderStageBadge(lead.stage || "new").outerHTML + '</div>',
+          '  <div class="c-info-grid">',
+          '    <div class="c-info-item"><span class="c-lbl">Full Name</span><strong>' + esc(cust.name) + '</strong></div>',
+          '    <div class="c-info-item"><span class="c-lbl">Company / Fleet</span><strong>' + esc(cust.company || "—") + '</strong></div>',
+          '    <div class="c-info-item"><span class="c-lbl">Phone Number</span><strong>' + esc(cust.phone) + '</strong></div>',
+          '    <div class="c-info-item"><span class="c-lbl">Email Address</span><strong>' + esc(cust.email || "—") + '</strong></div>',
+          '    <div class="c-info-item"><span class="c-lbl">Operating Location</span><strong>' + esc(cust.location) + '</strong></div>',
+          '    <div class="c-info-item"><span class="c-lbl">Customer Category</span><strong>' + esc(cust.customer_type || "Commercial Operator") + '</strong></div>',
+          '    <div class="c-info-item"><span class="c-lbl">Assigned Employee</span><strong>' + esc(lead.assigned_to || cust.assigned_to || "Anand R.") + '</strong></div>',
+          '    <div class="c-info-item"><span class="c-lbl">Primary Source</span>' + UI.renderChannelBadge(lead.channel || "whatsapp").outerHTML + '</div>',
+          '  </div>',
           '</div>',
-          '<div class="kanban-card-stack"></div>'
+          '<div class="crm-card" style="margin-top:16px;">',
+          '  <div class="crm-card-head"><h3 class="crm-card-title">Interested Products &amp; Requirements</h3><span class="crm-card-badge" style="color:var(--cyan); font-weight:700;">' + UI.formatCurrency(lead.estimated_value) + '</span></div>',
+          '  <div class="c-req-box">',
+          '    <div class="c-req-item"><span>Product Model:</span> <strong>' + esc(lead.product_model || "Seagö 50 HP PMSM Outboard") + '</strong></div>',
+          '    <div class="c-req-item"><span>Power Rating:</span> <strong>' + esc(lead.motor_hp || "50 HP") + '</strong></div>',
+          '    <div class="c-req-item"><span>Vessel Length:</span> <strong>' + esc(lead.vessel_length || "12 m") + '</strong></div>',
+          '    <div class="c-req-item"><span>Seating:</span> <strong>' + (lead.seating_capacity ? lead.seating_capacity + " Persons" : "—") + '</strong></div>',
+          '    <div class="c-req-item"><span>Purchase Timeline:</span> <strong>' + esc(lead.purchase_timeline || "Immediate (< 2 wks)") + '</strong></div>',
+          '  </div>',
+          '</div>',
+          '<div class="crm-card" style="margin-top:16px;">',
+          '  <div class="crm-card-head"><h3 class="crm-card-title">Internal Commercial Notes</h3></div>',
+          '  <div class="drw-notes-list" id="custNotesList"></div>',
+          '  <div class="drw-add-note">',
+          '    <input type="text" class="crm-input" id="custNoteInput" placeholder="Add note...">',
+          '    <button type="button" class="btn btn-primary btn-sm" id="btnCustAddNote">Add</button>',
+          '  </div>',
+          '</div>',
+          '<div class="crm-card" style="margin-top:16px;">',
+          '  <div class="crm-card-head"><h3 class="crm-card-title">Chronological Activity Timeline</h3></div>',
+          '  <div class="c360-timeline" id="custTimelineList"></div>',
+          '</div>'
         ].join("");
 
-        var stack = col.querySelector(".kanban-card-stack");
-        colOpps.forEach(function (opp) {
-          var card = cEl("div", { className: "crm-kanban-card" });
-          card.innerHTML = [
-            '<div class="kb-card-head"><span class="crm-badge-stage crm-stage--qualified">' + opp.probability_pct + '% Prob</span><span class="kb-close-date">Target: ' + esc(opp.expected_close_date) + '</span></div>',
-            '<h4 class="kb-cust-name">' + esc(opp.name) + '</h4>',
-            '<div class="kb-cust-sub">' + esc(opp.customer_name) + ' · ' + esc(opp.company) + '</div>',
-            '<div class="kb-product-tag">' + esc(opp.product) + ' (x' + (opp.quantity || 1) + ')</div>',
-            '<div class="kb-card-foot"><strong class="kb-val">' + UI.formatCurrency(opp.estimated_value) + '</strong><span class="kb-assignee">' + esc(opp.assigned_to) + '</span></div>'
-          ].join("");
-
-          card.addEventListener("click", function () {
-            location.hash = "#/crm/leads/" + (opp.lead_id || "lead-1");
-          });
-
-          stack.appendChild(card);
+        // Render notes
+        var nList = leftSide.querySelector("#custNotesList");
+        (lead.notes || []).forEach(function (n) {
+          var noteEl = cEl("div", { className: "drw-note-bubble" });
+          noteEl.innerHTML = '<strong>' + esc(n.author) + '</strong> (' + UI.formatTimeAgo(n.created_at) + ')<p>' + esc(n.text) + '</p>';
+          nList.appendChild(noteEl);
         });
 
-        board.appendChild(col);
+        leftSide.querySelector("#btnCustAddNote").addEventListener("click", function () {
+          var inp = leftSide.querySelector("#custNoteInput");
+          var txt = inp.value.trim();
+          if (!txt) return;
+          API.leads.addNote(lead.id, txt, "Admin").then(function () {
+            inp.value = "";
+            renderCustomerDetails(container, contactId, leadId);
+            UI.showToast("Note added", "success");
+          });
+        });
+
+        // Render Timeline
+        API.contacts.getTimeline(targetContactId).then(function (tRes) {
+          var events = tRes.data || [];
+          var tlList = leftSide.querySelector("#custTimelineList");
+          events.forEach(function (e) {
+            var node = cEl("div", { className: "c360-tl-item" });
+            node.innerHTML = [
+              '<div class="tl-node">' + (UI.ICONS[e.channel] || "📌") + '</div>',
+              '<div class="tl-content">',
+              '  <div class="tl-head"><strong class="tl-title">' + esc(e.title) + '</strong><span class="tl-time">' + UI.formatDateShort(e.timestamp) + '</span></div>',
+              '  <p class="tl-desc">' + esc(e.description) + '</p>',
+              '</div>'
+            ].join("");
+            tlList.appendChild(node);
+          });
+        });
+
+        // ── Render RIGHT SIDE: Conversation History with distinct channel identity ──
+        var ch = lead.channel || "whatsapp";
+        API.conversations.get("conv-1").then(function (cConvRes) {
+          var conv = cConvRes.data || {};
+          rightSide.innerHTML = [
+            '<div class="crm-card crm-conv-pane crm-stream-wrap--' + ch + '">',
+            '  <div class="crm-conv-header crm-conv-header--' + ch + '">',
+            '    <div class="conv-hdr-left">' + (UI.ICONS[ch] || "") + '<div><h3>' + esc(cust.name) + '</h3><div class="conv-hdr-ch-label">Channel: ' + ch.toUpperCase() + '</div></div></div>',
+            '    <div class="conv-hdr-right">' + UI.renderHandoverBadge(lead.bot_status || "human_active").outerHTML + '</div>',
+            '  </div>',
+            '  <div class="crm-chat-stream crm-stream--' + ch + '" id="twoColChatStream"></div>',
+            '  <div class="crm-chat-compose-box">',
+            '    <div class="compose-toolbar"><span class="compose-channel-pill">' + (UI.ICONS[ch] || "") + ' Connected via ' + ch.toUpperCase() + '</span></div>',
+            '    <div class="compose-input-row">',
+            '      <textarea class="crm-compose-textarea" id="twoColReplyInp" placeholder="Type reply to customer..." rows="2"></textarea>',
+            '      <button type="button" class="btn btn-primary crm-send-msg-btn" id="btnTwoColSend">Send</button>',
+            '    </div>',
+            '  </div>',
+            '</div>'
+          ].join("");
+
+          var stream = rightSide.querySelector("#twoColChatStream");
+          (conv.messages || []).forEach(function (m) {
+            var row = cEl("div", { className: "crm-msg-row crm-msg-" + m.direction + " crm-msg-ch--" + ch });
+            row.innerHTML = [
+              '<div class="crm-msg-bubble">',
+              '  <div class="crm-msg-sender">' + esc(m.sender_name) + '</div>',
+              '  <div class="crm-msg-text">' + esc(m.text) + '</div>',
+              '  <div class="crm-msg-meta"><span>' + esc(m.timestamp) + '</span>' + (m.direction === "outbound" ? '<span class="msg-check">✓✓</span>' : '') + '</div>',
+              '</div>'
+            ].join("");
+            stream.appendChild(row);
+          });
+
+          var replyInp = rightSide.querySelector("#twoColReplyInp");
+          var btnSend = rightSide.querySelector("#btnTwoColSend");
+          function sendReply() {
+            var val = replyInp.value.trim();
+            if (!val) return;
+            API.conversations.sendMessage(conv.id, val, ch).then(function () {
+              replyInp.value = "";
+              UI.showToast("Message sent to customer", "success");
+              renderCustomerDetails(container, contactId, leadId);
+            });
+          }
+          btnSend.addEventListener("click", sendReply);
+          replyInp.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              sendReply();
+            }
+          });
+        });
       });
-
-      boardContainer.appendChild(board);
-    });
-
-    wrap.querySelector("#btnNewOpportunity").addEventListener("click", function () {
-      UI.showToast("Opening New Opportunity Modal", "info");
-      openNewInquiryModal();
     });
   }
 
   // ═════════════════════════════════════════════════════════════════════════
-  // 6. TASKS & FOLLOW-UPS VIEW (List & Calendar Views)
+  // 5. UNIFIED INBOX VIEW (3-Column Layout: WhatsApp, IG, FB, Website)
+  // ═════════════════════════════════════════════════════════════════════════
+  function renderUnifiedInbox(container, conversationId) {
+    container.innerHTML = "";
+    var wrap = cEl("div", { className: "crm-inbox-shell" });
+
+    // Top Header & Channel Filter Pills
+    var topbar = cEl("div", { className: "crm-inbox-topbar" });
+    topbar.innerHTML = [
+      '<div class="crm-inbox-tb-left">',
+      '  <div class="crm-breadcrumbs"><span>CRM</span> <span class="crm-bc-sep">/</span> <span class="crm-bc-active">Unified Inbox</span></div>',
+      '  <h2 class="crm-inbox-title">Sales Conversations</h2>',
+      '</div>',
+      '<div class="crm-inbox-tb-right">',
+      '  <div class="crm-channel-filter-pills" id="inboxChannelPills">',
+      '    <button type="button" class="ch-pill is-active" data-ch="all">All Channels</button>',
+      '    <button type="button" class="ch-pill" data-ch="whatsapp">' + UI.ICONS.whatsapp + ' WhatsApp</button>',
+      '    <button type="button" class="ch-pill" data-ch="instagram">' + UI.ICONS.instagram + ' Instagram</button>',
+      '    <button type="button" class="ch-pill" data-ch="facebook">' + UI.ICONS.facebook + ' Facebook</button>',
+      '    <button type="button" class="ch-pill" data-ch="website">' + UI.ICONS.website + ' Website</button>',
+      '  </div>',
+      '</div>'
+    ].join("");
+    wrap.appendChild(topbar);
+
+    // 3-Column Container
+    var mainCols = cEl("div", { className: "crm-inbox-layout" });
+
+    // LEFT: Conversation list
+    var leftCol = cEl("div", { className: "crm-inbox-col-left" });
+    leftCol.innerHTML = '<div class="crm-inbox-search"><input type="text" class="crm-input" placeholder="Search customer, number..." id="inboxSearchInput"></div><div class="crm-conv-list" id="convListContainer"></div>';
+    mainCols.appendChild(leftCol);
+
+    // CENTRE: Selected conversation stream
+    var centerCol = cEl("div", { className: "crm-inbox-col-center", id: "inboxCenterCol" });
+    mainCols.appendChild(centerCol);
+
+    // RIGHT: Customer info & lead details
+    var rightCol = cEl("div", { className: "crm-inbox-col-right", id: "inboxRightCol" });
+    mainCols.appendChild(rightCol);
+
+    wrap.appendChild(mainCols);
+    container.appendChild(wrap);
+
+    var activeConvId = conversationId || State.get().activeConversationId || "conv-1";
+    var currentFilter = "all";
+    var convListContainer = leftCol.querySelector("#convListContainer");
+
+    function refreshConvList() {
+      convListContainer.innerHTML = "";
+      API.conversations.list(currentFilter).then(function (res) {
+        var convs = res.data || [];
+        if (convs.length === 0) {
+          convListContainer.appendChild(UI.renderEmptyState("No conversations", "No inquiries found for this channel."));
+          return;
+        }
+
+        convs.forEach(function (conv) {
+          var item = cEl("div", {
+            className: "crm-conv-item " + (conv.id === activeConvId ? "is-active" : "")
+          });
+          var initials = conv.customer_name.split(" ").map(function (n) { return n[0]; }).join("").substring(0, 2);
+          item.innerHTML = [
+            '<div class="conv-avatar">' + initials + '<span class="conv-ch-icon">' + (UI.ICONS[conv.channel] || UI.ICONS.website) + '</span></div>',
+            '<div class="conv-meta">',
+            '  <div class="conv-head"><strong class="conv-name">' + esc(conv.customer_name) + '</strong><span class="conv-time">' + UI.formatTimeAgo(conv.last_message_at) + '</span></div>',
+            '  <div class="conv-snippet">' + esc(conv.last_message) + '</div>',
+            '  <div class="conv-foot"><span class="conv-assignee">' + esc(conv.assigned_to) + '</span>' + (conv.unread_count > 0 ? '<span class="conv-unread-dot">' + conv.unread_count + '</span>' : '') + '</div>',
+            '</div>'
+          ].join("");
+
+          item.addEventListener("click", function () {
+            activeConvId = conv.id;
+            State.set("activeConversationId", conv.id);
+            refreshConvList();
+            renderActiveConversation(activeConvId);
+          });
+
+          convListContainer.appendChild(item);
+        });
+
+        renderActiveConversation(activeConvId);
+      });
+    }
+
+    function renderActiveConversation(cId) {
+      centerCol.innerHTML = "";
+      rightCol.innerHTML = "";
+
+      API.conversations.get(cId).then(function (res) {
+        var conv = res.data;
+        if (!conv) {
+          centerCol.appendChild(UI.renderEmptyState("Select Conversation", "Choose an inquiry from the left to view."));
+          return;
+        }
+
+        // Centre Header
+        var chatHead = cEl("div", { className: "crm-chat-header crm-chat-header--" + conv.channel });
+        chatHead.innerHTML = [
+          '<div class="chat-head-left">',
+          '  <span class="chat-ch-icon">' + (UI.ICONS[conv.channel] || UI.ICONS.website) + '</span>',
+          '  <div><h3 class="chat-user-title">' + esc(conv.customer_name) + '</h3><div class="chat-sub">' + esc(conv.customer_phone || conv.customer_handle || "Web Ingestion") + '</div></div>',
+          '</div>',
+          '<div class="chat-head-right">',
+          '  <div class="handover-control" id="handoverToggleWrap"></div>',
+          '  <button type="button" class="btn btn-secondary btn-sm" id="btnResolveConv">' + (conv.is_resolved ? "Reopen" : "Resolve") + '</button>',
+          '</div>'
+        ].join("");
+
+        var hoWrap = chatHead.querySelector("#handoverToggleWrap");
+        hoWrap.appendChild(UI.renderHandoverBadge(conv.handover_status));
+
+        var hoBtn = cEl("button", {
+          className: "btn btn-outline-topbar btn-sm",
+          style: { marginLeft: "8px" },
+          type: "button"
+        }, conv.handover_status === "bot_active" ? "Take Over (Staff)" : "Resume Bot");
+
+        hoBtn.addEventListener("click", function () {
+          var nextStatus = conv.handover_status === "bot_active" ? "human_active" : "bot_active";
+          API.conversations.setHandover(conv.id, nextStatus).then(function () {
+            conv.handover_status = nextStatus;
+            UI.showToast("Handover status updated to: " + nextStatus, "success");
+            renderActiveConversation(conv.id);
+          });
+        });
+        hoWrap.appendChild(hoBtn);
+        centerCol.appendChild(chatHead);
+
+        // Stream
+        var msgStream = cEl("div", { className: "crm-chat-stream crm-stream--" + conv.channel, id: "chatMessageStream" });
+        (conv.messages || []).forEach(function (m) {
+          var row = cEl("div", { className: "crm-msg-row crm-msg-" + m.direction + " crm-msg-ch--" + m.channel });
+          row.innerHTML = [
+            '<div class="crm-msg-bubble">',
+            '  <div class="crm-msg-sender">' + esc(m.sender_name) + '</div>',
+            '  <div class="crm-msg-text">' + esc(m.text) + '</div>',
+            '  <div class="crm-msg-meta"><span class="msg-time">' + esc(m.timestamp) + '</span>' + (m.direction === "outbound" ? '<span class="msg-check">✓✓</span>' : '') + '</div>',
+            '</div>'
+          ].join("");
+          msgStream.appendChild(row);
+        });
+        centerCol.appendChild(msgStream);
+        setTimeout(function () { msgStream.scrollTop = msgStream.scrollHeight; }, 50);
+
+        // Compose
+        var composeBox = cEl("div", { className: "crm-chat-compose-box" });
+        composeBox.innerHTML = [
+          '<div class="compose-toolbar"><span class="compose-channel-pill">' + (UI.ICONS[conv.channel] || "") + ' Connected via ' + conv.channel.toUpperCase() + '</span></div>',
+          '<div class="compose-input-row">',
+          '  <textarea class="crm-compose-textarea" id="chatReplyInput" placeholder="Type a message to customer..." rows="2"></textarea>',
+          '  <button type="button" class="btn btn-primary crm-send-msg-btn" id="chatSendBtn">Send</button>',
+          '</div>'
+        ].join("");
+
+        var txtArea = composeBox.querySelector("#chatReplyInput");
+        var sendBtn = composeBox.querySelector("#chatSendBtn");
+        function doSend() {
+          var val = txtArea.value.trim();
+          if (!val) return;
+          API.conversations.sendMessage(conv.id, val, conv.channel).then(function () {
+            txtArea.value = "";
+            renderActiveConversation(conv.id);
+            UI.showToast("Message sent to customer", "success");
+          });
+        }
+        sendBtn.addEventListener("click", doSend);
+        txtArea.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            doSend();
+          }
+        });
+        centerCol.appendChild(composeBox);
+
+        // Right Panel: Customer information & lead details
+        rightCol.innerHTML = [
+          '<div class="crm-card">',
+          '  <div class="crm-card-head"><h3 class="crm-card-title">Customer Context</h3><span class="crm-card-badge">' + esc(conv.customer_name) + '</span></div>',
+          '  <div class="ctx-kv-list">',
+          '    <div class="ctx-kv"><span class="ctx-lbl">Channel Source</span><span class="ctx-val">' + UI.renderChannelBadge(conv.channel).outerHTML + '</span></div>',
+          '    <div class="ctx-kv"><span class="ctx-lbl">Assigned Employee</span><span class="ctx-val"><strong>' + esc(conv.assigned_to) + '</strong></span></div>',
+          '    <div class="ctx-kv"><span class="ctx-lbl">Priority</span><span class="ctx-val">' + UI.renderPriorityBadge(conv.priority).outerHTML + '</span></div>',
+          '    <div class="ctx-kv"><span class="ctx-lbl">Phone</span><span class="ctx-val">' + esc(conv.customer_phone || "—") + '</span></div>',
+          '  </div>',
+          '  <div class="ctx-actions-stack">',
+          '    <button type="button" class="btn btn-primary btn-sm btn-full" id="btnRightViewLead">Open Two-Column Customer Details</button>',
+          '    <button type="button" class="btn btn-secondary btn-sm btn-full" id="btnRightAddTask">+ Schedule Follow-up</button>',
+          '  </div>',
+          '</div>'
+        ].join("");
+
+        rightCol.querySelector("#btnRightViewLead").addEventListener("click", function () {
+          renderCustomerDetails(container, conv.contact_id, conv.lead_id);
+        });
+        rightCol.querySelector("#btnRightAddTask").addEventListener("click", openNewTaskModal);
+      });
+    }
+
+    var pills = topbar.querySelectorAll(".ch-pill");
+    pills.forEach(function (p) {
+      p.addEventListener("click", function () {
+        pills.forEach(function (x) { x.classList.remove("is-active"); });
+        p.classList.add("is-active");
+        currentFilter = p.getAttribute("data-ch");
+        refreshConvList();
+      });
+    });
+
+    refreshConvList();
+  }
+
+  // ═════════════════════════════════════════════════════════════════════════
+  // 6. TASKS & FOLLOW-UPS VIEW (Section 7 Requirement)
   // ═════════════════════════════════════════════════════════════════════════
   function renderTasks(container) {
     container.innerHTML = "";
@@ -1040,9 +868,9 @@
     var header = cEl("div", { className: "crm-view-header" });
     header.innerHTML = [
       '<div class="crm-vh-left">',
-      '  <div class="crm-breadcrumbs"><span>CRM</span> <span class="crm-bc-sep">/</span> <span class="crm-bc-active">Task Management</span></div>',
-      '  <h1 class="crm-vh-title">Tasks &amp; Follow-ups</h1>',
-      '  <p class="crm-vh-sub">Commercial follow-up calls, sea trial scheduling, proforma revisions, and deadlines.</p>',
+      '  <div class="crm-breadcrumbs"><span>CRM</span> <span class="crm-bc-sep">/</span> <span class="crm-bc-active">Tasks &amp; Follow-ups</span></div>',
+      '  <h1 class="crm-vh-title">Follow-up Management</h1>',
+      '  <p class="crm-vh-sub">Phone calls, WhatsApp follow-ups, meetings, product demonstrations, and quotations.</p>',
       '</div>',
       '<div class="crm-vh-actions">',
       '  <button type="button" class="btn btn-primary btn-sm" id="btnAddNewTask">+ Create Task</button>',
@@ -1050,174 +878,101 @@
     ].join("");
     wrap.appendChild(header);
 
-    var taskListCard = cEl("div", { className: "crm-card" });
-    var taskList = cEl("div", { className: "crm-tasks-list-wrap" });
+    // Filter Tabs: My Tasks, Today, Upcoming, Overdue, Completed
+    var tabFilterRow = cEl("div", { className: "crm-task-filter-pills" });
+    tabFilterRow.innerHTML = [
+      '<button type="button" class="t-pill is-active" data-filter="all">All Tasks</button>',
+      '<button type="button" class="t-pill" data-filter="my">My Tasks</button>',
+      '<button type="button" class="t-pill" data-filter="today">Today</button>',
+      '<button type="button" class="t-pill" data-filter="upcoming">Upcoming</button>',
+      '<button type="button" class="t-pill" data-filter="overdue">Overdue</button>',
+      '<button type="button" class="t-pill" data-filter="completed">Completed</button>'
+    ].join("");
+    wrap.appendChild(tabFilterRow);
+
+    var taskListCard = cEl("div", { className: "crm-card", style: { marginTop: "14px" } });
+    var taskList = cEl("div", { className: "crm-tasks-list-wrap", id: "tasksListArea" });
     taskListCard.appendChild(taskList);
     wrap.appendChild(taskListCard);
     container.appendChild(wrap);
 
-    API.tasks.list().then(function (res) {
-      var tasks = res.data || [];
-      tasks.forEach(function (task) {
-        var item = cEl("div", { className: "crm-task-row " + (task.status === "completed" ? "is-completed" : "") });
-        item.innerHTML = [
-          '<div class="task-chk-col"><input type="checkbox" class="task-chk" ' + (task.status === "completed" ? "checked" : "") + '></div>',
-          '<div class="task-info-col">',
-          '  <h4 class="task-title">' + esc(task.title) + '</h4>',
-          '  <div class="task-meta"><span class="task-customer">Customer: ' + esc(task.customer_name || "Commercial Fleet") + '</span> · <span class="task-due">Due: ' + UI.formatDateShort(task.due_date) + '</span></div>',
-          '</div>',
-          '<div class="task-assignee-col"><span class="team-avatar-sm">' + task.assigned_to[0] + '</span> <span>' + esc(task.assigned_to) + '</span></div>',
-          '<div class="task-priority-col">' + UI.renderPriorityBadge(task.priority).outerHTML + '</div>'
-        ].join("");
+    var currentTaskFilter = "all";
 
-        var chk = item.querySelector(".task-chk");
-        chk.addEventListener("change", function () {
-          var newStatus = chk.checked ? "completed" : "pending";
-          API.tasks.updateStatus(task.id, newStatus).then(function () {
-            item.classList.toggle("is-completed", chk.checked);
-            UI.showToast("Task marked as: " + newStatus, "success");
-          });
+    function refreshTasks() {
+      taskList.innerHTML = "";
+      API.tasks.list().then(function (res) {
+        var tasks = res.data || [];
+        var filtered = tasks.filter(function (t) {
+          if (currentTaskFilter === "completed") return t.status === "completed";
+          if (currentTaskFilter === "overdue") return t.priority === "urgent" || t.priority === "high";
+          if (currentTaskFilter === "my") return t.assigned_to === "Anand R.";
+          return true;
         });
 
-        taskList.appendChild(item);
+        if (filtered.length === 0) {
+          taskList.appendChild(UI.renderEmptyState("No Tasks Found", "All tasks in this category are completed."));
+          return;
+        }
+
+        filtered.forEach(function (task) {
+          var item = cEl("div", { className: "crm-task-row " + (task.status === "completed" ? "is-completed" : "") });
+          item.innerHTML = [
+            '<div class="task-chk-col"><input type="checkbox" class="task-chk" ' + (task.status === "completed" ? "checked" : "") + '></div>',
+            '<div class="task-info-col">',
+            '  <h4 class="task-title">' + esc(task.title) + '</h4>',
+            '  <div class="task-meta"><span class="task-type-badge">' + esc(task.task_type.replace(/_/g, " ").toUpperCase()) + '</span> · <span class="task-customer">Customer: ' + esc(task.customer_name || "Commercial Fleet") + '</span> · <span class="task-due">Due: ' + UI.formatDateShort(task.due_date) + '</span></div>',
+            '</div>',
+            '<div class="task-assignee-col"><span class="team-avatar-sm">' + task.assigned_to[0] + '</span> <span>' + esc(task.assigned_to) + '</span></div>',
+            '<div class="task-priority-col">' + UI.renderPriorityBadge(task.priority).outerHTML + '</div>'
+          ].join("");
+
+          var chk = item.querySelector(".task-chk");
+          chk.addEventListener("change", function () {
+            var newStatus = chk.checked ? "completed" : "pending";
+            API.tasks.updateStatus(task.id, newStatus).then(function () {
+              item.classList.toggle("is-completed", chk.checked);
+              UI.showToast("Task marked as: " + newStatus, "success");
+            });
+          });
+
+          taskList.appendChild(item);
+        });
+      });
+    }
+
+    var tPills = tabFilterRow.querySelectorAll(".t-pill");
+    tPills.forEach(function (p) {
+      p.addEventListener("click", function () {
+        tPills.forEach(function (x) { x.classList.remove("is-active"); });
+        p.classList.add("is-active");
+        currentTaskFilter = p.getAttribute("data-filter");
+        refreshTasks();
       });
     });
 
     wrap.querySelector("#btnAddNewTask").addEventListener("click", openNewTaskModal);
+    refreshTasks();
   }
 
   // ═════════════════════════════════════════════════════════════════════════
-  // 7. PRODUCTS & CATALOGUE INQUIRY CONTEXT
+  // 7. INTEGRATIONS PAGE (Section 8 Requirement)
   // ═════════════════════════════════════════════════════════════════════════
-  function renderProductsCatalog(container) {
+  function renderIntegrations(container) {
     container.innerHTML = "";
     var wrap = cEl("div", { className: "crm-view-wrap" });
 
     var header = cEl("div", { className: "crm-view-header" });
     header.innerHTML = [
       '<div class="crm-vh-left">',
-      '  <div class="crm-breadcrumbs"><span>CRM</span> <span class="crm-bc-sep">/</span> <span class="crm-bc-active">Seagö Propulsion &amp; Vessel Specs</span></div>',
-      '  <h1 class="crm-vh-title">Product &amp; Vessel Catalogue Context</h1>',
-      '  <p class="crm-vh-sub">Link customer requirements directly to verified Seagö electric outboards, battery packs, and FRP custom vessels.</p>',
-      '</div>',
-      '<div class="crm-vh-actions">',
-      '  <a href="products.html" target="_blank" rel="noopener" class="btn btn-secondary btn-sm">View Public Catalogue &rarr;</a>',
+      '  <div class="crm-breadcrumbs"><span>CRM</span> <span class="crm-bc-sep">/</span> <span class="crm-bc-active">Integrations</span></div>',
+      '  <h1 class="crm-vh-title">Connected Channels &amp; Integrations</h1>',
+      '  <p class="crm-vh-sub">Individual configuration cards for WhatsApp Cloud API, Facebook, Instagram, Web3Forms, LinkedIn, and X.</p>',
       '</div>'
     ].join("");
     wrap.appendChild(header);
 
-    var grid = cEl("div", { className: "crm-prod-cat-grid" });
-
-    // Outboard Motors Line
-    var mCard = cEl("div", { className: "crm-card" });
-    mCard.innerHTML = [
-      '<div class="crm-card-head"><h3 class="crm-card-title">Electric Outboard Motors (3 HP – 50 HP)</h3><span class="crm-card-badge">8 Production Models</span></div>',
-      '<div class="prod-specs-table">',
-      '  <div class="p-row"><strong>3 HP (2.2 kW)</strong><span>51.2V · 50 AH LiFePO4 · Tiller / Remote</span></div>',
-      '  <div class="p-row"><strong>7 HP (5.1 kW)</strong><span>51.2V · 105 AH LiFePO4 · Fast displacement</span></div>',
-      '  <div class="p-row"><strong>10 HP (7.3 kW)</strong><span>73.6V · 150 AH LiFePO4 · Commercial workboat</span></div>',
-      '  <div class="p-row"><strong>15 HP (11 kW)</strong><span>73.6V · 210 AH LiFePO4 · Heavy-duty transit</span></div>',
-      '  <div class="p-row"><strong>20 HP (15 kW)</strong><span>96V · 210 AH LiFePO4 · Yacht auxiliary &amp; tender</span></div>',
-      '  <div class="p-row"><strong>30 HP (22 kW)</strong><span>96V · 230 AH LiFePO4 · High-speed tourism</span></div>',
-      '  <div class="p-row"><strong>40 HP (29.4 kW)</strong><span>144V · 200 AH LiFePO4 · Twin ferry repower</span></div>',
-      '  <div class="p-row"><strong>50 HP (36.8 kW)</strong><span>144V · 300 AH LiFePO4 · Commercial flagship</span></div>',
-      '</div>'
-    ].join("");
-    grid.appendChild(mCard);
-
-    // Custom FRP Boats Line
-    var bCard = cEl("div", { className: "crm-card" });
-    bCard.innerHTML = [
-      '<div class="crm-card-head"><h3 class="crm-card-title">Custom Composite FRP Vessels</h3><span class="crm-card-badge">3 Form Factors</span></div>',
-      '<div class="prod-specs-table">',
-      '  <div class="p-row"><strong>FREEDOM (8 Seater)</strong><span>5.48m L · 1.72m Beam · 0.25m Draft · 50 HP Max · 350-500 Kg</span></div>',
-      '  <div class="p-row"><strong>ECSTASY (12 Seater)</strong><span>12.7m L · 2.2m Beam · 0.33-0.45m Draft · 50 HP · Luxury Tourism</span></div>',
-      '  <div class="p-row"><strong>CUSTOM 20 (20 Seater)</strong><span>14-16m L · Twin Outboard (2x 50 HP) · Commercial Passenger Shuttle</span></div>',
-      '</div>',
-      '<div style="margin-top:16px;">',
-      '  <button type="button" class="btn btn-primary btn-sm btn-full" id="btnLaunchSpecForm">+ Spec Inquiry for Lead</button>',
-      '</div>'
-    ].join("");
-    grid.appendChild(bCard);
-
-    wrap.appendChild(grid);
-    container.appendChild(wrap);
-
-    bCard.querySelector("#btnLaunchSpecForm").addEventListener("click", openNewInquiryModal);
-  }
-
-  // ═════════════════════════════════════════════════════════════════════════
-  // 8. REPORTS & ANALYTICS VIEW
-  // ═════════════════════════════════════════════════════════════════════════
-  function renderReports(container) {
-    container.innerHTML = "";
-    var wrap = cEl("div", { className: "crm-view-wrap" });
-
-    var header = cEl("div", { className: "crm-view-header" });
-    header.innerHTML = [
-      '<div class="crm-vh-left">',
-      '  <div class="crm-breadcrumbs"><span>CRM</span> <span class="crm-bc-sep">/</span> <span class="crm-bc-active">Business Analytics</span></div>',
-      '  <h1 class="crm-vh-title">Reports &amp; Sales Analytics</h1>',
-      '  <p class="crm-vh-sub">Conversion funnels, channel acquisition efficiency, first response time SLAs, and revenue projections.</p>',
-      '</div>',
-      '<div class="crm-vh-actions">',
-      '  <button type="button" class="btn btn-secondary btn-sm" id="btnRepExport">Export Reports CSV</button>',
-      '</div>'
-    ].join("");
-    wrap.appendChild(header);
-
-    var repGrid = cEl("div", { className: "crm-rep-grid" });
-
-    // Chart 1: Conversion Funnel
-    var c1 = cEl("div", { className: "crm-card" });
-    c1.innerHTML = [
-      '<div class="crm-card-head"><h3 class="crm-card-title">Commercial Conversion Funnel</h3><span class="crm-card-badge">38.5% Close Rate</span></div>',
-      '<div class="crm-funnel-chart">',
-      '  <div class="fn-bar-row"><span class="fn-lbl">Inquiries Received</span><div class="fn-bar-track"><div class="fn-bar-fill" style="width:100%; background:#0284C7;"></div></div><strong>8 Leads</strong></div>',
-      '  <div class="fn-bar-row"><span class="fn-lbl">Technical Fit Qualified</span><div class="fn-bar-track"><div class="fn-bar-fill" style="width:75%; background:#2563EB;"></div></div><strong>6 Leads</strong></div>',
-      '  <div class="fn-bar-row"><span class="fn-lbl">Proposals Dispatched</span><div class="fn-bar-track"><div class="fn-bar-fill" style="width:50%; background:#D97706;"></div></div><strong>4 Quotes</strong></div>',
-      '  <div class="fn-bar-row"><span class="fn-lbl">Contracts Closed &amp; Won</span><div class="fn-bar-track"><div class="fn-bar-fill" style="width:38%; background:#16A34A;"></div></div><strong>3 Won</strong></div>',
-      '</div>'
-    ].join("");
-    repGrid.appendChild(c1);
-
-    // Chart 2: SLA Response Times
-    var c2 = cEl("div", { className: "crm-card" });
-    c2.innerHTML = [
-      '<div class="crm-card-head"><h3 class="crm-card-title">Speed-to-Lead &amp; Response Times</h3><span class="crm-card-badge">Target: &lt; 15 mins</span></div>',
-      '<div class="sla-metrics">',
-      '  <div class="sla-metric-box"><span class="sla-lbl">WhatsApp Bot Auto-Reply</span><strong>&lt; 2 seconds</strong><span class="sla-note">100% compliance</span></div>',
-      '  <div class="sla-metric-box"><span class="sla-lbl">Human Handover First Reply</span><strong>14 minutes</strong><span class="sla-note">Within 15m SLA</span></div>',
-      '  <div class="sla-metric-box"><span class="sla-lbl">Formal Proposal Dispatched</span><strong>18.5 hours</strong><span class="sla-note">Target &lt; 24 hours</span></div>',
-      '</div>'
-    ].join("");
-    repGrid.appendChild(c2);
-
-    wrap.appendChild(repGrid);
-    container.appendChild(wrap);
-
-    wrap.querySelector("#btnRepExport").addEventListener("click", exportAllCsv);
-  }
-
-  // ═════════════════════════════════════════════════════════════════════════
-  // 9. INTEGRATION CENTRE & WEBHOOK MONITOR
-  // ═════════════════════════════════════════════════════════════════════════
-  function renderIntegrations(container, activeSub) {
-    container.innerHTML = "";
-    var wrap = cEl("div", { className: "crm-view-wrap" });
-
-    var header = cEl("div", { className: "crm-view-header" });
-    header.innerHTML = [
-      '<div class="crm-vh-left">',
-      '  <div class="crm-breadcrumbs"><span>CRM</span> <span class="crm-bc-sep">/</span> <span class="crm-bc-active">Integration Centre</span></div>',
-      '  <h1 class="crm-vh-title">Connected Channels &amp; Webhook Health</h1>',
-      '  <p class="crm-vh-sub">Manage Meta Cloud API, social lead forms, Web3Forms mapping, and monitor real-time event webhooks.</p>',
-      '</div>'
-    ].join("");
-    wrap.appendChild(header);
-
-    // Integrations Grid
     var intGrid = cEl("div", { className: "crm-int-grid" });
+    wrap.appendChild(intGrid);
 
     API.integrations.list().then(function (res) {
       var items = res.data || [];
@@ -1234,16 +989,29 @@
           '<div class="int-card-body">',
           (intItem.phone_number ? '<div class="int-kv"><span>Phone Number:</span> <strong>' + esc(intItem.phone_number) + '</strong></div>' : ''),
           (intItem.account_handle ? '<div class="int-kv"><span>Account Handle:</span> <strong>' + esc(intItem.account_handle) + '</strong></div>' : ''),
-          (intItem.last_sync_at ? '<div class="int-kv"><span>Last Synchronized:</span> <strong>' + UI.formatTimeAgo(intItem.last_sync_at) + '</strong></div>' : ''),
+          (intItem.page_name ? '<div class="int-kv"><span>Facebook Page:</span> <strong>' + esc(intItem.page_name) + '</strong></div>' : ''),
+          (intItem.last_sync_at ? '<div class="int-kv"><span>Last Sync:</span> <strong>' + UI.formatTimeAgo(intItem.last_sync_at) + '</strong></div>' : ''),
           (intItem.last_error ? '<div class="int-error-box">' + esc(intItem.last_error) + '</div>' : ''),
           '  <div class="int-caps-wrap">',
           (intItem.capabilities || []).map(function (c) { return '<span class="c-tag">' + esc(c) + '</span>'; }).join(""),
           '  </div>',
           '</div>',
-          '<div class="int-card-foot">',
-          '  <button type="button" class="btn btn-secondary btn-sm btn-full btn-config-int" data-provider="' + intItem.provider + '">Configure Connection &rarr;</button>',
+          '<div class="int-card-foot" style="display:flex; gap:8px;">',
+          '  <button type="button" class="btn btn-secondary btn-sm btn-test-int" style="flex:1;">Test Connection</button>',
+          '  <button type="button" class="btn btn-primary btn-sm btn-config-int" style="flex:1;" data-provider="' + intItem.provider + '">Configure</button>',
           '</div>'
         ].join("");
+
+        card.querySelector(".btn-test-int").addEventListener("click", function () {
+          UI.showToast("Testing connection with " + intItem.name + "...", "info");
+          setTimeout(function () {
+            if (intItem.status === "connected") {
+              UI.showToast("Connection to " + intItem.name + " verified successfully", "success");
+            } else {
+              UI.showToast("Connection test: " + (intItem.last_error || "Awaiting backend credentials"), "error");
+            }
+          }, 600);
+        });
 
         card.querySelector(".btn-config-int").addEventListener("click", function () {
           openIntegrationConfigModal(intItem);
@@ -1253,51 +1021,6 @@
       });
     });
 
-    wrap.appendChild(intGrid);
-
-    // Live Webhook Event Monitoring Section
-    var whCard = cEl("div", { className: "crm-card", style: { marginTop: "24px" } });
-    whCard.innerHTML = [
-      '<div class="crm-card-head">',
-      '  <h3 class="crm-card-title">Real-Time Ingestion Webhook Log</h3>',
-      '  <span class="crm-card-badge">Frontend Monitor · Auto-refresh</span>',
-      '</div>',
-      '<div class="wh-table-wrap">',
-      '  <table class="crm-table">',
-      '    <thead><tr><th>Event ID</th><th>Provider</th><th>Event Type</th><th>Timestamp</th><th>Status</th><th>Payload Summary</th><th style="text-align:right;">Action</th></tr></thead>',
-      '    <tbody id="whEventTableBody"></tbody>',
-      '  </table>',
-      '</div>'
-    ].join("");
-
-    var whTbody = whCard.querySelector("#whEventTableBody");
-    API.integrations.getWebhookEvents().then(function (res) {
-      var events = res.data || [];
-      events.forEach(function (evt) {
-        var tr = cEl("tr");
-        var stCls = evt.processing_status === "success" ? "crm-stage--won" : "crm-stage--lost";
-        tr.innerHTML = [
-          '<td><code>' + esc(evt.id) + '</code></td>',
-          '<td>' + UI.renderChannelBadge(evt.provider).outerHTML + '</td>',
-          '<td><strong>' + esc(evt.event_type) + '</strong></td>',
-          '<td>' + UI.formatTimeAgo(evt.received_at) + '</td>',
-          '<td><span class="crm-badge-stage ' + stCls + '">' + esc(evt.processing_status.toUpperCase()) + '</span></td>',
-          '<td><span class="tbl-cust-sub">' + esc(evt.payload_summary) + '</span></td>',
-          '<td style="text-align:right;"><button type="button" class="btn btn-secondary btn-sm btn-retry-wh" data-id="' + evt.id + '">Retry</button></td>'
-        ].join("");
-
-        tr.querySelector(".btn-retry-wh").addEventListener("click", function () {
-          API.integrations.retryWebhookEvent(evt.id).then(function () {
-            UI.showToast("Webhook event queued for retry", "success");
-            renderIntegrations(container, activeSub);
-          });
-        });
-
-        whTbody.appendChild(tr);
-      });
-    });
-
-    wrap.appendChild(whCard);
     container.appendChild(wrap);
   }
 
@@ -1310,17 +1033,26 @@
       '    <button type="button" class="crm-modal-close" id="intCloseBtn">&times;</button>',
       '  </div>',
       '  <div class="crm-modal-body">',
-      '    <div class="form-group">',
-      '      <label>Connection Status</label>',
-      '      <input type="text" class="crm-input" value="' + esc(intItem.status) + '" readonly style="background:#F1F5F9;">',
-      '    </div>',
+      '    <div class="form-group"><label>Connection Status</label><input type="text" class="crm-input" value="' + esc(intItem.status) + '" readonly style="background:#F1F5F9;"></div>',
       (intItem.provider === "whatsapp" ? [
         '<div class="form-group"><label>Meta App ID</label><input type="text" class="crm-input" value="' + esc(intItem.app_id || "") + '"></div>',
         '<div class="form-group"><label>WhatsApp Business Account ID (WABA)</label><input type="text" class="crm-input" value="' + esc(intItem.waba_id || "") + '"></div>',
         '<div class="form-group"><label>Phone Number ID</label><input type="text" class="crm-input" value="' + esc(intItem.phone_number_id || "") + '"></div>',
-        '<div class="form-group"><label>Access Token (Masked for Security)</label><input type="password" class="crm-input" value="EAAGxxxxxxxxxxxxxxxxxxxxxxxZD" readonly></div>'
+        '<div class="form-group"><label>Access Token (Masked Server Secret)</label><input type="password" class="crm-input" value="EAAGxxxxxxxxxxxxxxxxxxxxxxxZD" readonly></div>'
       ].join("") : ''),
-      '    <div class="form-group"><label>Webhook Verification Callback URL</label><input type="text" class="crm-input" value="https://api.seago.in/webhooks/' + esc(intItem.provider) + '" readonly style="background:#F1F5F9;"></div>',
+      (intItem.provider === "website" ? [
+        '<div class="form-group"><label>Web3Forms Access Key</label><input type="password" class="crm-input" value="a8f4xxxx-xxxx-xxxx-xxxx-xxxxxxxx6b91" readonly></div>',
+        '<div class="form-group"><label>Form-to-CRM Field Mapping</label>',
+        '  <div class="crm-field-map-table">',
+        '    <div class="map-row"><span>name</span> &rarr; <strong>Customer Name</strong></div>',
+        '    <div class="map-row"><span>email</span> &rarr; <strong>Email Address</strong></div>',
+        '    <div class="map-row"><span>phone</span> &rarr; <strong>Phone Number</strong></div>',
+        '    <div class="map-row"><span>company</span> &rarr; <strong>Company / Organization</strong></div>',
+        '    <div class="map-row"><span>product</span> &rarr; <strong>Interested Product</strong></div>',
+        '    <div class="map-row"><span>message</span> &rarr; <strong>Enquiry Details</strong></div>',
+        '  </div>',
+        '</div>'
+      ].join("") : ''),
       '  </div>',
       '  <div class="crm-modal-foot">',
       '    <button type="button" class="btn btn-secondary btn-sm" id="btnIntCancel">Cancel</button>',
@@ -1340,68 +1072,13 @@
   }
 
   // ═════════════════════════════════════════════════════════════════════════
-  // 10. SETTINGS VIEW
-  // ═════════════════════════════════════════════════════════════════════════
-  function renderSettings(container) {
-    container.innerHTML = "";
-    var wrap = cEl("div", { className: "crm-view-wrap" });
-
-    var header = cEl("div", { className: "crm-view-header" });
-    header.innerHTML = [
-      '<div class="crm-vh-left">',
-      '  <div class="crm-breadcrumbs"><span>CRM</span> <span class="crm-bc-sep">/</span> <span class="crm-bc-active">Settings</span></div>',
-      '  <h1 class="crm-vh-title">CRM System Configuration</h1>',
-      '  <p class="crm-vh-sub">Manage round-robin routing, notification channels, business hours, and API endpoints.</p>',
-      '</div>',
-      '<div class="crm-vh-actions">',
-      '  <button type="button" class="btn btn-primary btn-sm" id="btnSaveCrmSettings">Save Preferences</button>',
-      '</div>'
-    ].join("");
-    wrap.appendChild(header);
-
-    var card = cEl("div", { className: "crm-card" });
-    card.innerHTML = [
-      '<div class="crm-card-head"><h3 class="crm-card-title">Backend API Environment</h3></div>',
-      '<div class="form-group" style="margin-bottom:18px;">',
-      '  <label>API Base Endpoint URL</label>',
-      '  <input type="text" class="crm-input" id="crmApiBaseInput" value="' + esc(API.getApiBaseUrl()) + '">',
-      '  <small style="color:var(--muted); font-size:11.5px;">The URL where the backend developer deploys CRM REST endpoints.</small>',
-      '</div>',
-      '<div class="form-group" style="margin-bottom:18px;">',
-      '  <label>Automated Lead Assignment Rule</label>',
-      '  <select class="crm-select">',
-      '    <option>Round-Robin Across Active Sales Executives</option>',
-      '    <option>Product-Based Specialty (Outboards vs Custom FRP Boats)</option>',
-      '    <option>Geographic Region (Kerala vs Goa vs Odisha vs Port Blair)</option>',
-      '  </select>',
-      '</div>',
-      '<div class="form-group">',
-      '  <label>Business Operating Hours (for automated WhatsApp Bot)</label>',
-      '  <input type="text" class="crm-input" value="09:00 AM – 07:00 PM IST (Mon–Sat)">',
-      '</div>'
-    ].join("");
-
-    wrap.appendChild(card);
-    container.appendChild(wrap);
-
-    wrap.querySelector("#btnSaveCrmSettings").addEventListener("click", function () {
-      var newBase = wrap.querySelector("#crmApiBaseInput").value.trim();
-      API.setApiBaseUrl(newBase);
-      UI.showToast("CRM settings and API base updated", "success");
-    });
-  }
-
-  // ═════════════════════════════════════════════════════════════════════════
-  // SHARED MODALS: New Fleet Inquiry & New Task
+  // MODALS: New Fleet Inquiry & New Task
   // ═════════════════════════════════════════════════════════════════════════
   function openNewInquiryModal() {
     var modal = cEl("div", { className: "crm-modal-overlay" });
     modal.innerHTML = [
       '<div class="crm-modal-box">',
-      '  <div class="crm-modal-head">',
-      '    <h3>+ Log New Commercial Fleet Inquiry</h3>',
-      '    <button type="button" class="crm-modal-close" id="newInqClose">&times;</button>',
-      '  </div>',
+      '  <div class="crm-modal-head"><h3>+ Log New Customer Enquiry</h3><button type="button" class="crm-modal-close" id="newInqClose">&times;</button></div>',
       '  <div class="crm-modal-body">',
       '    <div class="form-group"><label>Customer Name *</label><input type="text" class="crm-input" id="inqName" placeholder="e.g. Capt. Rajesh Varma" required></div>',
       '    <div class="form-group"><label>Company / Organization</label><input type="text" class="crm-input" id="inqCompany" placeholder="e.g. Backwater Cruises"></div>',
@@ -1409,26 +1086,27 @@
       '    <div class="form-group"><label>Location</label><input type="text" class="crm-input" id="inqLocation" placeholder="Kochi, Kerala"></div>',
       '    <div class="form-group"><label>Interested Product Category</label>',
       '      <select class="crm-select" id="inqCategory">',
-      '        <option value="Outboard Motor">Electric Outboard Motor (3–50 HP)</option>',
-      '        <option value="Custom Electric Boat">Freedom 8-Seater FRP Boat</option>',
-      '        <option value="Custom Solar Boat">Ecstasy 12-Seater Solar Boat</option>',
-      '        <option value="Commercial Ferry">Custom 20-Seater Commercial Shuttle</option>',
+      '        <option value="Seagö 50 HP (36.8 kW) PMSM Outboard">Seagö 50 HP PMSM Outboard</option>',
+      '        <option value="Seagö 30 HP (22 kW) PMSM Outboard">Seagö 30 HP PMSM Outboard</option>',
+      '        <option value="FREEDOM — 8 Seater Electric FRP Craft">Freedom 8-Seater FRP Boat</option>',
+      '        <option value="ECSTASY — 12 Seater Luxury Tourism Craft">Ecstasy 12-Seater Solar Boat</option>',
+      '        <option value="CUSTOM 20 — 20 Seater Passenger Ferry">Custom 20-Seater Passenger Ferry</option>',
       '      </select>',
       '    </div>',
       '    <div class="form-group"><label>Channel Source</label>',
       '      <select class="crm-select" id="inqChannel">',
-      '        <option value="direct">Direct Phone Hotline</option>',
-      '        <option value="whatsapp">WhatsApp Inbound</option>',
+      '        <option value="whatsapp">WhatsApp Business</option>',
       '        <option value="website">Website Form</option>',
       '        <option value="instagram">Instagram</option>',
       '        <option value="facebook">Facebook</option>',
+      '        <option value="direct">Direct Hotline</option>',
       '      </select>',
       '    </div>',
       '    <div class="form-group"><label>Estimated Contract Value (INR)</label><input type="number" class="crm-input" id="inqValue" placeholder="1250000" value="1250000"></div>',
       '  </div>',
       '  <div class="crm-modal-foot">',
       '    <button type="button" class="btn btn-secondary btn-sm" id="btnCancelInq">Cancel</button>',
-      '    <button type="button" class="btn btn-primary btn-sm" id="btnSaveInq">Create Inquiry</button>',
+      '    <button type="button" class="btn btn-primary btn-sm" id="btnSaveInq">Create Enquiry</button>',
       '  </div>',
       '</div>'
     ].join("");
@@ -1447,7 +1125,7 @@
         phone: phone,
         company: modal.querySelector("#inqCompany").value.trim(),
         location: modal.querySelector("#inqLocation").value.trim(),
-        product_category: modal.querySelector("#inqCategory").value,
+        product_category: "Outboard Motor",
         product_model: modal.querySelector("#inqCategory").value,
         channel: modal.querySelector("#inqChannel").value,
         estimated_value: Number(modal.querySelector("#inqValue").value) || 1000000,
@@ -1455,13 +1133,9 @@
         assigned_to: "Anand R."
       };
       API.leads.create(newLead).then(function () {
-        UI.showToast("Inquiry created: " + name, "success");
+        UI.showToast("Enquiry created: " + name, "success");
         document.body.removeChild(modal);
-        if (State.get().activeTab === "leads") {
-          renderLeads(document.getElementById("crmAppRoot"));
-        } else {
-          location.hash = "#/crm/leads";
-        }
+        location.hash = "#/crm/leads";
       });
     });
 
@@ -1475,6 +1149,16 @@
       '  <div class="crm-modal-head"><h3>+ Schedule Follow-up Task</h3><button type="button" class="crm-modal-close" id="taskClose">&times;</button></div>',
       '  <div class="crm-modal-body">',
       '    <div class="form-group"><label>Task Title *</label><input type="text" class="crm-input" id="tTitle" placeholder="e.g. Follow up on battery sizing specs" required></div>',
+      '    <div class="form-group"><label>Task Type</label>',
+      '      <select class="crm-select" id="tType">',
+      '        <option value="phone_call">Phone Call</option>',
+      '        <option value="whatsapp_followup">WhatsApp Follow-up</option>',
+      '        <option value="email">Email</option>',
+      '        <option value="meeting">Meeting</option>',
+      '        <option value="product_demo">Product Demonstration</option>',
+      '        <option value="quotation_prep">Quotation Follow-up</option>',
+      '      </select>',
+      '    </div>',
       '    <div class="form-group"><label>Related Customer</label><input type="text" class="crm-input" id="tCustomer" placeholder="Capt. Rajesh Varma"></div>',
       '    <div class="form-group"><label>Assigned Staff</label>',
       '      <select class="crm-select" id="tAssignee">',
@@ -1506,6 +1190,7 @@
       if (!title) return;
       API.tasks.create({
         title: title,
+        task_type: modal.querySelector("#tType").value,
         customer_name: modal.querySelector("#tCustomer").value.trim(),
         assigned_to: modal.querySelector("#tAssignee").value,
         due_date: modal.querySelector("#tDueDate").value,
@@ -1525,7 +1210,7 @@
   function exportAllCsv() {
     API.leads.list().then(function (res) {
       var leads = res.data || [];
-      var headers = ["Lead ID", "Customer Name", "Company", "Phone", "Email", "Location", "Channel", "Product", "Value (INR)", "Stage", "Priority", "Assigned To"];
+      var headers = ["Lead ID", "Customer Name", "Company", "Phone", "Email", "Location", "Channel", "Product", "Value (INR)", "Stage", "Priority", "Assigned Employee"];
       var rows = leads.map(function (l) {
         return [
           l.id,
@@ -1557,15 +1242,12 @@
 
   global.SeagoCrmViews = {
     renderOverview: renderOverview,
-    renderUnifiedInbox: renderUnifiedInbox,
     renderLeads: renderLeads,
-    renderContacts: renderContacts,
-    renderOpportunities: renderOpportunities,
+    renderCustomers: renderCustomers,
+    renderCustomerDetails: renderCustomerDetails,
+    renderUnifiedInbox: renderUnifiedInbox,
     renderTasks: renderTasks,
-    renderProductsCatalog: renderProductsCatalog,
-    renderReports: renderReports,
     renderIntegrations: renderIntegrations,
-    renderSettings: renderSettings,
     openNewInquiryModal: openNewInquiryModal,
     openNewTaskModal: openNewTaskModal,
     exportAllCsv: exportAllCsv

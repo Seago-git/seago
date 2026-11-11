@@ -189,3 +189,4 @@ export interface DashboardMetrics {
   channel_distribution: Record<ChannelType, number>;
   stage_distribution: Record<LeadStage, number>;
 }
+

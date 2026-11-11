@@ -455,3 +455,4 @@ HTTP Status Codes 400, 401, 403, 404, 422, 500 return:
 
 ### `POST /notifications/mark-all-read`
 * **Frontend Module:** "Mark all read" link in notification dropdown.
+

@@ -78,3 +78,4 @@
   global.SeagoCrmState = SeagoCrmState;
 
 })(window);
+

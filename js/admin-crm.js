@@ -1,6 +1,7 @@
 /**
- * SEAGÖ CRM 2.0 — Orchestrator & Shell Coordinator
- * Bridges into Admin Studio SPA architecture and router.
+ * SEAGÖ CRM — Core Orchestrator & Shell Coordinator
+ * Clean 6-Section Enterprise Navigation:
+ * 1. Overview  2. Leads  3. Customers  4. Inbox  5. Tasks  6. Integrations
  * ES5 Compatible · Pure JavaScript.
  */
 (function (global) {
@@ -12,22 +13,21 @@
 
   var CRM_TABS = [
     { key: "overview", label: "Overview", icon: "📊" },
-    { key: "inbox", label: "Unified Inbox", icon: "💬" },
-    { key: "leads", label: "Leads & Inquiries", icon: "🎯" },
-    { key: "contacts", label: "Customer 360", icon: "👥" },
-    { key: "opportunities", label: "Opportunities", icon: "💼" },
-    { key: "tasks", label: "Tasks & Follow-ups", icon: "📋" },
-    { key: "products", label: "Propulsion Catalogue", icon: "⚡" },
-    { key: "reports", label: "Reports & SLAs", icon: "📈" },
-    { key: "integrations", label: "Integrations & Webhooks", icon: "🔌" },
-    { key: "settings", label: "Settings", icon: "⚙️" }
+    { key: "leads", label: "Leads", icon: "🎯" },
+    { key: "customers", label: "Customers", icon: "👥" },
+    { key: "inbox", label: "Inbox", icon: "💬" },
+    { key: "tasks", label: "Tasks", icon: "📋" },
+    { key: "integrations", label: "Integrations", icon: "🔌" }
   ];
 
   function renderCrmScreen(action, id) {
     var pageRoot = document.getElementById("page-root");
     if (!pageRoot) return;
 
+    // Normalize route aliases
     var activeTab = action || "overview";
+    if (activeTab === "contacts") activeTab = "customers";
+
     State.set("activeTab", activeTab);
     State.set("subRoute", action);
     State.set("selectedId", id);
@@ -43,7 +43,7 @@
       '<div class="crm-nav-left">',
       '  <div class="crm-nav-brand">',
       '    <span class="crm-nav-logo-dot"></span>',
-      '    <span class="crm-nav-title">SEAGÖ CRM 2.0</span>',
+      '    <span class="crm-nav-title">SEAGÖ CRM</span>',
       '    <span class="crm-badge-env ' + (global.SeagoCrmApi.getDemoMode() ? "is-demo" : "is-live") + '">' + (global.SeagoCrmApi.getDemoMode() ? "DEV DATA" : "LIVE API") + '</span>',
       '  </div>',
       '</div>',
@@ -61,7 +61,7 @@
       '</div>'
     ].join("");
 
-    // Populate Tab Pills
+    // Populate the 6 Tab Pills
     var tabsList = crmNav.querySelector("#crmTabsList");
     CRM_TABS.forEach(function (tab) {
       var btn = UI.createEl("button", {
@@ -101,29 +101,21 @@
 
     pageRoot.appendChild(crmShell);
 
-    // Render corresponding view module
+    // Route to corresponding view
     renderTabContent(crmBody, activeTab, id);
   }
 
   function renderTabContent(container, tabKey, id) {
-    if (tabKey === "inbox") {
-      Views.renderUnifiedInbox(container, id);
-    } else if (tabKey === "leads") {
+    if (tabKey === "leads") {
       Views.renderLeads(container, id);
-    } else if (tabKey === "contacts") {
-      Views.renderContacts(container, id);
-    } else if (tabKey === "opportunities") {
-      Views.renderOpportunities(container, id);
+    } else if (tabKey === "customers" || tabKey === "contacts") {
+      Views.renderCustomers(container, id);
+    } else if (tabKey === "inbox") {
+      Views.renderUnifiedInbox(container, id);
     } else if (tabKey === "tasks") {
       Views.renderTasks(container, id);
-    } else if (tabKey === "products") {
-      Views.renderProductsCatalog(container, id);
-    } else if (tabKey === "reports") {
-      Views.renderReports(container, id);
     } else if (tabKey === "integrations") {
       Views.renderIntegrations(container, id);
-    } else if (tabKey === "settings") {
-      Views.renderSettings(container, id);
     } else {
       Views.renderOverview(container, id);
     }

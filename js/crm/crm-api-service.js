@@ -600,3 +600,4 @@
   global.SeagoCrmApi = SeagoCrmApi;
 
 })(window);
+
