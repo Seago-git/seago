@@ -3381,7 +3381,7 @@
         inpQSub.value = s.quote_modal_subtitle || "";
         inpFn.value = s.founder_name || "";
         inpFt.value = s.founder_title || "";
-        inpCopy.value = s.copyright_text || "";
+        inpCopy.value = s.copyright_text || "© 2026 Seagö. All rights reserved.";
 
         statsContainer.innerHTML = "";
         var stats = s.hero_stats || [];
