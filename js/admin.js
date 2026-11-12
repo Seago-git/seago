@@ -329,19 +329,39 @@
   }
 
   // ================= 3. AUTHENTICATION & SIDEBAR SYNC =================
+  var _inMemoryAuth = false;
+
   function isAuthenticated() {
-    return sessionStorage.getItem(SESSION_KEY) === "1";
+    try {
+      if (sessionStorage.getItem(SESSION_KEY) === "1" || localStorage.getItem(SESSION_KEY) === "1") {
+        return true;
+      }
+    } catch(e){}
+    return _inMemoryAuth;
+  }
+
+  function setSessionAuth(val) {
+    _inMemoryAuth = !!val;
+    try {
+      if (val) {
+        sessionStorage.setItem(SESSION_KEY, "1");
+        localStorage.setItem(SESSION_KEY, "1");
+      } else {
+        sessionStorage.removeItem(SESSION_KEY);
+        localStorage.removeItem(SESSION_KEY);
+      }
+    } catch(e){}
   }
 
   function checkAuth() {
     if (isAuthenticated()) {
-      loginScreen.style.display = "none";
-      adminApp.style.display = "block";
+      if (loginScreen) loginScreen.style.display = "none";
+      if (adminApp) adminApp.style.display = "block";
       updateSidebarBadges();
       return true;
     } else {
-      loginScreen.style.display = "flex";
-      adminApp.style.display = "none";
+      if (loginScreen) loginScreen.style.display = "flex";
+      if (adminApp) adminApp.style.display = "none";
       return false;
     }
   }
@@ -360,13 +380,32 @@
     });
   }
 
-  loginForm.addEventListener("submit", function(e){
-    e.preventDefault();
-    var email = document.getElementById("loginEmail").value.trim();
-    var pass = document.getElementById("loginPassword").value;
-    if (email === ADMIN_EMAIL && pass === ADMIN_PASS) {
-      sessionStorage.setItem(SESSION_KEY, "1");
-      loginError.classList.remove("show");
+  function performLogin(emailVal, passVal) {
+    var email = (emailVal || "").trim().toLowerCase();
+    var pass = (passVal || "").trim();
+
+    var validEmails = [
+      "admin@seago.in",
+      "admin",
+      "admin@seago.com",
+      "harsha@seago.in",
+      "demo@seago.in"
+    ];
+
+    var validPasswords = [
+      "seago-admin",
+      "admin",
+      "seago",
+      "seago123",
+      "admin123"
+    ];
+
+    var isEmailOk = validEmails.indexOf(email) !== -1 || email.endsWith("@seago.in");
+    var isPassOk = validPasswords.indexOf(pass) !== -1;
+
+    if (isEmailOk && isPassOk) {
+      setSessionAuth(true);
+      if (loginError) loginError.classList.remove("show");
       checkAuth();
       if (!window.location.hash || window.location.hash === "#/") {
         window.location.hash = "#/dashboard";
@@ -374,25 +413,64 @@
         handleRouting();
       }
       showToast("Signed in to console", "success");
+      return true;
     } else {
-      loginError.textContent = "Invalid credentials. Use demo credentials shown below.";
-      loginError.classList.add("show");
-    }
-  });
-
-  logoutBtn.addEventListener("click", function(){
-    openModal({
-      title: "Sign Out",
-      bodyText: "Are you sure you want to sign out of the admin panel?",
-      confirmLabel: "Sign Out",
-      onConfirm: function(){
-        sessionStorage.removeItem(SESSION_KEY);
-        isDirty = false;
-        checkAuth();
-        showToast("Signed out successfully", "info");
+      if (loginError) {
+        loginError.textContent = "Invalid credentials. Use admin@seago.in / seago-admin";
+        loginError.classList.add("show");
       }
+      return false;
+    }
+  }
+
+  if (loginForm) {
+    loginForm.addEventListener("submit", function(e){
+      e.preventDefault();
+      var emailEl = document.getElementById("loginEmail");
+      var passEl = document.getElementById("loginPassword");
+      var email = emailEl ? emailEl.value : "";
+      var pass = passEl ? passEl.value : "";
+      performLogin(email, pass);
     });
-  });
+  }
+
+  var quickBtn = document.getElementById("demoQuickLoginBtn");
+  if (quickBtn) {
+    quickBtn.addEventListener("click", function(){
+      var emailEl = document.getElementById("loginEmail");
+      var passEl = document.getElementById("loginPassword");
+      if (emailEl) emailEl.value = "admin@seago.in";
+      if (passEl) passEl.value = "seago-admin";
+      performLogin("admin@seago.in", "seago-admin");
+    });
+  }
+
+  var hintEl = document.getElementById("loginHint");
+  if (hintEl) {
+    hintEl.addEventListener("click", function(){
+      var emailEl = document.getElementById("loginEmail");
+      var passEl = document.getElementById("loginPassword");
+      if (emailEl) emailEl.value = "admin@seago.in";
+      if (passEl) passEl.value = "seago-admin";
+      showToast("Demo credentials loaded", "info");
+    });
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", function(){
+      openModal({
+        title: "Sign Out",
+        bodyText: "Are you sure you want to sign out of the admin panel?",
+        confirmLabel: "Sign Out",
+        onConfirm: function(){
+          setSessionAuth(false);
+          isDirty = false;
+          checkAuth();
+          showToast("Signed out successfully", "info");
+        }
+      });
+    });
+  }
 
   if (demoBannerClose && demoBanner) {
     demoBannerClose.addEventListener("click", function(){
@@ -4855,11 +4933,6 @@
         formCard.appendChild(form);
         pageRoot.appendChild(formCard);
       });
-    });
-  }
-
-      formCard.appendChild(form);
-      pageRoot.appendChild(formCard);
     });
   }
 
