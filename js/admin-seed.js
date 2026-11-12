@@ -553,7 +553,7 @@
         slug: "home",
         file: "index.html",
         title: "Home Page",
-        badge: "Electric Marine Propulsion · Made in India",
+        badge: "Electric Outboards & Boats · Made in India",
         headline: "Zero-emission power for India's rivers, backwaters & coastlines",
         subheadline: "Seagö engineers and manufactures electric outboard motors, LiFePO4 battery packs, and custom electric & solar boats — built for Indian waterways and deployed across tourism boats, the public transport system, and fishing fleets.",
         cta_primary: "Request a Quote",
@@ -656,7 +656,7 @@
         title: "About Seagö & Leadership",
         badge: "ABOUT US",
         headline: "Building the electric fleet India's waterways need",
-        subheadline: "Seagö is an Indian consortium engineering and manufacturing electric marine propulsion — motors and full custom boats — for the rivers, backwaters, and coastlines of India.",
+        subheadline: "Seagö is an Indian consortium engineering and manufacturing electric outboards, battery systems, and full custom boats for the rivers, backwaters, and coastlines of India.",
         story_eyebrow: "Our Story",
         story_p1: "Seagö designs and manufactures electric outboard motors and custom FRP electric & solar boats — all engineered in-house and built at our facility in Chennai, Tamil Nadu. In just over two years, that range has moved from prototype to fleet: powering India's first electric fishing vessel, tourism boats across Karnataka's heritage waterways, and public transport ferries on busy routes.",
         story_p2: "Our sales and support base is in Kerala, and our reach now spans 5 states — Tamil Nadu, Karnataka, Kerala, Maharashtra, and Odisha — with fishing cooperatives, tourism operators, and public agencies increasingly looking for a lower-cost, zero-emission alternative to diesel propulsion.",
@@ -734,7 +734,7 @@
         tourism_stat3_lbl: "Operation",
         hydrogen_tag: "Tamil Nadu · Completed",
         hydrogen_title: "Hydrogen Fuel-Cell Boat",
-        hydrogen_desc: "Seagö, in collaboration with the Indian Maritime University (IMU), has successfully completed R&D on a hydrogen fuel-cell boat — research into what comes after lithium for marine propulsion. The programme is now closed with no further R&D required. The partnership continues with a second collaborative project focused on the future of the fishing industry.",
+        hydrogen_desc: "Seagö, in collaboration with the Indian Maritime University (IMU), has successfully completed R&D on a hydrogen fuel-cell boat — research into what comes after lithium for clean waterways. The programme is now closed with no further R&D required. The partnership continues with a second collaborative project focused on the future of the fishing industry.",
         hydrogen_image: "assets/photos/hydrogenboat.webp",
         hydrogen_stat1_val: "IMU",
         hydrogen_stat1_lbl: "Research Partner",
@@ -745,7 +745,7 @@
         cta_banner_title: "Have a fleet, route, or vessel in mind?",
         cta_banner_text: "Whether it's a single boat or a multi-vessel deployment, tell us the details and we'll help you scope it.",
         cta_banner_btn: "Request a Quote",
-        meta_desc: "Verified case studies and real-world deployment data for Seagö electric marine propulsion systems.",
+        meta_desc: "Verified case studies and real-world deployment data for Seagö electric systems.",
         updated_at: "2024-01-01T00:00:00.000Z"
       },
       {
@@ -818,122 +818,9 @@
       { id: "ast-brand-logo", name: "Seagö Official High-Res Logo.png", url: "assets/seago-logo.png", kind: "image", size: 76000, category: "Branding", updated_at: "2024-01-01T00:00:00.000Z" }
     ],
 
-    crm_leads: [
-      {
-        id: "lead-1",
-        name: "Capt. Rajesh Varma",
-        phone: "+91 98470 23145",
-        email: "rajesh.varma@backwatercruises.in",
-        company: "Backwater Cruises",
-        customer_type: "Commercial Ferry Operator",
-        location: "Kochi, Kerala",
-        channel: "whatsapp",
-        source_ref: "WhatsApp Business Direct",
-        product_category: "Outboard Motor",
-        product_model: "Seagö 50 HP (36.8 kW) PMSM Outboard",
-        quantity: 1,
-        boat_details: "12m passenger vessel, Vembanad Lake",
-        purchase_timeline: "Immediate",
-        estimated_value: 1250000,
-        currency: "INR",
-        stage: "new",
-        priority: "high",
-        assigned_to: "Anand R.",
-        opt_in_whatsapp: true,
-        opt_in_timestamp: "2026-11-10T09:12:00.000Z",
-        bot_status: "active",
-        tags: ["50 HP", "Kochi"],
-        notes: [
-          { author: "Anand R.", text: "Client requested technical dimensions and delivery timeline for 50 HP motor.", created_at: "2026-11-10T10:00:00.000Z" }
-        ],
-        conversation: [
-          { id: "m1", direction: "inbound", sender: "Capt. Rajesh Varma", text: "Hello, we are looking for a 50 HP electric outboard motor for our passenger boat in Kochi. Please share pricing and specifications.", time: "10:14 AM", status: "read" },
-          { id: "m2", direction: "bot", sender: "Seagö Assistant", text: "Welcome to Seagö Marine Propulsion! We build 100% electric outboards from 3 HP to 50 HP. An executive from our sales team will connect with you shortly.", time: "10:14 AM", status: "delivered" }
-        ],
-        created_at: "2026-11-10T10:14:00.000Z",
-        updated_at: "2026-11-10T10:14:00.000Z"
-      },
-      {
-        id: "lead-2",
-        name: "Arunachalam S.",
-        phone: "+91 94342 88910",
-        email: "arun@coralbayresort.com",
-        company: "Coral Bay Resort",
-        customer_type: "Eco-Resort / Hotel",
-        location: "Port Blair, Andaman",
-        channel: "website",
-        source_ref: "Website Quote Form",
-        product_category: "Outboard Motor",
-        product_model: "Seagö 30 HP Electric Outboard",
-        quantity: 2,
-        boat_details: "Island resort transfer boat",
-        purchase_timeline: "1–3 Months",
-        estimated_value: 850000,
-        currency: "INR",
-        stage: "contacted",
-        priority: "normal",
-        assigned_to: "Divya K.",
-        opt_in_whatsapp: true,
-        opt_in_timestamp: "2026-11-10T11:00:00.000Z",
-        bot_status: "active",
-        tags: ["30 HP", "Andaman"],
-        notes: [
-          { author: "Divya K.", text: "Quote sent via email with battery sizing guidelines.", created_at: "2026-11-10T11:30:00.000Z" }
-        ],
-        conversation: [
-          { id: "m3", direction: "inbound", sender: "Arunachalam S.", text: "Quote form submitted from website: Looking for 2 units of 30 HP electric outboards for island transfers.", time: "11:00 AM", status: "read" }
-        ],
-        created_at: "2026-11-10T11:00:00.000Z",
-        updated_at: "2026-11-10T11:30:00.000Z"
-      }
-    ],
-
-    crm_tasks: [
-      {
-        id: "task-1",
-        title: "Send 50 HP motor specs and pricing to Capt. Rajesh Varma",
-        due_date: "Today",
-        assigned_to: "Anand R.",
-        lead_id: "lead-1",
-        lead_name: "Capt. Rajesh Varma",
-        priority: "high",
-        status: "pending",
-        created_at: "2026-11-10T10:15:00.000Z"
-      },
-      {
-        id: "task-2",
-        title: "Follow up on 30 HP battery configuration with Coral Bay Resort",
-        due_date: "Tomorrow",
-        assigned_to: "Divya K.",
-        lead_id: "lead-2",
-        lead_name: "Arunachalam S.",
-        priority: "normal",
-        status: "pending",
-        created_at: "2026-11-10T11:35:00.000Z"
-      }
-    ],
-
-    crm_integrations: [
-      {
-        id: "int-wa",
-        channel: "whatsapp",
-        title: "WhatsApp Business",
-        provider: "Official Cloud API",
-        phone_number: "+91 98400 12345",
-        status: "connected",
-        health: "Active"
-      },
-      {
-        id: "int-web",
-        channel: "website",
-        title: "Website Inquiries",
-        provider: "Web3Forms",
-        phone_number: "contact.html & products.html",
-        status: "connected",
-        health: "Active"
-      }
-    ],
-
+    crm_leads: [],
+    crm_tasks: [],
+    crm_integrations: [],
     crm_events: []
   };
 

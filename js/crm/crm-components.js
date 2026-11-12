@@ -116,15 +116,35 @@
 
   function renderHandoverBadge(statusKey) {
     var meta = {
-      bot_active: { label: "Bot Active", cls: "handover-bot", icon: "🤖" },
-      human_requested: { label: "Human Requested", cls: "handover-requested", icon: "🙋" },
-      human_assigned: { label: "Staff Assigned", cls: "handover-assigned", icon: "👤" },
-      human_active: { label: "Live Staff", cls: "handover-active", icon: "🟢" },
-      resolved: { label: "Resolved", cls: "handover-resolved", icon: "✓" }
+      bot_active: {
+        label: "Bot Active",
+        cls: "handover-bot",
+        icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><line x1="8" y1="16" x2="8" y2="16"></line><line x1="16" y1="16" x2="16" y2="16"></line></svg>'
+      },
+      human_requested: {
+        label: "Human Requested",
+        cls: "handover-requested",
+        icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>'
+      },
+      human_assigned: {
+        label: "Staff Assigned",
+        cls: "handover-assigned",
+        icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>'
+      },
+      human_active: {
+        label: "Live Staff",
+        cls: "handover-active",
+        icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"></circle></svg>'
+      },
+      resolved: {
+        label: "Resolved",
+        cls: "handover-resolved",
+        icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>'
+      }
     };
     var m = meta[statusKey] || meta.bot_active;
     var span = createEl("span", { className: "crm-handover-pill " + m.cls });
-    span.textContent = m.icon + " " + m.label;
+    span.innerHTML = m.icon + '<span style="margin-left:4px;">' + escapeHtml(m.label) + '</span>';
     return span;
   }
 
@@ -174,7 +194,7 @@
   function renderEmptyState(title, message, actionLabel, onAction) {
     var wrap = createEl("div", { className: "crm-empty-state" });
     wrap.innerHTML = [
-      '<div class="crm-empty-icon">📭</div>',
+      '<div class="crm-empty-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.65;"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg></div>',
       '<h3 class="crm-empty-title">' + escapeHtml(title) + '</h3>',
       '<p class="crm-empty-desc">' + escapeHtml(message) + '</p>'
     ].join("");

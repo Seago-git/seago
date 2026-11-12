@@ -1,4 +1,4 @@
-# robots.txt for Seagö Marine Mobility (https://seago.in)
+# robots.txt for Seagö (https://seago.in)
 User-agent: *
 Allow: /
 

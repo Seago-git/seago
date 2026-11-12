@@ -6,9 +6,9 @@ Seagö operates an integrated design, engineering, and manufacturing facility in
 
 ## Core Pages
 
-- [Seagö Home](https://seago.in/index.html): Overview of zero-emission marine propulsion, key performance metrics, and complete fleet electrification systems.
+- [Seagö Home](https://seago.in/index.html): Overview of zero-emission electric outboards and vessels, key performance metrics, and complete fleet electrification systems.
 - [About Seagö & Leadership](https://seago.in/about.html): Company history, Chennai manufacturing facility, Kerala sales base, and executive leadership by Founder & CEO Gopish Kumar.G.
-- [Marine Propulsion Products](https://seago.in/products.html): Comprehensive catalog of 3 HP to 50 HP electric outboards, marine-grade LiFePO4 battery packs, and custom FRP solar/electric vessels.
+- [Products](https://seago.in/products.html): Comprehensive catalog of 3 HP to 50 HP electric outboards, marine-grade LiFePO4 battery packs, and custom FRP solar/electric vessels.
 - [Case Studies & Deployments](https://seago.in/case-studies.html): Operational field reports including Vikalpika (India's 1st electric fishing vessel with ICAR-CIFT), Karnataka tourism fleets, Kerala public ferries, and IMU hydrogen fuel-cell research.
 - [Visual Gallery](https://seago.in/gallery.html): Field footage, video recordings of trial runs across backwaters and rivers, vessel walk-arounds, and motor photography.
 - [Contact & Quote Inquiries](https://seago.in/contact.html): Quote request form, direct email (sales@seago.in), WhatsApp hotline (+91 86063 66633), and office locations in Kerala and Chennai.

@@ -1,8 +1,8 @@
 # Seagö — Comprehensive Technical Documentation & Company Reference
 
-> Complete documentation for Seagö electric marine propulsion systems, electric outboards (3 HP to 50 HP), marine LiFePO4 battery banks, composite vessels, and field deployments.
+> Complete documentation for Seagö electric outboards (3 HP to 50 HP), marine LiFePO4 battery banks, composite vessels, and field deployments.
 
-Published by: Seagö Marine Mobility
+Published by: Seagö
 Website: https://seago.in
 Contact: sales@seago.in | Phone / WhatsApp: +91 86063 66633
 Headquarters / Sales & Support: GG Plaza, NH-66, Lalaji Junction, Karunagappally, Kollam – 690518, Kerala, India
