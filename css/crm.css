@@ -1541,11 +1541,18 @@
 /* ── Integration Grid ── */
 .crm-int-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
+  margin-top: 16px;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1200px) {
+  .crm-int-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
   .crm-int-grid {
     grid-template-columns: 1fr;
   }
@@ -1555,25 +1562,61 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  background: #FFFFFF;
+  border: 1px solid var(--crm-border);
+  border-radius: var(--crm-radius);
+  padding: 18px 20px;
+  min-height: 290px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.crm-int-card:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.07);
+}
+
+.int-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #F1F5F9;
 }
 
 .int-card-brand {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+}
+
+.int-card-brand svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
 }
 
 .int-card-brand h3 {
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--crm-navy);
+  margin: 0;
 }
 
 .int-status-badge {
   font-size: 9.5px;
   font-weight: 700;
-  padding: 2px 7px;
+  padding: 3px 8px;
   border-radius: 4px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.int-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .int-kv {
@@ -1582,6 +1625,12 @@
   justify-content: space-between;
   font-size: 11.5px;
   margin-top: 6px;
+  color: var(--crm-slate);
+}
+
+.int-kv strong {
+  color: var(--crm-navy);
+  font-weight: 600;
 }
 
 .int-error-box {
@@ -1589,25 +1638,34 @@
   border: 1px solid #FECACA;
   color: #DC2626;
   font-size: 11px;
-  padding: 6px 10px;
+  padding: 8px 10px;
   border-radius: 4px;
-  margin-top: 8px;
+  margin-top: 10px;
+  line-height: 1.4;
 }
 
 .int-caps-wrap {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
-  margin: 12px 0;
+  gap: 5px;
+  margin: 12px 0 16px;
 }
 
 .c-tag {
   background: #F1F5F9;
-  color: var(--crm-slate);
+  color: #475569;
   font-size: 10.5px;
-  font-weight: 500;
-  padding: 2px 6px;
+  font-weight: 600;
+  padding: 3px 8px;
   border-radius: 4px;
+  border: 1px solid #E2E8F0;
+}
+
+.int-card-foot {
+  display: flex;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid #F1F5F9;
 }
 
 /* ── Generic UI helpers ── */

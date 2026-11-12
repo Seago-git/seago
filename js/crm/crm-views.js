@@ -1179,17 +1179,17 @@
 
         card.querySelector(".btn-test-int").addEventListener("click", function () {
           UI.showToast("Testing connection with " + intItem.name + "...", "info");
-          setTimeout(function () {
-            if (intItem.status === "connected") {
+          API.integrations.testConnection(intItem.id).then(function (testRes) {
+            if (testRes.success) {
               UI.showToast("Connection to " + intItem.name + " verified successfully", "success");
             } else {
-              UI.showToast("Connection test: " + (intItem.last_error || "Awaiting backend credentials"), "error");
+              UI.showToast("Connection test: " + (testRes.message || "Awaiting credentials from backend engineer"), "error");
             }
-          }, 600);
+          });
         });
 
         card.querySelector(".btn-config-int").addEventListener("click", function () {
-          openIntegrationConfigModal(intItem);
+          openIntegrationConfigModal(intItem, container);
         });
 
         intGrid.appendChild(card);
@@ -1199,7 +1199,7 @@
     container.appendChild(wrap);
   }
 
-  function openIntegrationConfigModal(intItem) {
+  function openIntegrationConfigModal(intItem, viewContainer) {
     var modal = cEl("div", { className: "crm-modal-overlay" });
     modal.innerHTML = [
       '<div class="crm-modal-box">',
@@ -1208,15 +1208,44 @@
       '    <button type="button" class="crm-modal-close" id="intCloseBtn">&times;</button>',
       '  </div>',
       '  <div class="crm-modal-body">',
-      '    <div class="form-group"><label>Connection Status</label><input type="text" class="crm-input" value="' + esc(intItem.status) + '" readonly style="background:#F1F5F9;"></div>',
+      '    <div class="form-group"><label>Connection Status</label><input type="text" class="crm-input" value="' + esc(intItem.status ? intItem.status.toUpperCase() : "DISCONNECTED") + '" readonly style="background:#F1F5F9;font-weight:600;"></div>',
+      
+      // WhatsApp Cloud API
       (intItem.provider === "whatsapp" ? [
-        '<div class="form-group"><label>Meta App ID</label><input type="text" class="crm-input" value="' + esc(intItem.app_id || "") + '"></div>',
-        '<div class="form-group"><label>WhatsApp Business Account ID (WABA)</label><input type="text" class="crm-input" value="' + esc(intItem.waba_id || "") + '"></div>',
-        '<div class="form-group"><label>Phone Number ID</label><input type="text" class="crm-input" value="' + esc(intItem.phone_number_id || "") + '"></div>',
-        '<div class="form-group"><label>Access Token (Masked Server Secret)</label><input type="password" class="crm-input" value="EAAGxxxxxxxxxxxxxxxxxxxxxxxZD" readonly></div>'
+        '<div class="form-group"><label>Meta App ID</label><input type="text" class="crm-input" id="cfgAppId" value="' + esc(intItem.app_id || "") + '" placeholder="e.g. 192837465091827"></div>',
+        '<div class="form-group"><label>WhatsApp Business Account ID (WABA)</label><input type="text" class="crm-input" id="cfgWabaId" value="' + esc(intItem.waba_id || "") + '" placeholder="e.g. waba_seago_marine_99482"></div>',
+        '<div class="form-group"><label>Phone Number ID</label><input type="text" class="crm-input" id="cfgPhoneId" value="' + esc(intItem.phone_number_id || "") + '" placeholder="e.g. 109283746554321"></div>',
+        '<div class="form-group"><label>Permanent System User Token (Masked Server Secret)</label><input type="password" class="crm-input" value="EAAGxxxxxxxxxxxxxxxxxxxxxxxZD" readonly></div>',
+        '<div class="form-group"><label>Inbound Webhook Endpoint</label><input type="text" class="crm-input" value="https://api.seago.in/webhooks/whatsapp" readonly style="background:#F8FAFC;font-family:monospace;font-size:11.5px;"></div>',
+        '<div class="form-group"><label>Automated Chatbot Flow</label>',
+        '  <select class="crm-select" id="cfgBotMode"><option value="active">Active (Automated Greeting &amp; Commercial Qualification)</option><option value="off">Off (Direct Routing to Sales Representatives)</option></select>',
+        '</div>'
       ].join("") : ''),
+
+      // Facebook Lead Ads
+      (intItem.provider === "facebook" ? [
+        '<div class="form-group"><label>Connected Facebook Page</label><input type="text" class="crm-input" id="cfgFbPage" value="' + esc(intItem.page_name || "Seagö Official Page") + '" placeholder="Page Name or ID"></div>',
+        '<div class="form-group"><label>Meta Ads Account ID</label><input type="text" class="crm-input" id="cfgFbAdAccount" value="' + esc(intItem.ad_account || "") + '" placeholder="e.g. act_827162534"></div>',
+        '<div class="form-group"><label>Lead Gen Webhook Endpoint</label><input type="text" class="crm-input" value="https://api.seago.in/webhooks/meta-leadgen" readonly style="background:#F8FAFC;font-family:monospace;font-size:11.5px;"></div>',
+        '<div class="form-group"><label>Instant Form Sync</label>',
+        '  <select class="crm-select" id="cfgFbSync"><option value="auto">Automatic (Instantly import lead form responses into CRM)</option><option value="manual">Manual Batch Sync</option></select>',
+        '</div>'
+      ].join("") : ''),
+
+      // Instagram Professional
+      (intItem.provider === "instagram" ? [
+        '<div class="form-group"><label>Professional Instagram Handle</label><input type="text" class="crm-input" id="cfgIgHandle" value="' + esc(intItem.account_handle || "@seago.marine") + '" placeholder="@seago.marine"></div>',
+        '<div class="form-group"><label>Instagram Business Account ID</label><input type="text" class="crm-input" id="cfgIgAccId" value="' + esc(intItem.account_id || "") + '" placeholder="e.g. ig_biz_991827364"></div>',
+        '<div class="form-group"><label>Direct Message Webhook Endpoint</label><input type="text" class="crm-input" value="https://api.seago.in/webhooks/instagram-dm" readonly style="background:#F8FAFC;font-family:monospace;font-size:11.5px;"></div>',
+        '<div class="form-group"><label>Sync Capabilities</label>',
+        '  <div style="font-size:12px;color:#475569;margin-top:4px;">Direct Messages, Story Mentions, and Commercial Comments enabled.</div>',
+        '</div>'
+      ].join("") : ''),
+
+      // Website Form Ingestion (Web3Forms)
       (intItem.provider === "website" ? [
         '<div class="form-group"><label>Web3Forms Access Key</label><input type="password" class="crm-input" value="a8f4xxxx-xxxx-xxxx-xxxx-xxxxxxxx6b91" readonly></div>',
+        '<div class="form-group"><label>Webhook Receiver URL</label><input type="text" class="crm-input" value="https://api.seago.in/webhooks/web3forms" readonly style="background:#F8FAFC;font-family:monospace;font-size:11.5px;"></div>',
         '<div class="form-group"><label>Form-to-CRM Field Mapping</label>',
         '  <div class="crm-field-map-table">',
         '    <div class="map-row"><span>name</span> &rarr; <strong>Customer Name</strong></div>',
@@ -1228,6 +1257,22 @@
         '  </div>',
         '</div>'
       ].join("") : ''),
+
+      // LinkedIn Lead Sync
+      (intItem.provider === "linkedin" ? [
+        '<div class="form-group"><label>LinkedIn Organization Name / Vanity</label><input type="text" class="crm-input" id="cfgLiOrg" value="' + esc(intItem.organization || "Seagö") + '" placeholder="Organization Name"></div>',
+        '<div class="form-group"><label>LinkedIn Sponsored Ads Account ID</label><input type="text" class="crm-input" id="cfgLiAd" value="' + esc(intItem.ad_account || "") + '" placeholder="e.g. 509283741"></div>',
+        '<div class="form-group"><label>B2B Lead Gen Forms Webhook</label><input type="text" class="crm-input" value="https://api.seago.in/webhooks/linkedin" readonly style="background:#F8FAFC;font-family:monospace;font-size:11.5px;"></div>',
+        '<div class="form-group"><label>OAuth Permission Status</label><div style="font-size:12px;color:#64748B;">Requires approved Lead Sync partner application. Backend developer handles token exchange.</div></div>'
+      ].join("") : ''),
+
+      // X (Twitter) Developer API
+      (intItem.provider === "x" ? [
+        '<div class="form-group"><label>X Handle / Brand Account</label><input type="text" class="crm-input" id="cfgXHandle" value="' + esc(intItem.account_handle || "@seago_marine") + '" placeholder="@seago_marine"></div>',
+        '<div class="form-group"><label>Developer App Client ID (Masked)</label><input type="password" class="crm-input" value="TWlUxxxxxxxxxxxxxxxxxxx123" readonly></div>',
+        '<div class="form-group"><label>Events Webhook URL</label><input type="text" class="crm-input" value="https://api.seago.in/webhooks/x-events" readonly style="background:#F8FAFC;font-family:monospace;font-size:11.5px;"></div>'
+      ].join("") : ''),
+
       '  </div>',
       '  <div class="crm-modal-foot">',
       '    <button type="button" class="btn btn-secondary btn-sm" id="btnIntCancel">Cancel</button>',
@@ -1239,8 +1284,29 @@
     modal.querySelector("#intCloseBtn").addEventListener("click", function () { document.body.removeChild(modal); });
     modal.querySelector("#btnIntCancel").addEventListener("click", function () { document.body.removeChild(modal); });
     modal.querySelector("#btnIntSave").addEventListener("click", function () {
-      UI.showToast("Integration configuration saved", "success");
-      document.body.removeChild(modal);
+      var updates = {};
+      var appIdEl = modal.querySelector("#cfgAppId");
+      if (appIdEl) updates.app_id = appIdEl.value.trim();
+      var wabaIdEl = modal.querySelector("#cfgWabaId");
+      if (wabaIdEl) updates.waba_id = wabaIdEl.value.trim();
+      var phoneIdEl = modal.querySelector("#cfgPhoneId");
+      if (phoneIdEl) updates.phone_number_id = phoneIdEl.value.trim();
+      var fbPageEl = modal.querySelector("#cfgFbPage");
+      if (fbPageEl) updates.page_name = fbPageEl.value.trim();
+      var igHandleEl = modal.querySelector("#cfgIgHandle");
+      if (igHandleEl) updates.account_handle = igHandleEl.value.trim();
+      var liOrgEl = modal.querySelector("#cfgLiOrg");
+      if (liOrgEl) updates.organization = liOrgEl.value.trim();
+      var xHandleEl = modal.querySelector("#cfgXHandle");
+      if (xHandleEl) updates.account_handle = xHandleEl.value.trim();
+
+      API.integrations.update(intItem.id, updates).then(function () {
+        UI.showToast("Configuration saved for " + intItem.name, "success");
+        document.body.removeChild(modal);
+        if (viewContainer) {
+          renderIntegrations(viewContainer);
+        }
+      });
     });
 
     document.body.appendChild(modal);

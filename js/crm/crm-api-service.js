@@ -453,11 +453,82 @@
     integrations: {
       list: function () {
         return new Promise(function (resolve) {
-          var stored = getStoreCollection("crm_integrations");
-          if (!stored || stored.length === 0) {
-            stored = (global.SeagoCrmMockData && global.SeagoCrmMockData.INTEGRATIONS) || [];
+          var canonical = (global.SeagoCrmMockData && global.SeagoCrmMockData.INTEGRATIONS) || [
+            { id: "int-whatsapp", provider: "whatsapp", name: "WhatsApp Business Cloud API", status: "disconnected", capabilities: ["Two-Way Messaging", "Automated Chatbot", "Template Notifications", "Media Attachments"] },
+            { id: "int-facebook", provider: "facebook", name: "Facebook Lead Ads", status: "disconnected", capabilities: ["Instant Lead Forms", "Page Messages", "Campaign Attribution"] },
+            { id: "int-instagram", provider: "instagram", name: "Instagram Professional", status: "disconnected", capabilities: ["Direct Message Sync", "Story Mentions", "Lead Capture Automation"] },
+            { id: "int-web3forms", provider: "website", name: "Web3Forms Ingestion", status: "disconnected", capabilities: ["Quote Request Form", "Contact & Showroom Form", "Lead Mapping", "Auto-Responder"] },
+            { id: "int-linkedin", provider: "linkedin", name: "LinkedIn Lead Sync", status: "disconnected", capabilities: ["Lead Gen Forms", "Sponsored InMail Sync"] },
+            { id: "int-x", provider: "x", name: "X (Twitter) Developer API", status: "disconnected", capabilities: ["Direct Message Sync", "Public Mention Ingestion"] }
+          ];
+
+          var stored = getStoreCollection("crm_integrations") || [];
+
+          // Merge stored configurations into canonical providers to ensure all 6 cards always exist
+          var merged = canonical.map(function (canon) {
+            var found = stored.find(function (s) {
+              return s.id === canon.id || s.provider === canon.provider;
+            });
+            return found ? Object.assign({}, canon, found) : Object.assign({}, canon);
+          });
+
+          // Self-heal storage if missing items or length < 6
+          if (!stored || stored.length < 6) {
+            setStoreCollection("crm_integrations", merged);
           }
-          resolve({ data: clone(stored) });
+
+          resolve({ data: clone(merged) });
+        });
+      },
+
+      get: function (id) {
+        return new Promise(function (resolve) {
+          SeagoCrmApi.integrations.list().then(function (res) {
+            var items = res.data || [];
+            var found = items.find(function (item) {
+              return item.id === id || item.provider === id;
+            });
+            resolve({ data: found ? clone(found) : null });
+          });
+        });
+      },
+
+      update: function (id, updates) {
+        return new Promise(function (resolve) {
+          SeagoCrmApi.integrations.list().then(function (res) {
+            var items = res.data || [];
+            var updated = null;
+            for (var i = 0; i < items.length; i++) {
+              if (items[i].id === id || items[i].provider === id) {
+                Object.assign(items[i], updates);
+                updated = items[i];
+                break;
+              }
+            }
+            if (updated) {
+              setStoreCollection("crm_integrations", items);
+              resolve({ success: true, data: clone(updated) });
+            } else {
+              resolve({ error: "Integration not found" });
+            }
+          });
+        });
+      },
+
+      testConnection: function (id) {
+        return new Promise(function (resolve) {
+          SeagoCrmApi.integrations.get(id).then(function (res) {
+            var item = res.data;
+            if (!item) {
+              resolve({ success: false, message: "Integration not found" });
+              return;
+            }
+            if (item.status === "connected") {
+              resolve({ success: true, message: "Connection verified with " + item.name });
+            } else {
+              resolve({ success: false, message: item.last_error || "Not connected. Awaiting backend API credentials." });
+            }
+          });
         });
       }
     },
