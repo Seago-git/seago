@@ -126,31 +126,77 @@
             },
             leadData
           );
+          newLead.name = newLead.name || newLead.customer_name || "Commercial Prospect";
+          newLead.company = newLead.company || newLead.company_name || "—";
+          newLead.product_model = newLead.product_model || newLead.product_interest || "Seagö Electric Propulsion";
           leads.unshift(newLead);
           setStoreCollection("crm_leads", leads);
 
           // Also ensure contact exists
           var contacts = getStoreCollection("crm_contacts");
-          var found = false;
+          var contactId = null;
           for (var i = 0; i < contacts.length; i++) {
             if (contacts[i].phone === newLead.phone) {
-              found = true;
+              contactId = contacts[i].id;
               break;
             }
           }
-          if (!found) {
+          if (!contactId) {
+            contactId = "cont-" + Date.now();
             contacts.unshift({
-              id: "cont-" + Date.now(),
+              id: contactId,
               name: newLead.name,
               phone: newLead.phone,
               email: newLead.email || "",
               company: newLead.company || "",
               location: newLead.location || "",
               customer_type: newLead.customer_type || "Commercial Operator",
-              assigned_to: newLead.assigned_to || "Unassigned",
+              assigned_to: newLead.assigned_to || "Anand R.",
               created_at: new Date().toISOString()
             });
             setStoreCollection("crm_contacts", contacts);
+          }
+          newLead.contact_id = contactId;
+
+          // Also ensure conversation exists in Unified Inbox
+          var convs = getStoreCollection("crm_conversations");
+          var convFound = false;
+          for (var c = 0; c < convs.length; c++) {
+            if (convs[c].customer_phone === newLead.phone) {
+              convFound = true;
+              break;
+            }
+          }
+          if (!convFound) {
+            var convId = "conv-" + Date.now();
+            newLead.conversation_id = convId;
+            convs.unshift({
+              id: convId,
+              lead_id: newLead.id,
+              contact_id: contactId,
+              customer_name: newLead.name,
+              customer_phone: newLead.phone,
+              channel: newLead.channel || "whatsapp",
+              last_message: "Inquiry for " + (newLead.product_model || "Seagö Electric Outboard"),
+              last_message_at: new Date().toISOString(),
+              unread_count: 1,
+              handover_status: "bot_active",
+              assigned_to: newLead.assigned_to || "Anand R.",
+              priority: newLead.priority || "normal",
+              is_resolved: false,
+              messages: [
+                {
+                  id: "msg-" + Date.now(),
+                  direction: "inbound",
+                  channel: newLead.channel || "whatsapp",
+                  sender_name: newLead.name,
+                  text: "Hello Seagö team, I would like to inquire about " + (newLead.product_model || "electric outboards and vessels") + ". Please share specifications and pricing.",
+                  timestamp: "Just now",
+                  status: "received"
+                }
+              ]
+            });
+            setStoreCollection("crm_conversations", convs);
           }
 
           resolve({ data: clone(newLead), success: true });
@@ -337,6 +383,22 @@
           }
           resolve({ error: "Conversation not found" });
         });
+      }
+    },
+
+    // Alias for inbox communication
+    inbox: {
+      getConversations: function () {
+        return SeagoCrmApi.conversations.list();
+      },
+      list: function (filterChannel) {
+        return SeagoCrmApi.conversations.list(filterChannel);
+      },
+      get: function (id) {
+        return SeagoCrmApi.conversations.get(id);
+      },
+      sendMessage: function (id, text, sender) {
+        return SeagoCrmApi.conversations.sendMessage(id, text, sender);
       }
     },
 

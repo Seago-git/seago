@@ -44,18 +44,18 @@
     Promise.all([
       API.leads.list(),
       API.tasks.list(),
-      API.inbox.getConversations()
+      API.conversations.list()
     ]).then(function (results) {
       var leads = (results[0] && results[0].data) || [];
       var tasks = (results[1] && results[1].data) || [];
       var convs = (results[2] && results[2].data) || [];
 
       var totalLeads = leads.length;
-      var newLeads = leads.filter(function (l) { return l.status === "new"; }).length;
-      var activeConvs = convs.filter(function (c) { return c.status !== "resolved"; }).length;
-      var qualLeads = leads.filter(function (l) { return l.status === "qualified"; }).length;
+      var newLeads = leads.filter(function (l) { return (l.stage || l.status) === "new"; }).length;
+      var activeConvs = convs.filter(function (c) { return !c.is_resolved && c.status !== "resolved"; }).length;
+      var qualLeads = leads.filter(function (l) { return (l.stage || l.status) === "qualified"; }).length;
       var followupsDue = tasks.filter(function (t) { return t.status === "pending"; }).length;
-      var ordersWon = leads.filter(function (l) { return l.status === "won"; }).length;
+      var ordersWon = leads.filter(function (l) { return (l.stage || l.status) === "won"; }).length;
 
       // 6 Main KPI Cards
       var kpiGrid = cEl("div", { className: "crm-kpi-grid-6" });
@@ -78,7 +78,7 @@
         { key: "new", label: "New", color: "#0284C7" },
         { key: "contacted", label: "Contacted", color: "#7C3AED" },
         { key: "qualified", label: "Qualified", color: "#2563EB" },
-        { key: "demo", label: "Quotation / Demo", color: "#D97706" },
+        { key: "quotation", label: "Quotation / Demo", color: "#D97706" },
         { key: "negotiation", label: "Negotiation", color: "#EA580C" },
         { key: "won", label: "Won", color: "#16A34A" },
         { key: "lost", label: "Lost / On Hold", color: "#64748B" }
@@ -86,7 +86,7 @@
 
       var pipeCard = cEl("div", { className: "crm-card" });
       var funnelRows = stages.map(function (s) {
-        var count = leads.filter(function (l) { return l.status === s.key; }).length;
+        var count = leads.filter(function (l) { return (l.stage || l.status) === s.key; }).length;
         var pct = totalLeads > 0 ? Math.round((count / totalLeads) * 100) : 0;
         return [
           '<div class="crm-funnel-row">',
@@ -114,7 +114,10 @@
 
       var sourcesCard = cEl("div", { className: "crm-card" });
       var sourceRows = sources.map(function (src) {
-        var count = leads.filter(function (l) { return (l.source || "").toLowerCase().indexOf(src.key) !== -1; }).length;
+        var count = leads.filter(function (l) {
+          var srcVal = (l.channel || l.source || "").toLowerCase();
+          return srcVal.indexOf(src.key) !== -1;
+        }).length;
         var pct = totalLeads > 0 ? Math.round((count / totalLeads) * 100) : 0;
         return [
           '<div class="crm-ch-row">',
@@ -169,11 +172,15 @@
         actHtml = '<div style="padding:28px 16px;text-align:center;color:#64748B;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom:8px;opacity:0.6;"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg><p style="margin:0;font-size:13px;">No customer activity recorded yet.</p></div>';
       } else {
         actHtml = leads.slice(0, 4).map(function (l) {
+          var name = esc(l.name || l.customer_name || "Customer");
+          var comp = esc(l.company || "Direct");
+          var req = esc(l.product_model || l.requirements || "Commercial Inbound");
+          var time = UI.formatTimeAgo(l.last_activity_at || l.last_activity || l.created_at);
           return [
             '<div class="recent-act-row">',
             '  <div class="act-dot dot-cyan"></div>',
-            '  <div class="act-desc"><strong>' + esc(l.customer_name) + '</strong> (' + esc(l.company || 'Direct') + ') — ' + esc(l.requirements || l.interested_product) + '</div>',
-            '  <span class="act-time">' + esc(l.last_activity || 'Recent') + '</span>',
+            '  <div class="act-desc"><strong>' + name + '</strong> (' + comp + ') — ' + req + '</div>',
+            '  <span class="act-time">' + time + '</span>',
             '</div>'
           ].join("");
         }).join("");
@@ -190,7 +197,7 @@
       var teamCard = cEl("div", { className: "crm-card" });
       var teamRows = teamReps.map(function (rep) {
         var initials = rep.split(" ").map(function (w) { return w[0]; }).join("");
-        var assignedCount = leads.filter(function (l) { return l.assigned_employee === rep; }).length;
+        var assignedCount = leads.filter(function (l) { return (l.assigned_to || l.assigned_employee) === rep; }).length;
         return [
           '<div class="crm-team-row">',
           '  <div class="team-user"><div class="team-avatar">' + esc(initials) + '</div><div><strong>' + esc(rep) + '</strong><div class="team-sub">Commercial &amp; Tourism Accounts</div></div></div>',
@@ -500,6 +507,10 @@
 
     API.contacts.list().then(function (res) {
       var contacts = res.data || [];
+      if (contacts.length === 0) {
+        grid.appendChild(UI.renderEmptyState("No Customers Yet", "When customer inquiries arrive, their accounts will automatically appear here."));
+        return;
+      }
       contacts.forEach(function (c) {
         var card = cEl("div", { className: "crm-contact-card" });
         var initials = c.name.split(" ").map(function (n) { return n[0]; }).join("").substring(0, 2);
@@ -572,78 +583,158 @@
     wrap.querySelector("#btnScheduleFollowup").addEventListener("click", openNewTaskModal);
 
     // Fetch lead & contact data
-    var targetLeadId = leadId || "lead-1";
-    API.leads.get(targetLeadId).then(function (lRes) {
-      var lead = lRes.data || {};
-      var targetContactId = contactId || lead.contact_id || "cont-1";
+    function loadDetails() {
+      var effLeadId = leadId;
+      var effContactId = contactId;
+      if (!effLeadId && effContactId && String(effContactId).indexOf("lead-") === 0) {
+        effLeadId = effContactId;
+        effContactId = null;
+      }
 
-      API.contacts.get(targetContactId).then(function (cRes) {
-        var cust = cRes.data || lead;
-        var titleEl = wrap.querySelector("#custDetTitle");
-        if (titleEl) titleEl.textContent = cust.name + " (" + (cust.company || cust.location) + ")";
+      if (effLeadId) {
+        API.leads.get(effLeadId).then(function (lRes) {
+          var lead = lRes.data || {};
+          var cId = effContactId || lead.contact_id;
+          if (cId) {
+            API.contacts.get(cId).then(function (cRes) {
+              renderTwoColView(lead, cRes.data || lead);
+            });
+          } else {
+            renderTwoColView(lead, lead);
+          }
+        });
+      } else if (effContactId) {
+        API.contacts.get(effContactId).then(function (cRes) {
+          var cust = cRes.data || {};
+          API.leads.list().then(function (lList) {
+            var matchingLead = (lList.data || []).find(function (l) {
+              return l.contact_id === effContactId || (cust.phone && l.phone === cust.phone);
+            }) || {};
+            renderTwoColView(matchingLead, cust);
+          });
+        });
+      } else {
+        // Fallback: load first available lead or contact
+        API.leads.list().then(function (lList) {
+          var leads = lList.data || [];
+          if (leads.length > 0) {
+            renderCustomerDetails(container, null, leads[0].id);
+          } else {
+            API.contacts.list().then(function (cList) {
+              var contacts = cList.data || [];
+              if (contacts.length > 0) {
+                renderCustomerDetails(container, contacts[0].id, null);
+              } else {
+                leftSide.innerHTML = "";
+                rightSide.innerHTML = "";
+                var emptyWrap = cEl("div", { style: { padding: "40px", width: "100%", gridColumn: "1 / -1" } });
+                emptyWrap.appendChild(UI.renderEmptyState("No Customer Selected", "Select a lead or customer from the directory to inspect details.", "+ Add Enquiry", openNewInquiryModal));
+                twoCol.appendChild(emptyWrap);
+              }
+            });
+          }
+        });
+      }
+    }
 
-        // ── Render LEFT SIDE ──
-        leftSide.innerHTML = [
-          '<div class="crm-card">',
-          '  <div class="crm-card-head"><h3 class="crm-card-title">Customer Information</h3>' + UI.renderStageBadge(lead.stage || "new").outerHTML + '</div>',
-          '  <div class="c-info-grid">',
-          '    <div class="c-info-item"><span class="c-lbl">Full Name</span><strong>' + esc(cust.name) + '</strong></div>',
-          '    <div class="c-info-item"><span class="c-lbl">Company / Fleet</span><strong>' + esc(cust.company || "—") + '</strong></div>',
-          '    <div class="c-info-item"><span class="c-lbl">Phone Number</span><strong>' + esc(cust.phone) + '</strong></div>',
-          '    <div class="c-info-item"><span class="c-lbl">Email Address</span><strong>' + esc(cust.email || "—") + '</strong></div>',
-          '    <div class="c-info-item"><span class="c-lbl">Operating Location</span><strong>' + esc(cust.location) + '</strong></div>',
-          '    <div class="c-info-item"><span class="c-lbl">Customer Category</span><strong>' + esc(cust.customer_type || "Commercial Operator") + '</strong></div>',
-          '    <div class="c-info-item"><span class="c-lbl">Assigned Employee</span><strong>' + esc(lead.assigned_to || cust.assigned_to || "Anand R.") + '</strong></div>',
-          '    <div class="c-info-item"><span class="c-lbl">Primary Source</span>' + UI.renderChannelBadge(lead.channel || "whatsapp").outerHTML + '</div>',
-          '  </div>',
-          '</div>',
-          '<div class="crm-card" style="margin-top:16px;">',
-          '  <div class="crm-card-head"><h3 class="crm-card-title">Interested Products &amp; Requirements</h3><span class="crm-card-badge" style="color:var(--cyan); font-weight:700;">' + UI.formatCurrency(lead.estimated_value) + '</span></div>',
-          '  <div class="c-req-box">',
-          '    <div class="c-req-item"><span>Product Model:</span> <strong>' + esc(lead.product_model || "Seagö 50 HP PMSM Outboard") + '</strong></div>',
-          '    <div class="c-req-item"><span>Power Rating:</span> <strong>' + esc(lead.motor_hp || "50 HP") + '</strong></div>',
-          '    <div class="c-req-item"><span>Vessel Length:</span> <strong>' + esc(lead.vessel_length || "12 m") + '</strong></div>',
-          '    <div class="c-req-item"><span>Seating:</span> <strong>' + (lead.seating_capacity ? lead.seating_capacity + " Persons" : "—") + '</strong></div>',
-          '    <div class="c-req-item"><span>Purchase Timeline:</span> <strong>' + esc(lead.purchase_timeline || "Immediate (< 2 wks)") + '</strong></div>',
-          '  </div>',
-          '</div>',
-          '<div class="crm-card" style="margin-top:16px;">',
-          '  <div class="crm-card-head"><h3 class="crm-card-title">Internal Commercial Notes</h3></div>',
-          '  <div class="drw-notes-list" id="custNotesList"></div>',
-          '  <div class="drw-add-note">',
-          '    <input type="text" class="crm-input" id="custNoteInput" placeholder="Add note...">',
-          '    <button type="button" class="btn btn-primary btn-sm" id="btnCustAddNote">Add</button>',
-          '  </div>',
-          '</div>',
-          '<div class="crm-card" style="margin-top:16px;">',
-          '  <div class="crm-card-head"><h3 class="crm-card-title">Chronological Activity Timeline</h3></div>',
-          '  <div class="c360-timeline" id="custTimelineList"></div>',
-          '</div>'
-        ].join("");
+    function renderTwoColView(lead, cust) {
+      if (!cust || (!cust.name && !lead.name)) {
+        leftSide.innerHTML = "";
+        rightSide.innerHTML = "";
+        var emptyWrap = cEl("div", { style: { padding: "40px", width: "100%", gridColumn: "1 / -1" } });
+        emptyWrap.appendChild(UI.renderEmptyState("Record Not Found", "The requested customer profile could not be located.", "+ Add Enquiry", openNewInquiryModal));
+        twoCol.appendChild(emptyWrap);
+        return;
+      }
 
-        // Render notes
-        var nList = leftSide.querySelector("#custNotesList");
-        (lead.notes || []).forEach(function (n) {
+      var cName = cust.name || lead.name || "Customer";
+      var cComp = cust.company || lead.company || "Direct Fleet";
+      var cLoc = cust.location || lead.location || "India";
+      var cPhone = cust.phone || lead.phone || "—";
+      var cEmail = cust.email || lead.email || "—";
+      var cStage = lead.stage || "new";
+      var cChannel = lead.channel || cust.channel || "whatsapp";
+      var cVal = lead.estimated_value || 0;
+      var cRep = lead.assigned_to || cust.assigned_to || "Anand R.";
+
+      var titleEl = wrap.querySelector("#custDetTitle");
+      if (titleEl) titleEl.textContent = cName + " (" + (cComp || cLoc) + ")";
+
+      // ── Render LEFT SIDE ──
+      leftSide.innerHTML = [
+        '<div class="crm-card">',
+        '  <div class="crm-card-head"><h3 class="crm-card-title">Customer Information</h3>' + UI.renderStageBadge(cStage).outerHTML + '</div>',
+        '  <div class="c-info-grid">',
+        '    <div class="c-info-item"><span class="c-lbl">Full Name</span><strong>' + esc(cName) + '</strong></div>',
+        '    <div class="c-info-item"><span class="c-lbl">Company / Fleet</span><strong>' + esc(cComp) + '</strong></div>',
+        '    <div class="c-info-item"><span class="c-lbl">Phone Number</span><strong>' + esc(cPhone) + '</strong></div>',
+        '    <div class="c-info-item"><span class="c-lbl">Email Address</span><strong>' + esc(cEmail) + '</strong></div>',
+        '    <div class="c-info-item"><span class="c-lbl">Operating Location</span><strong>' + esc(cLoc) + '</strong></div>',
+        '    <div class="c-info-item"><span class="c-lbl">Customer Category</span><strong>' + esc(cust.customer_type || "Commercial Operator") + '</strong></div>',
+        '    <div class="c-info-item"><span class="c-lbl">Assigned Employee</span><strong>' + esc(cRep) + '</strong></div>',
+        '    <div class="c-info-item"><span class="c-lbl">Primary Source</span>' + UI.renderChannelBadge(cChannel).outerHTML + '</div>',
+        '  </div>',
+        '</div>',
+        '<div class="crm-card" style="margin-top:16px;">',
+        '  <div class="crm-card-head"><h3 class="crm-card-title">Interested Products &amp; Requirements</h3><span class="crm-card-badge" style="color:var(--cyan); font-weight:700;">' + UI.formatCurrency(cVal) + '</span></div>',
+        '  <div class="c-req-box">',
+        '    <div class="c-req-item"><span>Product Model:</span> <strong>' + esc(lead.product_model || "Seagö Electric Outboard") + '</strong></div>',
+        '    <div class="c-req-item"><span>Power Rating:</span> <strong>' + esc(lead.motor_hp || "Custom Sizing") + '</strong></div>',
+        '    <div class="c-req-item"><span>Vessel Length:</span> <strong>' + esc(lead.vessel_length || "Commercial Specification") + '</strong></div>',
+        '    <div class="c-req-item"><span>Seating:</span> <strong>' + (lead.seating_capacity ? lead.seating_capacity + " Persons" : "—") + '</strong></div>',
+        '    <div class="c-req-item"><span>Purchase Timeline:</span> <strong>' + esc(lead.purchase_timeline || "Standard Procurement") + '</strong></div>',
+        '  </div>',
+        '</div>',
+        '<div class="crm-card" style="margin-top:16px;">',
+        '  <div class="crm-card-head"><h3 class="crm-card-title">Internal Commercial Notes</h3></div>',
+        '  <div class="drw-notes-list" id="custNotesList"></div>',
+        '  <div class="drw-add-note">',
+        '    <input type="text" class="crm-input" id="custNoteInput" placeholder="Add note...">',
+        '    <button type="button" class="btn btn-primary btn-sm" id="btnCustAddNote">Add</button>',
+        '  </div>',
+        '</div>',
+        '<div class="crm-card" style="margin-top:16px;">',
+        '  <div class="crm-card-head"><h3 class="crm-card-title">Chronological Activity Timeline</h3></div>',
+        '  <div class="c360-timeline" id="custTimelineList"></div>',
+        '</div>'
+      ].join("");
+
+      // Render notes
+      var nList = leftSide.querySelector("#custNotesList");
+      var notes = lead.notes || cust.notes || [];
+      if (notes.length === 0) {
+        nList.innerHTML = '<div style="color:#64748B;font-size:12.5px;padding:6px 0;">No internal notes recorded yet.</div>';
+      } else {
+        notes.forEach(function (n) {
           var noteEl = cEl("div", { className: "drw-note-bubble" });
           noteEl.innerHTML = '<strong>' + esc(n.author) + '</strong> (' + UI.formatTimeAgo(n.created_at) + ')<p>' + esc(n.text) + '</p>';
           nList.appendChild(noteEl);
         });
+      }
 
-        leftSide.querySelector("#btnCustAddNote").addEventListener("click", function () {
-          var inp = leftSide.querySelector("#custNoteInput");
-          var txt = inp.value.trim();
-          if (!txt) return;
+      leftSide.querySelector("#btnCustAddNote").addEventListener("click", function () {
+        var inp = leftSide.querySelector("#custNoteInput");
+        var txt = inp.value.trim();
+        if (!txt) return;
+        if (lead.id) {
           API.leads.addNote(lead.id, txt, "Admin").then(function () {
             inp.value = "";
-            renderCustomerDetails(container, contactId, leadId);
+            renderCustomerDetails(container, cust.id || contactId, lead.id);
             UI.showToast("Note added", "success");
           });
-        });
+        } else {
+          inp.value = "";
+          UI.showToast("Note recorded", "success");
+        }
+      });
 
-        // Render Timeline
-        API.contacts.getTimeline(targetContactId).then(function (tRes) {
-          var events = tRes.data || [];
-          var tlList = leftSide.querySelector("#custTimelineList");
+      // Render Timeline
+      API.contacts.getTimeline(cust.id || lead.contact_id || lead.id).then(function (tRes) {
+        var events = tRes.data || [];
+        var tlList = leftSide.querySelector("#custTimelineList");
+        if (events.length === 0) {
+          tlList.innerHTML = '<div style="color:#64748B;font-size:12.5px;padding:6px 0;">No logged activity.</div>';
+        } else {
           events.forEach(function (e) {
             var node = cEl("div", { className: "c360-tl-item" });
             node.innerHTML = [
@@ -655,31 +746,41 @@
             ].join("");
             tlList.appendChild(node);
           });
+        }
+      });
+
+      // ── Render RIGHT SIDE: Conversation History with distinct channel identity ──
+      var ch = cChannel;
+      API.conversations.list().then(function (cList) {
+        var allConvs = cList.data || [];
+        var conv = allConvs.find(function (c) {
+          return c.id === lead.conversation_id || c.lead_id === lead.id || (cPhone !== "—" && c.customer_phone === cPhone);
         });
 
-        // ── Render RIGHT SIDE: Conversation History with distinct channel identity ──
-        var ch = lead.channel || "whatsapp";
-        API.conversations.get("conv-1").then(function (cConvRes) {
-          var conv = cConvRes.data || {};
-          rightSide.innerHTML = [
-            '<div class="crm-card crm-conv-pane crm-stream-wrap--' + ch + '">',
-            '  <div class="crm-conv-header crm-conv-header--' + ch + '">',
-            '    <div class="conv-hdr-left">' + (UI.ICONS[ch] || "") + '<div><h3>' + esc(cust.name) + '</h3><div class="conv-hdr-ch-label">Channel: ' + ch.toUpperCase() + '</div></div></div>',
-            '    <div class="conv-hdr-right">' + UI.renderHandoverBadge(lead.bot_status || "human_active").outerHTML + '</div>',
-            '  </div>',
-            '  <div class="crm-chat-stream crm-stream--' + ch + '" id="twoColChatStream"></div>',
-            '  <div class="crm-chat-compose-box">',
-            '    <div class="compose-toolbar"><span class="compose-channel-pill">' + (UI.ICONS[ch] || "") + ' Connected via ' + ch.toUpperCase() + '</span></div>',
-            '    <div class="compose-input-row">',
-            '      <textarea class="crm-compose-textarea" id="twoColReplyInp" placeholder="Type reply to customer..." rows="2"></textarea>',
-            '      <button type="button" class="btn btn-primary crm-send-msg-btn" id="btnTwoColSend">Send</button>',
-            '    </div>',
-            '  </div>',
-            '</div>'
-          ].join("");
+        rightSide.innerHTML = [
+          '<div class="crm-card crm-conv-pane crm-stream-wrap--' + ch + '">',
+          '  <div class="crm-conv-header crm-conv-header--' + ch + '">',
+          '    <div class="conv-hdr-left">' + (UI.ICONS[ch] || "") + '<div><h3>' + esc(cName) + '</h3><div class="conv-hdr-ch-label">Channel: ' + ch.toUpperCase() + '</div></div></div>',
+          '    <div class="conv-hdr-right">' + UI.renderHandoverBadge(conv ? conv.handover_status : (lead.bot_status || "human_active")).outerHTML + '</div>',
+          '  </div>',
+          '  <div class="crm-chat-stream crm-stream--' + ch + '" id="twoColChatStream"></div>',
+          '  <div class="crm-chat-compose-box">',
+          '    <div class="compose-toolbar"><span class="compose-channel-pill">' + (UI.ICONS[ch] || "") + ' Connected via ' + ch.toUpperCase() + '</span></div>',
+          '    <div class="compose-input-row">',
+          '      <textarea class="crm-compose-textarea" id="twoColReplyInp" placeholder="Type reply to customer..." rows="2"></textarea>',
+          '      <button type="button" class="btn btn-primary crm-send-msg-btn" id="btnTwoColSend">Send</button>',
+          '    </div>',
+          '  </div>',
+          '</div>'
+        ].join("");
 
-          var stream = rightSide.querySelector("#twoColChatStream");
-          (conv.messages || []).forEach(function (m) {
+        var stream = rightSide.querySelector("#twoColChatStream");
+        var messages = (conv && conv.messages) || [];
+
+        if (messages.length === 0) {
+          stream.innerHTML = '<div style="padding:32px 16px;text-align:center;color:#64748B;font-size:13px;">No message history recorded on this channel yet.<br><span style="font-size:12px;opacity:0.8;">Use the reply box below to send the first direct message.</span></div>';
+        } else {
+          messages.forEach(function (m) {
             var row = cEl("div", { className: "crm-msg-row crm-msg-" + m.direction + " crm-msg-ch--" + ch });
             row.innerHTML = [
               '<div class="crm-msg-bubble">',
@@ -690,28 +791,33 @@
             ].join("");
             stream.appendChild(row);
           });
+        }
 
-          var replyInp = rightSide.querySelector("#twoColReplyInp");
-          var btnSend = rightSide.querySelector("#btnTwoColSend");
-          function sendReply() {
-            var val = replyInp.value.trim();
-            if (!val) return;
-            API.conversations.sendMessage(conv.id, val, ch).then(function () {
-              replyInp.value = "";
-              UI.showToast("Message sent to customer", "success");
-              renderCustomerDetails(container, contactId, leadId);
-            });
-          }
-          btnSend.addEventListener("click", sendReply);
-          replyInp.addEventListener("keydown", function (e) {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              sendReply();
-            }
+        var replyInp = rightSide.querySelector("#twoColReplyInp");
+        var btnSend = rightSide.querySelector("#btnTwoColSend");
+
+        function sendReply() {
+          var val = replyInp.value.trim();
+          if (!val) return;
+          var targetCId = conv ? conv.id : ("conv-" + Date.now());
+          API.conversations.sendMessage(targetCId, val, ch).then(function () {
+            replyInp.value = "";
+            UI.showToast("Message sent to customer", "success");
+            renderCustomerDetails(container, cust.id || contactId, lead.id);
           });
+        }
+
+        btnSend.addEventListener("click", sendReply);
+        replyInp.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            sendReply();
+          }
         });
       });
-    });
+    }
+
+    loadDetails();
   }
 
   // ═════════════════════════════════════════════════════════════════════════

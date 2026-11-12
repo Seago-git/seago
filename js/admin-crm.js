@@ -54,7 +54,7 @@
       '  <div class="crm-notif-wrap" id="crmNotifWrap">',
       '    <button type="button" class="crm-notif-btn" id="crmNotifBtn" title="In-App Notifications" aria-label="Notifications">',
       '      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>',
-      '      <span class="crm-notif-badge">2</span>',
+      '      <span class="crm-notif-badge" id="crmNotifBadge" style="display:none;">0</span>',
       '    </button>',
       '    <div class="crm-notif-dropdown" id="crmNotifDropdown" style="display:none;"></div>',
       '  </div>',
@@ -80,6 +80,21 @@
     // Notifications Dropdown Logic
     var notifBtn = crmNav.querySelector("#crmNotifBtn");
     var notifMenu = crmNav.querySelector("#crmNotifDropdown");
+    var notifBadge = crmNav.querySelector("#crmNotifBadge");
+
+    global.SeagoCrmApi.notifications.list().then(function (res) {
+      var notifs = res.data || [];
+      var unread = notifs.filter(function (n) { return !n.read; }).length;
+      if (notifBadge) {
+        if (unread > 0) {
+          notifBadge.textContent = unread;
+          notifBadge.style.display = "flex";
+        } else {
+          notifBadge.style.display = "none";
+        }
+      }
+    });
+
     notifBtn.addEventListener("click", function (e) {
       e.stopPropagation();
       var isHidden = notifMenu.style.display === "none";
@@ -130,18 +145,22 @@
       target.appendChild(head);
 
       var list = UI.createEl("div", { className: "notif-menu-list" });
-      notifs.forEach(function (n) {
-        var item = UI.createEl("div", { className: "notif-item " + (n.read ? "is-read" : "is-unread") });
-        item.innerHTML = [
-          '<div class="notif-item-title">' + UI.escapeHtml(n.title) + '</div>',
-          '<div class="notif-item-msg">' + UI.escapeHtml(n.message) + '</div>',
-          '<div class="notif-item-time">' + UI.formatTimeAgo(n.timestamp) + '</div>'
-        ].join("");
-        item.addEventListener("click", function () {
-          if (n.route) location.hash = n.route;
+      if (notifs.length === 0) {
+        list.innerHTML = '<div style="padding:22px;text-align:center;color:#64748B;font-size:12.5px;">No notifications.</div>';
+      } else {
+        notifs.forEach(function (n) {
+          var item = UI.createEl("div", { className: "notif-item " + (n.read ? "is-read" : "is-unread") });
+          item.innerHTML = [
+            '<div class="notif-item-title">' + UI.escapeHtml(n.title) + '</div>',
+            '<div class="notif-item-msg">' + UI.escapeHtml(n.message) + '</div>',
+            '<div class="notif-item-time">' + UI.formatTimeAgo(n.timestamp) + '</div>'
+          ].join("");
+          item.addEventListener("click", function () {
+            if (n.route) location.hash = n.route;
+          });
+          list.appendChild(item);
         });
-        list.appendChild(item);
-      });
+      }
       target.appendChild(list);
 
       head.querySelector("#btnMarkAllRead").addEventListener("click", function (e) {
