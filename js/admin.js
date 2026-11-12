@@ -4137,372 +4137,726 @@
     });
   }
 
-  // 2. PRODUCTS & MOTORS PAGE CMS (products.html)
+  // Modal: Create or Edit a Product Section
+  function openSectionEditModal(sec, onSave) {
+    var isNew = !sec;
+    var item = sec ? Object.assign({}, sec) : {
+      id: "sec-custom-" + Date.now(),
+      title: "",
+      badge: "NEW RANGE",
+      intro: "",
+      layout: "selector",
+      unit: "Model",
+      image_url: "assets/photos/Outboard Motors.webp",
+      reverse: false,
+      published: true,
+      products: []
+    };
+
+    var wrap = createEl("div", { style: { display: "flex", flexDirection: "column", gap: "14px" } });
+
+    var gTitle = createEl("div", { className: "form-group" });
+    gTitle.appendChild(createEl("label", null, "Section Title *"));
+    var inpTitle = createEl("input", { type: "text", value: item.title || "", placeholder: "e.g. Inboard Motors, Pod Drives, Accessories" });
+    gTitle.appendChild(inpTitle);
+    wrap.appendChild(gTitle);
+
+    var r1 = createEl("div", { className: "form-row" });
+    var gBadge = createEl("div", { className: "form-group" });
+    gBadge.appendChild(createEl("label", null, "Category Badge"));
+    var inpBadge = createEl("input", { type: "text", value: item.badge || "", placeholder: "e.g. 10–100 kW · Commercial" });
+    gBadge.appendChild(inpBadge);
+    r1.appendChild(gBadge);
+
+    var gLayout = createEl("div", { className: "form-group" });
+    gLayout.appendChild(createEl("label", null, "Display Layout Type"));
+    var selLayout = createEl("select");
+    var optSel = createEl("option", { value: "selector" }, "Interactive Selector (Tabs with Specs & Photos)");
+    var optGrid = createEl("option", { value: "grid" }, "Card Grid (Multi-product card catalog)");
+    if (item.layout === "grid") optGrid.selected = true; else optSel.selected = true;
+    selLayout.appendChild(optSel);
+    selLayout.appendChild(optGrid);
+    gLayout.appendChild(selLayout);
+    r1.appendChild(gLayout);
+    wrap.appendChild(r1);
+
+    var r2 = createEl("div", { className: "form-row" });
+    var gUnit = createEl("div", { className: "form-group" });
+    gUnit.appendChild(createEl("label", null, "Selector Unit (for Tab buttons)"));
+    var inpUnit = createEl("input", { type: "text", value: item.unit || "HP", placeholder: "e.g. HP, Seats, kW, Pack" });
+    gUnit.appendChild(inpUnit);
+    r2.appendChild(gUnit);
+
+    var gRev = createEl("div", { className: "form-group", style: { display: "flex", alignItems: "center", gap: "8px", paddingTop: "26px" } });
+    var chkRev = createEl("input", { type: "checkbox", id: "m_sec_rev" });
+    chkRev.checked = !!item.reverse;
+    gRev.appendChild(chkRev);
+    gRev.appendChild(createEl("label", { for: "m_sec_rev", style: { margin: "0", cursor: "pointer" } }, "Alternate layout (Media on Right)"));
+    r2.appendChild(gRev);
+    wrap.appendChild(r2);
+
+    var gIntro = createEl("div", { className: "form-group" });
+    gIntro.appendChild(createEl("label", null, "Section Description / Narrative"));
+    var inpIntro = createEl("textarea", { rows: "3", placeholder: "Describe this equipment category for boatbuilders and commercial fleet operators..." }, item.intro || "");
+    gIntro.appendChild(inpIntro);
+    wrap.appendChild(gIntro);
+
+    var mediaSec = createMediaField("Featured Category Image", item.image_url || "assets/photos/Outboard Motors.webp", false);
+    wrap.appendChild(mediaSec.group);
+
+    openModal({
+      title: isNew ? "Create New Product Section" : "Edit Product Section",
+      bodyEl: wrap,
+      maxWidth: "580px",
+      confirmLabel: isNew ? "Create Section" : "Save Section Details",
+      onConfirm: function(){
+        var t = inpTitle.value.trim();
+        if (!t) {
+          showToast("Section title is required", "error");
+          return;
+        }
+        item.title = t;
+        item.badge = inpBadge.value.trim();
+        item.intro = inpIntro.value.trim();
+        item.layout = selLayout.value;
+        item.unit = inpUnit.value.trim() || "Model";
+        item.reverse = chkRev.checked;
+        item.image_url = mediaSec.input.value.trim() || "assets/photos/Outboard Motors.webp";
+        if (typeof onSave === "function") onSave(item);
+      }
+    });
+  }
+
+  // Modal: Add or Edit a Product in a Section
+  function openProductEditModal(section, prod, onSave) {
+    var isNew = !prod;
+    var item = prod ? JSON.parse(JSON.stringify(prod)) : {
+      id: "prod-" + Date.now(),
+      key: "",
+      name: "",
+      tag: "",
+      description: "",
+      image_url: section.image_url || "assets/photos/Outboard Motors.webp",
+      photos: [],
+      datasheet: "",
+      quote_url: "",
+      specs: {},
+      published: true
+    };
+
+    var wrap = createEl("div", { style: { display: "flex", flexDirection: "column", gap: "14px", maxHeight: "72vh", overflowY: "auto", paddingRight: "4px" } });
+
+    var r1 = createEl("div", { className: "form-row" });
+    var gName = createEl("div", { className: "form-group" });
+    gName.appendChild(createEl("label", null, "Product Name / Model Display *"));
+    var inpName = createEl("input", { type: "text", value: item.name || "", placeholder: "e.g. SEAGÖ 60 HP or 40 Seater Pontoon" });
+    gName.appendChild(inpName);
+    r1.appendChild(gName);
+
+    var gKey = createEl("div", { className: "form-group" });
+    gKey.appendChild(createEl("label", null, "Selector Tab Key * (" + (section.unit || "Label") + ")"));
+    var inpKey = createEl("input", { type: "text", value: item.key || "", placeholder: "e.g. 60 or 40 or 73.6V" });
+    gKey.appendChild(inpKey);
+    r1.appendChild(gKey);
+    wrap.appendChild(r1);
+
+    var r2 = createEl("div", { className: "form-row" });
+    var gTag = createEl("div", { className: "form-group" });
+    gTag.appendChild(createEl("label", null, "Subtitle / Spec Tag"));
+    var inpTag = createEl("input", { type: "text", value: item.tag || "", placeholder: "e.g. 60 HP · 45 kW · 144 V" });
+    gTag.appendChild(inpTag);
+    r2.appendChild(gTag);
+
+    var gDs = createEl("div", { className: "form-group" });
+    gDs.appendChild(createEl("label", null, "Datasheet / Catalog PDF URL (optional)"));
+    var inpDs = createEl("input", { type: "text", value: item.datasheet || "", placeholder: "catalog/SEAGO Technical Specifications.pdf" });
+    gDs.appendChild(inpDs);
+    r2.appendChild(gDs);
+    wrap.appendChild(r2);
+
+    var gDesc = createEl("div", { className: "form-group" });
+    gDesc.appendChild(createEl("label", null, "Short Description / Summary"));
+    var inpDesc = createEl("textarea", { rows: "2", placeholder: "Key performance, application, or commercial vessel notes..." }, item.description || "");
+    gDesc.appendChild(inpDesc);
+    wrap.appendChild(gDesc);
+
+    var mediaProd = createMediaField("Primary Product Image", item.image_url || section.image_url || "assets/photos/Outboard Motors.webp", false);
+    wrap.appendChild(mediaProd.group);
+
+    // Gallery / Slideshow photos
+    var gGallery = createEl("div", { className: "form-group" });
+    gGallery.appendChild(createEl("label", null, "Slideshow Photos (enter additional image URLs, one per line)"));
+    var initialPhotoLines = (Array.isArray(item.photos) && item.photos.length > 0)
+      ? item.photos.map(function(p){ return typeof p === 'string' ? p : (p.url || ''); }).filter(Boolean).join('\n')
+      : "";
+    var inpPhotos = createEl("textarea", { rows: "2", placeholder: "assets/photos/sundeck/sundeck-1.webp\nassets/photos/sundeck/sundeck-2.webp" }, initialPhotoLines);
+    gGallery.appendChild(inpPhotos);
+    wrap.appendChild(gGallery);
+
+    // Specifications Key-Value Editor
+    var specsSection = createEl("div", { style: { border: "1px solid var(--line)", borderRadius: "8px", padding: "14px", background: "#F8FAFC" } });
+    var specsHeader = createEl("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px", flexWrap: "wrap", gap: "8px" } });
+    specsHeader.appendChild(createEl("h5", { style: { margin: "0", fontSize: "13px", fontWeight: "700", color: "var(--navy)" } }, "Technical Specifications Grid"));
+
+    var presetWrap = createEl("div", { style: { display: "flex", gap: "6px" } });
+    var btnPreMotor = createEl("button", { type: "button", className: "btn btn-secondary btn-sm", style: { padding: "2px 6px", fontSize: "10.5px" } }, "+ Motor Specs");
+    var btnPreBoat = createEl("button", { type: "button", className: "btn btn-secondary btn-sm", style: { padding: "2px 6px", fontSize: "10.5px" } }, "+ Boat Specs");
+    presetWrap.appendChild(btnPreMotor);
+    presetWrap.appendChild(btnPreBoat);
+    specsHeader.appendChild(presetWrap);
+    specsSection.appendChild(specsHeader);
+
+    var specRowsContainer = createEl("div", { style: { display: "flex", flexDirection: "column", gap: "8px" } });
+
+    function addSpecRow(key, val) {
+      var row = createEl("div", { style: { display: "flex", gap: "8px", alignItems: "center" } });
+      var kInp = createEl("input", { type: "text", value: key || "", placeholder: "Spec Name (e.g. Rated Power)", style: { flex: "1" } });
+      var vInp = createEl("input", { type: "text", value: val || "", placeholder: "Value (e.g. 45 kW)", style: { flex: "1.2" } });
+      var dBtn = createEl("button", { type: "button", className: "btn btn-secondary btn-sm", style: { color: "var(--danger)", padding: "4px 8px" } }, "×");
+      dBtn.addEventListener("click", function(){ row.remove(); });
+      row.appendChild(kInp);
+      row.appendChild(vInp);
+      row.appendChild(dBtn);
+      specRowsContainer.appendChild(row);
+    }
+
+    btnPreMotor.addEventListener("click", function(){
+      var defaultMotorSpecs = [
+        ["Rated Power", "45 kW"], ["Rated Voltage", "144 V"], ["Recommended Battery", "144V 300 AH LiFePO4"],
+        ["Motor Type", "PMSM"], ["Maximum Speed", "5500 RPM"], ["Weight", "95 Kg"], ["Cooling System", "Water Cooled"]
+      ];
+      defaultMotorSpecs.forEach(function(pair){ addSpecRow(pair[0], pair[1]); });
+    });
+
+    btnPreBoat.addEventListener("click", function(){
+      var defaultBoatSpecs = [
+        ["Length", "8.50 m"], ["Beam", "4.57 m"], ["Draft", "0.35 m"],
+        ["Seating Capacity", "30 Persons"], ["Hull Material", "Composite FRP / Aluminum"], ["Propulsion", "100% Electric"]
+      ];
+      defaultBoatSpecs.forEach(function(pair){ addSpecRow(pair[0], pair[1]); });
+    });
+
+    var existingSpecs = (item.specs && typeof item.specs === "object") ? item.specs : {};
+    var exKeys = Object.keys(existingSpecs);
+    if (exKeys.length > 0) {
+      exKeys.forEach(function(k){ addSpecRow(k, existingSpecs[k]); });
+    } else {
+      addSpecRow("Rated Power", "");
+      addSpecRow("Rated Voltage", "");
+    }
+    specsSection.appendChild(specRowsContainer);
+
+    var addSpecBtn = createEl("button", { type: "button", className: "btn btn-secondary btn-sm", style: { marginTop: "10px" } }, "+ Add Specification Row");
+    addSpecBtn.addEventListener("click", function(){ addSpecRow("", ""); });
+    specsSection.appendChild(addSpecBtn);
+    wrap.appendChild(specsSection);
+
+    openModal({
+      title: isNew ? "Add Product to Section" : "Edit Product",
+      bodyEl: wrap,
+      maxWidth: "700px",
+      confirmLabel: isNew ? "Add Product" : "Save Product Details",
+      onConfirm: function(){
+        var pName = inpName.value.trim();
+        var pKey = inpKey.value.trim();
+        if (!pName || !pKey) {
+          showToast("Product name and selector tab key are required", "error");
+          return;
+        }
+
+        item.name = pName;
+        item.key = pKey;
+        item.tag = inpTag.value.trim();
+        item.datasheet = inpDs.value.trim();
+        item.description = inpDesc.value.trim();
+        item.image_url = mediaProd.input.value.trim() || section.image_url;
+
+        // Collect gallery photos
+        var extraLines = inpPhotos.value.split("\n").map(function(l){ return l.trim(); }).filter(Boolean);
+        var photosArr = [];
+        if (item.image_url) photosArr.push({ url: item.image_url, caption: item.name });
+        extraLines.forEach(function(url, idx){
+          if (url !== item.image_url) {
+            photosArr.push({ url: url, caption: item.name + " (" + (idx + 1) + ")" });
+          }
+        });
+        item.photos = photosArr;
+
+        // Collect specs
+        var collectedSpecs = {};
+        var rows = specRowsContainer.children;
+        for (var i = 0; i < rows.length; i++) {
+          var inps = rows[i].querySelectorAll("input");
+          if (inps && inps.length >= 2) {
+            var sk = inps[0].value.trim();
+            var sv = inps[1].value.trim();
+            if (sk) collectedSpecs[sk] = sv;
+          }
+        }
+        item.specs = collectedSpecs;
+
+        if (typeof onSave === "function") onSave(item);
+      }
+    });
+  }
+
+  // 2. PRODUCTS & MOTORS PAGE CMS (products.html) - Dynamic Sections & Products Builder
   function renderProductsPageEditor() {
     pageRoot.innerHTML = "";
     loadPageData("products", function(err, page){
       if (!page) return;
 
-      var form = createEl("form", { novalidate: "novalidate" });
-      var header = createPageHeader("Products & Outboard Fleet", "products.html", function(){
-        if (typeof form.requestSubmit === "function") {
-          form.requestSubmit();
-        } else {
-          form.dispatchEvent(new Event("submit", { cancelable: true }));
-        }
-      });
-      pageRoot.appendChild(header);
+      window.SeagoStore.list("product_sections", function(secErr, sectionsList){
+        var sections = (sectionsList && sectionsList.length > 0) ? sectionsList : ((window._SEAGO_SEED_DATA && window._SEAGO_SEED_DATA.product_sections) || []);
 
-      var formCard = createEl("div", { className: "form-card" });
+        var form = createEl("form", { novalidate: "novalidate" });
+        var header = createPageHeader("Products & Outboard Fleet", "products.html", function(){
+          if (typeof form.requestSubmit === "function") {
+            form.requestSubmit();
+          } else {
+            form.dispatchEvent(new Event("submit", { cancelable: true }));
+          }
+        });
+        pageRoot.appendChild(header);
 
-      // Section 1: Hero
-      var s1 = createEl("div", { className: "cms-section-card" });
-      var h1 = createEl("div", { className: "cms-section-header" });
-      var h1Left = createEl("div", { className: "cms-section-title-wrap" });
-      h1Left.appendChild(createEl("span", { className: "cms-section-number" }, "1"));
-      h1Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Products Page Hero"));
-      h1.appendChild(h1Left);
-      s1.appendChild(h1);
+        var formCard = createEl("div", { className: "form-card" });
 
-      var gBadge = createEl("div", { className: "form-group" });
-      gBadge.appendChild(createEl("label", null, "Category Badge"));
-      var inpBadge = createEl("input", { type: "text", value: page.badge || "PRODUCTS" });
-      gBadge.appendChild(inpBadge);
-      s1.appendChild(gBadge);
+        // Section 1: Hero Settings
+        var s1 = createEl("div", { className: "cms-section-card" });
+        var h1 = createEl("div", { className: "cms-section-header" });
+        var h1Left = createEl("div", { className: "cms-section-title-wrap" });
+        h1Left.appendChild(createEl("span", { className: "cms-section-number" }, "1"));
+        h1Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Products Page Hero"));
+        h1.appendChild(h1Left);
+        s1.appendChild(h1);
 
-      var gHead = createEl("div", { className: "form-group" });
-      gHead.appendChild(createEl("label", null, "Headline"));
-      var inpHead = createEl("input", { type: "text", value: page.headline || "One range, every vessel" });
-      gHead.appendChild(inpHead);
-      s1.appendChild(gHead);
+        var gBadge = createEl("div", { className: "form-group" });
+        gBadge.appendChild(createEl("label", null, "Category Badge"));
+        var inpBadge = createEl("input", { type: "text", value: page.badge || "PRODUCTS" });
+        gBadge.appendChild(inpBadge);
+        s1.appendChild(gBadge);
 
-      var gSub = createEl("div", { className: "form-group" });
-      gSub.appendChild(createEl("label", null, "Introductory Narrative"));
-      var inpSub = createEl("textarea", { rows: "3" }, page.subheadline || "");
-      gSub.appendChild(inpSub);
-      s1.appendChild(gSub);
-      form.appendChild(s1);
+        var gHead = createEl("div", { className: "form-group" });
+        gHead.appendChild(createEl("label", null, "Headline"));
+        var inpHead = createEl("input", { type: "text", value: page.headline || "One range, every vessel" });
+        gHead.appendChild(inpHead);
+        s1.appendChild(gHead);
 
-      // Section 2: Outboard Motors Lineup (3–50 HP)
-      var s2 = createEl("div", { className: "cms-section-card" });
-      var h2 = createEl("div", { className: "cms-section-header" });
-      var h2Left = createEl("div", { className: "cms-section-title-wrap" });
-      h2Left.appendChild(createEl("span", { className: "cms-section-number" }, "2"));
-      h2Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Outboard Motors Lineup (3–50 HP)"));
-      h2.appendChild(h2Left);
+        var gSub = createEl("div", { className: "form-group" });
+        gSub.appendChild(createEl("label", null, "Introductory Narrative"));
+        var inpSub = createEl("textarea", { rows: "3" }, page.subheadline || "");
+        gSub.appendChild(inpSub);
+        s1.appendChild(gSub);
+        form.appendChild(s1);
 
-      var addMotorBtn = createEl("a", { className: "btn btn-sm btn-primary", href: "#/motors/new" }, "+ Add New Motor");
-      h2.appendChild(addMotorBtn);
-      s2.appendChild(h2);
+        // Section 2: Product Sections & Catalog Builder
+        var s2 = createEl("div", { className: "cms-section-card" });
+        var h2 = createEl("div", { className: "cms-section-header", style: { display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px" } });
+        var h2Left = createEl("div", { className: "cms-section-title-wrap" });
+        h2Left.appendChild(createEl("span", { className: "cms-section-number" }, "2"));
+        var h2TitleWrap = createEl("div");
+        h2TitleWrap.appendChild(createEl("h3", { className: "cms-section-title", style: { margin: "0" } }, "Product Catalog Sections & Builder"));
+        h2TitleWrap.appendChild(createEl("p", { style: { margin: "2px 0 0", fontSize: "12px", color: "var(--text-muted)" } }, "Add new sections, reorder them, or add new products to any existing section"));
+        h2Left.appendChild(h2TitleWrap);
+        h2.appendChild(h2Left);
 
-      var rMHead = createEl("div", { className: "form-row" });
-      var gMBadge = createEl("div", { className: "form-group" });
-      gMBadge.appendChild(createEl("label", null, "Outboard Range Badge"));
-      var inpMBadge = createEl("input", { type: "text", value: page.motors_badge || "3–50 HP · 8 models" });
-      gMBadge.appendChild(inpMBadge);
-      var gMTitle = createEl("div", { className: "form-group" });
-      gMTitle.appendChild(createEl("label", null, "Outboard Range Title"));
-      var inpMTitle = createEl("input", { type: "text", value: page.motors_title || "Outboard Motors" });
-      gMTitle.appendChild(inpMTitle);
-      rMHead.appendChild(gMBadge);
-      rMHead.appendChild(gMTitle);
-      s2.appendChild(rMHead);
-
-      var gMIntro = createEl("div", { className: "form-group" });
-      gMIntro.appendChild(createEl("label", null, "Outboard Range Description"));
-      var inpMIntro = createEl("textarea", { rows: "2" }, page.motors_intro || "");
-      gMIntro.appendChild(inpMIntro);
-      s2.appendChild(gMIntro);
-
-      var mediaMotor = createMediaField("Outboard Motor Featured Image", page.motors_img || "assets/photos/outboard-motor-cutout.webp", false);
-      s2.appendChild(mediaMotor.group);
-
-      // Active Motors List Cards
-      var motorTableWrap = createEl("div", { style: { marginTop: "16px" } });
-      window.SeagoStore.list("motors", function(mErr, motors){
-        if (motors && motors.length > 0) {
-          var mGrid = createEl("div", {
-            style: {
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-              gap: "12px",
-              marginTop: "12px"
-            }
+        var addSectionBtn = createEl("button", { type: "button", className: "btn btn-sm btn-primary", style: { display: "inline-flex", alignItems: "center", gap: "6px" } });
+        addSectionBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg><span>+ Create New Section</span>';
+        addSectionBtn.addEventListener("click", function(){
+          openSectionEditModal(null, function(newSec){
+            sections.push(newSec);
+            persistAllSections(function(){
+              renderSectionsList();
+              showToast("New product section created!", "success");
+            });
           });
+        });
+        h2.appendChild(addSectionBtn);
+        s2.appendChild(h2);
 
-          motors.forEach(function(m){
-            var mCard = createEl("div", {
+        var sectionsContainer = createEl("div", { style: { marginTop: "18px", display: "flex", flexDirection: "column", gap: "16px" } });
+        s2.appendChild(sectionsContainer);
+        form.appendChild(s2);
+
+        // Section 3: Bottom Call-To-Action Banner
+        var s3 = createEl("div", { className: "cms-section-card" });
+        var h3 = createEl("div", { className: "cms-section-header" });
+        var h3Left = createEl("div", { className: "cms-section-title-wrap" });
+        h3Left.appendChild(createEl("span", { className: "cms-section-number" }, "3"));
+        h3Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Bottom Call-To-Action Banner"));
+        h3.appendChild(h3Left);
+        s3.appendChild(h3);
+
+        var rCtaBan = createEl("div", { className: "form-row" });
+        var gCtaTitle = createEl("div", { className: "form-group" });
+        gCtaTitle.appendChild(createEl("label", null, "Banner Title"));
+        var inpCtaTitle = createEl("input", { type: "text", value: page.cta_banner_title || "Tell us your boat, we'll spec the system" });
+        gCtaTitle.appendChild(inpCtaTitle);
+        var gCtaBtn = createEl("div", { className: "form-group" });
+        gCtaBtn.appendChild(createEl("label", null, "Button Label"));
+        var inpCtaBtn = createEl("input", { type: "text", value: page.cta_banner_btn || "Request a Quote" });
+        gCtaBtn.appendChild(inpCtaBtn);
+        rCtaBan.appendChild(gCtaTitle);
+        rCtaBan.appendChild(gCtaBtn);
+        s3.appendChild(rCtaBan);
+
+        var gCtaText = createEl("div", { className: "form-group" });
+        gCtaText.appendChild(createEl("label", null, "Banner Subtext"));
+        var inpCtaText = createEl("textarea", { rows: "2" }, page.cta_banner_text || "");
+        gCtaText.appendChild(inpCtaText);
+        s3.appendChild(gCtaText);
+        form.appendChild(s3);
+
+        // Section 4: SEO Metadata
+        var s4 = createEl("div", { className: "cms-section-card" });
+        var h4 = createEl("div", { className: "cms-section-header" });
+        var h4Left = createEl("div", { className: "cms-section-title-wrap" });
+        h4Left.appendChild(createEl("span", { className: "cms-section-number" }, "4"));
+        h4Left.appendChild(createEl("h3", { className: "cms-section-title" }, "SEO Search Metadata"));
+        h4.appendChild(h4Left);
+        s4.appendChild(h4);
+
+        var gMeta = createEl("div", { className: "form-group" });
+        gMeta.appendChild(createEl("label", null, "Google Search Meta Description"));
+        var inpMeta = createEl("textarea", { rows: "2" }, page.meta_desc || "");
+        gMeta.appendChild(inpMeta);
+        s4.appendChild(gMeta);
+        form.appendChild(s4);
+
+        // Submit Bar
+        var actions = createEl("div", { className: "form-actions" });
+        var cancel = createEl("a", { className: "btn btn-secondary", href: "#/dashboard" }, "Cancel");
+        var save = createEl("button", { type: "submit", className: "btn btn-primary" }, "Save Products Page Changes");
+        actions.appendChild(cancel);
+        actions.appendChild(save);
+        form.appendChild(actions);
+
+        function persistAllSections(done) {
+          isDirty = true;
+          try {
+            localStorage.setItem("seago_admin_v1:product_sections", JSON.stringify(sections));
+          } catch(e){}
+          if (typeof done === "function") done();
+        }
+
+        // Section list renderer
+        function renderSectionsList() {
+          sectionsContainer.innerHTML = "";
+          if (!sections || sections.length === 0) {
+            var emptyNotice = createEl("div", { style: { padding: "24px", textAlign: "center", background: "#F8FAFC", border: "1px dashed var(--line)", borderRadius: "8px" } });
+            emptyNotice.appendChild(createEl("p", { style: { margin: "0 0 12px", color: "var(--text-muted)" } }, "No product sections found. Click '+ Create New Section' to begin."));
+            sectionsContainer.appendChild(emptyNotice);
+            return;
+          }
+
+          sections.forEach(function(sec, sIdx){
+            var sCard = createEl("div", {
               style: {
-                background: "#F8FAFC",
+                background: "#FFFFFF",
                 border: "1px solid var(--line)",
-                borderRadius: "8px",
-                padding: "14px",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between"
+                borderRadius: "10px",
+                overflow: "hidden",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.04)"
               }
             });
 
-            var mTop = createEl("div");
-            var mHeader = createEl("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" } });
-            var mTitle = createEl("h4", { style: { margin: "0", fontSize: "14px", color: "var(--navy)" } }, m.title || (m.hp + " HP"));
-            var mHpBadge = createEl("span", { className: "badge badge-success" }, m.hp + " HP");
-            mHeader.appendChild(mTitle);
-            mHeader.appendChild(mHpBadge);
-            mTop.appendChild(mHeader);
+            // Card Header
+            var scHeader = createEl("div", {
+              style: {
+                padding: "14px 18px",
+                background: "#F8FAFC",
+                borderBottom: "1px solid var(--line)",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexWrap: "wrap",
+                gap: "10px"
+              }
+            });
 
-            var mMeta = createEl("div", { style: { fontSize: "11.5px", color: "var(--text-muted)", marginTop: "6px" } });
-            mMeta.textContent = (m.kw || "") + " · " + (m.voltage || "") + " · " + (m.cooling || "Liquid Cooled");
-            mTop.appendChild(mMeta);
-            mCard.appendChild(mTop);
+            var scHeaderLeft = createEl("div", { style: { display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" } });
+            var numBadge = createEl("span", {
+              style: {
+                background: "var(--navy)",
+                color: "#fff",
+                fontSize: "11px",
+                fontWeight: "700",
+                padding: "2px 8px",
+                borderRadius: "4px"
+              }
+            }, "Section " + (sIdx + 1));
+            scHeaderLeft.appendChild(numBadge);
 
-            var mFooter = createEl("div", { style: { marginTop: "12px", display: "flex", justifyContent: "space-between", alignItems: "center" } });
-            var editBtn = createEl("a", { className: "btn btn-secondary btn-sm", href: "#/motors/edit/" + m.id });
-            editBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px; vertical-align:middle;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg><span>Edit Specs</span>';
-            var previewLink = createEl("a", { className: "btn btn-outline-topbar btn-sm", href: m.catalog_path || "products.html", target: "_blank", rel: "noopener" });
-            previewLink.innerHTML = '<span>Datasheet</span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:4px; vertical-align:middle;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
-            mFooter.appendChild(editBtn);
-            mFooter.appendChild(previewLink);
-            mCard.appendChild(mFooter);
+            var sTitleEl = createEl("h4", { style: { margin: "0", fontSize: "15px", color: "var(--navy)", fontWeight: "700" } }, sec.title || "Untitled Section");
+            scHeaderLeft.appendChild(sTitleEl);
 
-            mGrid.appendChild(mCard);
+            if (sec.badge) {
+              var sBadgeEl = createEl("span", { className: "badge badge-primary", style: { fontSize: "11px" } }, sec.badge);
+              scHeaderLeft.appendChild(sBadgeEl);
+            }
+
+            var layoutTypeBadge = createEl("span", {
+              style: {
+                fontSize: "10.5px",
+                fontWeight: "600",
+                color: "var(--slate)",
+                background: "#E2E8F0",
+                padding: "2px 7px",
+                borderRadius: "4px"
+              }
+            }, sec.layout === "grid" ? "Card Grid Layout" : ("Selector Tabs (" + (sec.unit || "Unit") + ")"));
+            scHeaderLeft.appendChild(layoutTypeBadge);
+
+            var scHeaderActions = createEl("div", { style: { display: "flex", alignItems: "center", gap: "6px" } });
+
+            // Move Up
+            if (sIdx > 0) {
+              var upBtn = createEl("button", { type: "button", className: "btn btn-secondary btn-sm", style: { padding: "4px 8px" }, title: "Move Section Up" });
+              upBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"></polyline></svg>';
+              upBtn.addEventListener("click", function(){
+                var temp = sections[sIdx];
+                sections[sIdx] = sections[sIdx - 1];
+                sections[sIdx - 1] = temp;
+                persistAllSections(renderSectionsList);
+              });
+              scHeaderActions.appendChild(upBtn);
+            }
+
+            // Move Down
+            if (sIdx < sections.length - 1) {
+              var downBtn = createEl("button", { type: "button", className: "btn btn-secondary btn-sm", style: { padding: "4px 8px" }, title: "Move Section Down" });
+              downBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+              downBtn.addEventListener("click", function(){
+                var temp = sections[sIdx];
+                sections[sIdx] = sections[sIdx + 1];
+                sections[sIdx + 1] = temp;
+                persistAllSections(renderSectionsList);
+              });
+              scHeaderActions.appendChild(downBtn);
+            }
+
+            // Edit Section
+            var editSecBtn = createEl("button", { type: "button", className: "btn btn-secondary btn-sm", style: { display: "inline-flex", alignItems: "center", gap: "4px" } });
+            editSecBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg><span>Edit Section</span>';
+            editSecBtn.addEventListener("click", function(){
+              openSectionEditModal(sec, function(updated){
+                sections[sIdx] = updated;
+                persistAllSections(function(){
+                  renderSectionsList();
+                  showToast("Section updated!", "success");
+                });
+              });
+            });
+            scHeaderActions.appendChild(editSecBtn);
+
+            // Delete Section
+            var delSecBtn = createEl("button", { type: "button", className: "btn btn-secondary btn-sm", style: { color: "var(--danger)" }, title: "Delete Section" });
+            delSecBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>';
+            delSecBtn.addEventListener("click", function(){
+              openModal({
+                title: "Delete Section",
+                bodyText: "Are you sure you want to delete section '" + (sec.title || "this section") + "' and all its products? This will remove it from the live products page.",
+                danger: true,
+                confirmLabel: "Delete Section",
+                onConfirm: function(){
+                  sections.splice(sIdx, 1);
+                  persistAllSections(function(){
+                    renderSectionsList();
+                    showToast("Section deleted", "info");
+                  });
+                }
+              });
+            });
+            scHeaderActions.appendChild(delSecBtn);
+
+            scHeader.appendChild(scHeaderLeft);
+            scHeader.appendChild(scHeaderActions);
+            sCard.appendChild(scHeader);
+
+            // Card Body: Section Summary & Products
+            var scBody = createEl("div", { style: { padding: "16px 18px" } });
+
+            if (sec.intro) {
+              var introP = createEl("p", { style: { margin: "0 0 14px", fontSize: "13.5px", color: "var(--slate)", lineHeight: "1.6" } }, sec.intro);
+              scBody.appendChild(introP);
+            }
+
+            // Products Subsection
+            var prodsWrap = createEl("div", { style: { marginTop: "12px", borderTop: "1px solid var(--line)", paddingTop: "14px" } });
+            var prodsBar = createEl("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" } });
+            var prodsTitle = createEl("h5", { style: { margin: "0", fontSize: "13px", fontWeight: "700", color: "var(--navy)", display: "flex", alignItems: "center", gap: "8px" } });
+            var prodList = Array.isArray(sec.products) ? sec.products : [];
+            prodsTitle.innerHTML = '<span>Products in this section</span> <span class="badge badge-neutral" style="font-size:10.5px;">' + prodList.length + ' products</span>';
+            prodsBar.appendChild(prodsTitle);
+
+            var addProdBtn = createEl("button", { type: "button", className: "btn btn-sm btn-outline-topbar", style: { display: "inline-flex", alignItems: "center", gap: "5px" } });
+            addProdBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg><span>+ Add Product to this Section</span>';
+            addProdBtn.addEventListener("click", function(){
+              openProductEditModal(sec, null, function(newProd){
+                if (!Array.isArray(sec.products)) sec.products = [];
+                sec.products.push(newProd);
+                persistAllSections(function(){
+                  renderSectionsList();
+                  showToast("Product added to " + (sec.title || "section") + "!", "success");
+                });
+              });
+            });
+            prodsBar.appendChild(addProdBtn);
+            prodsWrap.appendChild(prodsBar);
+
+            if (prodList.length === 0) {
+              var pEmpty = createEl("div", { style: { padding: "16px", textAlign: "center", background: "#F8FAFC", borderRadius: "6px", fontSize: "12.5px", color: "var(--text-muted)" } });
+              pEmpty.textContent = "No products in this section yet. Click '+ Add Product to this Section' above to add models.";
+              prodsWrap.appendChild(pEmpty);
+            } else {
+              var pGrid = createEl("div", {
+                style: {
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+                  gap: "12px"
+                }
+              });
+
+              prodList.forEach(function(p, pIdx){
+                var pCard = createEl("div", {
+                  style: {
+                    background: "#F8FAFC",
+                    border: "1px solid var(--line)",
+                    borderRadius: "8px",
+                    padding: "12px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between"
+                  }
+                });
+
+                var pTop = createEl("div");
+                var pHeadRow = createEl("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "6px" } });
+                var pTitle = createEl("h6", { style: { margin: "0", fontSize: "13.5px", fontWeight: "700", color: "var(--navy)" } }, p.name || ("Product " + (p.key || (pIdx + 1))));
+                var pKeyBadge = createEl("span", { className: "badge badge-success", style: { fontSize: "10.5px" } }, (sec.unit ? (p.key + " " + sec.unit) : ("Tab: " + p.key)));
+                pHeadRow.appendChild(pTitle);
+                pHeadRow.appendChild(pKeyBadge);
+                pTop.appendChild(pHeadRow);
+
+                if (p.tag) {
+                  var pTagEl = createEl("div", { style: { fontSize: "11px", color: "var(--blue)", fontWeight: "600", marginTop: "4px" } }, p.tag);
+                  pTop.appendChild(pTagEl);
+                }
+
+                // Specs summary chips
+                if (p.specs && typeof p.specs === "object") {
+                  var spChips = createEl("div", { style: { display: "flex", flexWrap: "wrap", gap: "4px", marginTop: "8px" } });
+                  var spKeys = Object.keys(p.specs).slice(0, 3);
+                  spKeys.forEach(function(k){
+                    var ch = createEl("span", {
+                      style: {
+                        fontSize: "10px",
+                        background: "#E2E8F0",
+                        color: "var(--navy)",
+                        padding: "2px 6px",
+                        borderRadius: "3px"
+                      }
+                    }, k + ": " + p.specs[k]);
+                    spChips.appendChild(ch);
+                  });
+                  pTop.appendChild(spChips);
+                }
+                pCard.appendChild(pTop);
+
+                // Product Actions Footer
+                var pFoot = createEl("div", { style: { marginTop: "12px", display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid var(--line)", paddingTop: "8px" } });
+                
+                var pOrderBtns = createEl("div", { style: { display: "flex", gap: "3px" } });
+                if (pIdx > 0) {
+                  var pUp = createEl("button", { type: "button", className: "btn btn-secondary btn-sm", style: { padding: "2px 6px", fontSize: "10px" }, title: "Move Product Left" }, "←");
+                  pUp.addEventListener("click", function(){
+                    var t = sec.products[pIdx];
+                    sec.products[pIdx] = sec.products[pIdx - 1];
+                    sec.products[pIdx - 1] = t;
+                    persistAllSections(renderSectionsList);
+                  });
+                  pOrderBtns.appendChild(pUp);
+                }
+                if (pIdx < prodList.length - 1) {
+                  var pDn = createEl("button", { type: "button", className: "btn btn-secondary btn-sm", style: { padding: "2px 6px", fontSize: "10px" }, title: "Move Product Right" }, "→");
+                  pDn.addEventListener("click", function(){
+                    var t = sec.products[pIdx];
+                    sec.products[pIdx] = sec.products[pIdx + 1];
+                    sec.products[pIdx + 1] = t;
+                    persistAllSections(renderSectionsList);
+                  });
+                  pOrderBtns.appendChild(pDn);
+                }
+                pFoot.appendChild(pOrderBtns);
+
+                var pCrudBtns = createEl("div", { style: { display: "flex", gap: "6px" } });
+                var pEditBtn = createEl("button", { type: "button", className: "btn btn-secondary btn-sm", style: { padding: "3px 8px", fontSize: "11px" } }, "Edit");
+                pEditBtn.addEventListener("click", function(){
+                  openProductEditModal(sec, p, function(updatedProd){
+                    sec.products[pIdx] = updatedProd;
+                    persistAllSections(function(){
+                      renderSectionsList();
+                      showToast("Product updated!", "success");
+                    });
+                  });
+                });
+                pCrudBtns.appendChild(pEditBtn);
+
+                var pDelBtn = createEl("button", { type: "button", className: "btn btn-secondary btn-sm", style: { padding: "3px 8px", fontSize: "11px", color: "var(--danger)" }, title: "Delete Product" }, "×");
+                pDelBtn.addEventListener("click", function(){
+                  openModal({
+                    title: "Delete Product",
+                    bodyText: "Are you sure you want to delete '" + (p.name || ("product " + p.key)) + "' from " + (sec.title || "this section") + "?",
+                    danger: true,
+                    confirmLabel: "Delete Product",
+                    onConfirm: function(){
+                      sec.products.splice(pIdx, 1);
+                      persistAllSections(function(){
+                        renderSectionsList();
+                        showToast("Product removed", "info");
+                      });
+                    }
+                  });
+                });
+                pCrudBtns.appendChild(pDelBtn);
+                pFoot.appendChild(pCrudBtns);
+
+                pCard.appendChild(pFoot);
+                pGrid.appendChild(pCard);
+              });
+              prodsWrap.appendChild(pGrid);
+            }
+
+            scBody.appendChild(prodsWrap);
+            sCard.appendChild(scBody);
+            sectionsContainer.appendChild(sCard);
           });
-          motorTableWrap.appendChild(mGrid);
         }
+
+        renderSectionsList();
+
+        form.addEventListener("input", function(){ isDirty = true; });
+
+        form.addEventListener("submit", function(e){
+          e.preventDefault();
+          page.badge = inpBadge.value.trim();
+          page.headline = inpHead.value.trim();
+          page.subheadline = inpSub.value.trim();
+          page.cta_banner_title = inpCtaTitle.value.trim();
+          page.cta_banner_btn = inpCtaBtn.value.trim();
+          page.cta_banner_text = inpCtaText.value.trim();
+          page.meta_desc = inpMeta.value.trim();
+
+          persistAllSections(function(){
+            savePageData(page);
+          });
+        });
+
+        formCard.appendChild(form);
+        pageRoot.appendChild(formCard);
       });
-      s2.appendChild(motorTableWrap);
-      form.appendChild(s2);
-
-      // Section 3: Marine LiFePO4 Battery Energy Storage
-      var s3 = createEl("div", { className: "cms-section-card" });
-      var h3 = createEl("div", { className: "cms-section-header" });
-      var h3Left = createEl("div", { className: "cms-section-title-wrap" });
-      h3Left.appendChild(createEl("span", { className: "cms-section-number" }, "3"));
-      h3Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Marine LiFePO4 Energy Storage Section"));
-      h3.appendChild(h3Left);
-      s3.appendChild(h3);
-
-      var rBHead = createEl("div", { className: "form-row" });
-      var gBBadge = createEl("div", { className: "form-group" });
-      gBBadge.appendChild(createEl("label", null, "Section Badge"));
-      var inpBBadge = createEl("input", { type: "text", value: page.battery_badge || "LiFePO4" });
-      gBBadge.appendChild(inpBBadge);
-      var gBTitle = createEl("div", { className: "form-group" });
-      gBTitle.appendChild(createEl("label", null, "Section Title"));
-      var inpBTitle = createEl("input", { type: "text", value: page.battery_title || "Battery Packs" });
-      gBTitle.appendChild(inpBTitle);
-      rBHead.appendChild(gBBadge);
-      rBHead.appendChild(gBTitle);
-      s3.appendChild(rBHead);
-
-      var gBIntro = createEl("div", { className: "form-group" });
-      gBIntro.appendChild(createEl("label", null, "Battery Architecture & Chemistry Description"));
-      var inpBIntro = createEl("textarea", { rows: "3" }, page.batteries_intro || "");
-      gBIntro.appendChild(inpBIntro);
-      s3.appendChild(gBIntro);
-
-      var mediaBatt = createMediaField("Battery Box Image", page.battery_img || "assets/photos/Battery Box.webp", false);
-      s3.appendChild(mediaBatt.group);
-
-      s3.appendChild(createEl("h4", { style: { margin: "14px 0 8px", fontSize: "12.5px", color: "var(--navy)" } }, "Battery Specifications Grid"));
-      var rBSpec1 = createEl("div", { className: "form-row-3" });
-      var gBVolt = createEl("div", { className: "form-group" });
-      gBVolt.appendChild(createEl("label", null, "Voltage Options"));
-      var inpBVolt = createEl("input", { type: "text", value: page.battery_voltage || "51.2V / 73.6V / 96V / 144V" });
-      gBVolt.appendChild(inpBVolt);
-      var gBCap = createEl("div", { className: "form-group" });
-      gBCap.appendChild(createEl("label", null, "Capacity Range"));
-      var inpBCap = createEl("input", { type: "text", value: page.battery_capacity || "50 – 400 AH" });
-      gBCap.appendChild(inpBCap);
-      var gBChem = createEl("div", { className: "form-group" });
-      gBChem.appendChild(createEl("label", null, "Chemistry"));
-      var inpBChem = createEl("input", { type: "text", value: page.battery_chemistry || "LiFePO4" });
-      gBChem.appendChild(inpBChem);
-      rBSpec1.appendChild(gBVolt);
-      rBSpec1.appendChild(gBCap);
-      rBSpec1.appendChild(gBChem);
-      s3.appendChild(rBSpec1);
-
-      var rBSpec2 = createEl("div", { className: "form-row-3" });
-      var gBProt = createEl("div", { className: "form-group" });
-      gBProt.appendChild(createEl("label", null, "Protection"));
-      var inpBProt = createEl("input", { type: "text", value: page.battery_protection || "Integrated BMS" });
-      gBProt.appendChild(inpBProt);
-      var gBEnc = createEl("div", { className: "form-group" });
-      gBEnc.appendChild(createEl("label", null, "Enclosure Rating"));
-      var inpBEnc = createEl("input", { type: "text", value: page.battery_enclosure || "Marine-grade, IP-rated" });
-      gBEnc.appendChild(inpBEnc);
-      var gBBest = createEl("div", { className: "form-group" });
-      gBBest.appendChild(createEl("label", null, "Best For"));
-      var inpBBest = createEl("input", { type: "text", value: page.battery_best_for || "Retrofits, new builds, shore charging" });
-      gBBest.appendChild(inpBBest);
-      rBSpec2.appendChild(gBProt);
-      rBSpec2.appendChild(gBEnc);
-      rBSpec2.appendChild(gBBest);
-      s3.appendChild(rBSpec2);
-
-      form.appendChild(s3);
-
-      // Section 4: Custom Electric & Solar Hybrid Vessels
-      var s4 = createEl("div", { className: "cms-section-card" });
-      var h4 = createEl("div", { className: "cms-section-header" });
-      var h4Left = createEl("div", { className: "cms-section-title-wrap" });
-      h4Left.appendChild(createEl("span", { className: "cms-section-number" }, "4"));
-      h4Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Electric & Solar Vessels Section"));
-      h4.appendChild(h4Left);
-      s4.appendChild(h4);
-
-      var rBoatsHead = createEl("div", { className: "form-row" });
-      var gBtBadge = createEl("div", { className: "form-group" });
-      gBtBadge.appendChild(createEl("label", null, "Vessels Badge"));
-      var inpBtBadge = createEl("input", { type: "text", value: page.boats_badge || "Custom Build" });
-      gBtBadge.appendChild(inpBtBadge);
-      var gBtTitle = createEl("div", { className: "form-group" });
-      gBtTitle.appendChild(createEl("label", null, "Vessels Title"));
-      var inpBtTitle = createEl("input", { type: "text", value: page.boats_title || "Electric & Solar Boats" });
-      gBtTitle.appendChild(inpBtTitle);
-      rBoatsHead.appendChild(gBtBadge);
-      rBoatsHead.appendChild(gBtTitle);
-      s4.appendChild(rBoatsHead);
-
-      var gBoatIntro = createEl("div", { className: "form-group" });
-      gBoatIntro.appendChild(createEl("label", null, "Vessel Hull & Passenger Transport Narrative"));
-      var inpBoatIntro = createEl("textarea", { rows: "3" }, page.boats_intro || "");
-      gBoatIntro.appendChild(inpBoatIntro);
-      s4.appendChild(gBoatIntro);
-
-      var mediaBoat = createMediaField("Boat Featured Photo", page.boats_img || "assets/photos/seago-solar-boat.webp", false);
-      s4.appendChild(mediaBoat.group);
-
-      s4.appendChild(createEl("h4", { style: { margin: "14px 0 8px", fontSize: "12.5px", color: "var(--navy)" } }, "Boat Specifications Grid"));
-      var rBtSpec1 = createEl("div", { className: "form-row-3" });
-      var gBtHull = createEl("div", { className: "form-group" });
-      gBtHull.appendChild(createEl("label", null, "Hull Material"));
-      var inpBtHull = createEl("input", { type: "text", value: page.boats_hull || "FRP (fibre-reinforced plastic)" });
-      gBtHull.appendChild(inpBtHull);
-      var gBtProp = createEl("div", { className: "form-group" });
-      gBtProp.appendChild(createEl("label", null, "Propulsion"));
-      var inpBtProp = createEl("input", { type: "text", value: page.boats_propulsion || "Electric or solar-hybrid" });
-      gBtProp.appendChild(inpBtProp);
-      var gBtCfg = createEl("div", { className: "form-group" });
-      gBtCfg.appendChild(createEl("label", null, "Configurations"));
-      var inpBtCfg = createEl("input", { type: "text", value: page.boats_config || "Fishing, tourism, ferry" });
-      gBtCfg.appendChild(inpBtCfg);
-      rBtSpec1.appendChild(gBtHull);
-      rBtSpec1.appendChild(gBtProp);
-      rBtSpec1.appendChild(gBtCfg);
-      s4.appendChild(rBtSpec1);
-
-      var rBtSpec2 = createEl("div", { className: "form-row-3" });
-      var gBtCust = createEl("div", { className: "form-group" });
-      gBtCust.appendChild(createEl("label", null, "Customization"));
-      var inpBtCust = createEl("input", { type: "text", value: page.boats_custom || "Seating, canopy & capacity to spec" });
-      gBtCust.appendChild(inpBtCust);
-      var gBtOrig = createEl("div", { className: "form-group" });
-      gBtOrig.appendChild(createEl("label", null, "Built & Delivered From"));
-      var inpBtOrig = createEl("input", { type: "text", value: page.boats_origin || "Chennai, Tamil Nadu" });
-      gBtOrig.appendChild(inpBtOrig);
-      var gBtRef = createEl("div", { className: "form-group" });
-      gBtRef.appendChild(createEl("label", null, "Reference Builds"));
-      var inpBtRef = createEl("input", { type: "text", value: page.boats_reference || "Fishing & public transport vessels" });
-      gBtRef.appendChild(inpBtRef);
-      rBtSpec2.appendChild(gBtCust);
-      rBtSpec2.appendChild(gBtOrig);
-      rBtSpec2.appendChild(gBtRef);
-      s4.appendChild(rBtSpec2);
-
-      form.appendChild(s4);
-
-      // Section 5: Bottom CTA Banner
-      var s5 = createEl("div", { className: "cms-section-card" });
-      var h5 = createEl("div", { className: "cms-section-header" });
-      var h5Left = createEl("div", { className: "cms-section-title-wrap" });
-      h5Left.appendChild(createEl("span", { className: "cms-section-number" }, "5"));
-      h5Left.appendChild(createEl("h3", { className: "cms-section-title" }, "Bottom Call-To-Action Banner"));
-      h5.appendChild(h5Left);
-      s5.appendChild(h5);
-
-      var rCtaBan = createEl("div", { className: "form-row" });
-      var gCtaTitle = createEl("div", { className: "form-group" });
-      gCtaTitle.appendChild(createEl("label", null, "Banner Title"));
-      var inpCtaTitle = createEl("input", { type: "text", value: page.cta_banner_title || "Tell us your boat, we'll spec the system" });
-      gCtaTitle.appendChild(inpCtaTitle);
-      var gCtaBtn = createEl("div", { className: "form-group" });
-      gCtaBtn.appendChild(createEl("label", null, "Button Label"));
-      var inpCtaBtn = createEl("input", { type: "text", value: page.cta_banner_btn || "Request a Quote" });
-      gCtaBtn.appendChild(inpCtaBtn);
-      rCtaBan.appendChild(gCtaTitle);
-      rCtaBan.appendChild(gCtaBtn);
-      s5.appendChild(rCtaBan);
-
-      var gCtaText = createEl("div", { className: "form-group" });
-      gCtaText.appendChild(createEl("label", null, "Banner Subtext"));
-      var inpCtaText = createEl("textarea", { rows: "2" }, page.cta_banner_text || "");
-      gCtaText.appendChild(inpCtaText);
-      s5.appendChild(gCtaText);
-      form.appendChild(s5);
-
-      // Section 6: SEO
-      var s6 = createEl("div", { className: "cms-section-card" });
-      var h6 = createEl("div", { className: "cms-section-header" });
-      var h6Left = createEl("div", { className: "cms-section-title-wrap" });
-      h6Left.appendChild(createEl("span", { className: "cms-section-number" }, "6"));
-      h6Left.appendChild(createEl("h3", { className: "cms-section-title" }, "SEO Search Metadata"));
-      h6.appendChild(h6Left);
-      s6.appendChild(h6);
-
-      var gMeta = createEl("div", { className: "form-group" });
-      gMeta.appendChild(createEl("label", null, "Google Search Meta Description"));
-      var inpMeta = createEl("textarea", { rows: "2" }, page.meta_desc || "");
-      gMeta.appendChild(inpMeta);
-      s6.appendChild(gMeta);
-      form.appendChild(s6);
-
-      // Submit Bar
-      var actions = createEl("div", { className: "form-actions" });
-      var cancel = createEl("a", { className: "btn btn-secondary", href: "#/dashboard" }, "Cancel");
-      var save = createEl("button", { type: "submit", className: "btn btn-primary" }, "Save Products Page Changes");
-      actions.appendChild(cancel);
-      actions.appendChild(save);
-      form.appendChild(actions);
-
-      form.addEventListener("input", function(){ isDirty = true; });
-
-      form.addEventListener("submit", function(e){
-        e.preventDefault();
-        page.badge = inpBadge.value.trim();
-        page.headline = inpHead.value.trim();
-        page.subheadline = inpSub.value.trim();
-        page.motors_badge = inpMBadge.value.trim();
-        page.motors_title = inpMTitle.value.trim();
-        page.motors_intro = inpMIntro.value.trim();
-        page.motors_img = mediaMotor.input.value.trim();
-        page.battery_badge = inpBBadge.value.trim();
-        page.battery_title = inpBTitle.value.trim();
-        page.batteries_intro = inpBIntro.value.trim();
-        page.battery_img = mediaBatt.input.value.trim();
-        page.battery_voltage = inpBVolt.value.trim();
-        page.battery_capacity = inpBCap.value.trim();
-        page.battery_chemistry = inpBChem.value.trim();
-        page.battery_protection = inpBProt.value.trim();
-        page.battery_enclosure = inpBEnc.value.trim();
-        page.battery_best_for = inpBBest.value.trim();
-        page.boats_badge = inpBtBadge.value.trim();
-        page.boats_title = inpBtTitle.value.trim();
-        page.boats_intro = inpBoatIntro.value.trim();
-        page.boats_img = mediaBoat.input.value.trim();
-        page.boats_hull = inpBtHull.value.trim();
-        page.boats_propulsion = inpBtProp.value.trim();
-        page.boats_config = inpBtCfg.value.trim();
-        page.boats_custom = inpBtCust.value.trim();
-        page.boats_origin = inpBtOrig.value.trim();
-        page.boats_reference = inpBtRef.value.trim();
-        page.cta_banner_title = inpCtaTitle.value.trim();
-        page.cta_banner_btn = inpCtaBtn.value.trim();
-        page.cta_banner_text = inpCtaText.value.trim();
-        page.meta_desc = inpMeta.value.trim();
-        savePageData(page);
-      });
+    });
+  }
 
       formCard.appendChild(form);
       pageRoot.appendChild(formCard);

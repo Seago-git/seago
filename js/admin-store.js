@@ -344,7 +344,8 @@
     "crm_leads",
     "crm_tasks",
     "crm_integrations",
-    "crm_events"
+    "crm_events",
+    "product_sections"
   ];
 
   function exportAll(cb) {

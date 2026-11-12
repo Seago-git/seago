@@ -577,6 +577,417 @@
     }, { passive: true });
   }
 
+  /* ---------- dynamic CMS product sections & catalog hydration ---------- */
+  function initDynamicProductCatalog() {
+    var catalogWrap = document.getElementById('productsCatalogContainer');
+    if (!catalogWrap) return;
+
+    var rawSections = null;
+    try {
+      rawSections = localStorage.getItem('seago_admin_v1:product_sections');
+    } catch(e){}
+
+    var sections = null;
+    if (rawSections) {
+      try { sections = JSON.parse(rawSections); } catch(e){}
+    }
+    if (!sections && window._SEAGO_SEED_DATA && window._SEAGO_SEED_DATA.product_sections) {
+      sections = window._SEAGO_SEED_DATA.product_sections;
+    }
+    if (!sections || !Array.isArray(sections)) return;
+
+    // Filter published sections
+    var pubSections = sections.filter(function(s) { return s.published !== false; });
+    if (pubSections.length === 0) return;
+
+    // 1. Update Outboard section from CMS
+    var obSec = pubSections.find(function(s) { return s.id === 'sec-outboard' || s.slug === 'outboard'; });
+    if (obSec && Array.isArray(obSec.products)) {
+      var obProds = obSec.products.filter(function(p){ return p.published !== false; });
+      if (obProds.length > 0) {
+        obProds.forEach(function(p){
+          var k = String(p.key || p.id);
+          var specObj = Object.assign({}, p.specs || {});
+          specObj.power = p.name ? p.name.replace(/^SEAGÖ\s*/i, '') : (k + ' HP');
+          specObj.file = p.datasheet ? p.datasheet.replace(/^catalog\//, '') : (specObj.file || '');
+          specObj.comingSoon = !!p.comingSoon;
+          OUTBOARD_DATA[k] = specObj;
+        });
+
+        if (hpPicker) {
+          var unit = obSec.unit || 'HP';
+          var sorted = obProds.slice().sort(function(a, b){
+            return (parseFloat(a.key) || 0) - (parseFloat(b.key) || 0);
+          });
+          var html = '';
+          sorted.forEach(function(p){
+            var k = String(p.key);
+            var isAct = (k === activeHp);
+            html += '<button type="button" class="hp-btn' + (isAct ? ' is-active' : '') + '" data-hp="' + k + '" aria-pressed="' + (isAct ? 'true' : 'false') + '">' + k + '</button>';
+          });
+          html += '<span class="hp-picker__unit">' + unit + '</span>';
+          hpPicker.innerHTML = html;
+        }
+
+        var obBlock = document.getElementById('outboard');
+        if (obBlock) {
+          if (obSec.title) {
+            var h2 = obBlock.querySelector('h2');
+            if (h2) h2.textContent = obSec.title;
+          }
+          if (obSec.badge && outboardBadge) outboardBadge.textContent = obSec.badge;
+          if (obSec.intro) {
+            var pDesc = obBlock.querySelector('.product-copy > p');
+            if (pDesc) pDesc.textContent = obSec.intro;
+          }
+          if (obSec.image_url) {
+            var obImg = obBlock.querySelector('.outboard-image');
+            if (obImg) obImg.src = obSec.image_url;
+          }
+        }
+        if (!OUTBOARD_DATA[activeHp] && obProds.length > 0) {
+          selectHp(String(obProds[0].key));
+        } else {
+          renderHp(activeHp);
+        }
+      }
+    }
+
+    // 2. Update Boats section from CMS
+    var bSec = pubSections.find(function(s) { return s.id === 'sec-boats' || s.slug === 'boats'; });
+    if (bSec && Array.isArray(bSec.products)) {
+      var bProds = bSec.products.filter(function(p){ return p.published !== false; });
+      if (bProds.length > 0) {
+        bProds.forEach(function(p){
+          var k = String(p.key || p.id);
+          var photos = (Array.isArray(p.photos) && p.photos.length > 0) ? p.photos : [{ url: p.image_url || 'assets/photos/boat-freedom-8seater.webp', caption: p.name || 'Custom Boat' }];
+          BOAT_DATA[k] = {
+            seater: k,
+            name: p.name || (k + ' Seater'),
+            tag: p.tag || (k + ' Seater'),
+            modelDisplay: p.name || (k + ' Seater Craft'),
+            chip: p.chip || ('03 · ' + k + ' Seater'),
+            photos: photos,
+            specs: p.specs || {}
+          };
+        });
+
+        if (boatPicker) {
+          var bUnit = bSec.unit || 'Seats';
+          var sortedB = bProds.slice().sort(function(a, b){
+            return (parseFloat(a.key) || 0) - (parseFloat(b.key) || 0);
+          });
+          var bHtml = '';
+          sortedB.forEach(function(p){
+            var k = String(p.key);
+            var isAct = (k === activeBoat);
+            bHtml += '<button type="button" class="hp-btn' + (isAct ? ' is-active' : '') + '" data-boat="' + k + '" aria-pressed="' + (isAct ? 'true' : 'false') + '">' + k + '</button>';
+          });
+          bHtml += '<span class="hp-picker__unit">' + bUnit + '</span>';
+          boatPicker.innerHTML = bHtml;
+        }
+
+        var bBlock = document.getElementById('boats');
+        if (bBlock) {
+          if (bSec.title) {
+            var bH2 = bBlock.querySelector('h2');
+            if (bH2) bH2.textContent = bSec.title;
+          }
+          if (bSec.intro) {
+            var bDesc = bBlock.querySelector('.product-copy > p');
+            if (bDesc) bDesc.textContent = bSec.intro;
+          }
+        }
+        if (!BOAT_DATA[activeBoat] && bProds.length > 0) {
+          selectBoat(String(bProds[0].key));
+        } else {
+          renderBoat(activeBoat);
+        }
+      }
+    }
+
+    // 3. Update Battery section from CMS
+    var batSec = pubSections.find(function(s) { return s.id === 'sec-battery' || s.slug === 'battery'; });
+    if (batSec) {
+      var batBlock = document.getElementById('battery');
+      if (batBlock) {
+        if (batSec.title) {
+          var batH2 = batBlock.querySelector('h2');
+          if (batH2) batH2.textContent = batSec.title;
+        }
+        if (batSec.badge) {
+          var batTag = batBlock.querySelector('.case-tag');
+          if (batTag) batTag.textContent = batSec.badge;
+        }
+        if (batSec.intro) {
+          var batDesc = batBlock.querySelector('.product-copy > p');
+          if (batDesc) batDesc.textContent = batSec.intro;
+        }
+        if (batSec.image_url) {
+          var batImg = batBlock.querySelector('.battery-image');
+          if (batImg) batImg.src = batSec.image_url;
+        }
+      }
+    }
+
+    // 4. Render any custom sections created by user
+    pubSections.forEach(function(sec, sIdx){
+      if (sec.id === 'sec-outboard' || sec.id === 'sec-battery' || sec.id === 'sec-boats' || sec.slug === 'outboard' || sec.slug === 'battery' || sec.slug === 'boats') {
+        return; // standard sections already hydrated
+      }
+
+      var secDomId = 'custom-sec-' + (sec.id || ('idx-' + sIdx));
+      var existingSecEl = document.getElementById(secDomId);
+      if (existingSecEl) return;
+
+      var secEl = document.createElement('section');
+      secEl.id = secDomId;
+      secEl.className = 'section product-block' + (sec.reverse ? ' reverse' : '') + (sIdx % 2 === 1 ? ' soft' : '');
+
+      if (sec.layout === 'grid') {
+        // Grid Layout
+        var wrap = document.createElement('div');
+        wrap.className = 'wrap';
+
+        var headerDiv = document.createElement('div');
+        headerDiv.className = 'reveal';
+        headerDiv.style.maxWidth = '680px';
+        headerDiv.style.marginBottom = '20px';
+
+        if (sec.badge) {
+          var tag = document.createElement('span');
+          tag.className = 'case-tag';
+          tag.textContent = sec.badge;
+          headerDiv.appendChild(tag);
+        }
+        var h2 = document.createElement('h2');
+        h2.style.fontFamily = "'Space Grotesk',sans-serif";
+        h2.style.fontSize = "clamp(28px,3.4vw,38px)";
+        h2.style.fontWeight = "700";
+        h2.style.margin = "12px 0 16px";
+        h2.textContent = sec.title || 'Product Lineup';
+        headerDiv.appendChild(h2);
+
+        if (sec.intro) {
+          var p = document.createElement('p');
+          p.style.color = "var(--slate)";
+          p.style.fontSize = "15.5px";
+          p.style.lineHeight = "1.8";
+          p.textContent = sec.intro;
+          headerDiv.appendChild(p);
+        }
+        wrap.appendChild(headerDiv);
+
+        var cardsGrid = document.createElement('div');
+        cardsGrid.className = 'product-cards-grid';
+
+        var prods = Array.isArray(sec.products) ? sec.products.filter(function(p){ return p.published !== false; }) : [];
+        prods.forEach(function(p){
+          var card = document.createElement('div');
+          card.className = 'product-grid-card reveal';
+
+          var media = document.createElement('div');
+          media.className = 'product-grid-card__media';
+          var img = document.createElement('img');
+          img.src = p.image_url || sec.image_url || 'assets/photos/Outboard Motors.webp';
+          img.alt = p.name || 'Product photo';
+          media.appendChild(img);
+          if (p.tag) {
+            var bdg = document.createElement('span');
+            bdg.className = 'product-grid-card__badge';
+            bdg.textContent = p.tag;
+            media.appendChild(bdg);
+          }
+          card.appendChild(media);
+
+          var body = document.createElement('div');
+          body.className = 'product-grid-card__body';
+
+          var title = document.createElement('h3');
+          title.className = 'product-grid-card__title';
+          title.textContent = p.name || 'Product';
+          body.appendChild(title);
+
+          if (p.description) {
+            var desc = document.createElement('p');
+            desc.className = 'product-grid-card__desc';
+            desc.textContent = p.description;
+            body.appendChild(desc);
+          }
+
+          if (p.specs && typeof p.specs === 'object' && Object.keys(p.specs).length > 0) {
+            var specsEl = document.createElement('div');
+            specsEl.className = 'product-grid-card__specs';
+            Object.keys(p.specs).forEach(function(k){
+              var sItem = document.createElement('div');
+              sItem.className = 'product-grid-card__spec-item';
+              var sLbl = document.createElement('span');
+              sLbl.textContent = k;
+              var sVal = document.createElement('b');
+              sVal.textContent = p.specs[k];
+              sItem.appendChild(sLbl);
+              sItem.appendChild(sVal);
+              specsEl.appendChild(sItem);
+            });
+            body.appendChild(specsEl);
+          }
+
+          var act = document.createElement('div');
+          act.className = 'product-grid-card__actions';
+          if (p.datasheet) {
+            var dsBtn = document.createElement('a');
+            dsBtn.className = 'btn btn-outline btn-sm magnetic';
+            dsBtn.href = p.datasheet;
+            dsBtn.target = '_blank';
+            dsBtn.rel = 'noopener';
+            dsBtn.textContent = 'Datasheet';
+            act.appendChild(dsBtn);
+          }
+          var qBtn = document.createElement('a');
+          qBtn.className = 'btn btn-primary btn-sm magnetic';
+          qBtn.href = p.quote_url || ('contact.html?product=' + encodeURIComponent(p.name || ''));
+          qBtn.setAttribute('data-quote-open', '');
+          qBtn.textContent = 'Request a Quote';
+          act.appendChild(qBtn);
+          body.appendChild(act);
+
+          card.appendChild(body);
+          cardsGrid.appendChild(card);
+        });
+        wrap.appendChild(cardsGrid);
+        secEl.appendChild(wrap);
+
+      } else {
+        // Selector Layout
+        var wrapRow = document.createElement('div');
+        wrapRow.className = 'wrap product-row';
+
+        var mediaCol = document.createElement('div');
+        mediaCol.className = 'product-media reveal';
+        var photoFrame = document.createElement('div');
+        photoFrame.className = 'ph photo-frame';
+        var secImg = document.createElement('img');
+        secImg.src = sec.image_url || 'assets/photos/Outboard Motors.webp';
+        secImg.alt = sec.title || 'Product Image';
+        photoFrame.appendChild(secImg);
+        if (sec.chip) {
+          var chip = document.createElement('span');
+          chip.className = 'ph__chip';
+          chip.textContent = sec.chip;
+          photoFrame.appendChild(chip);
+        }
+        mediaCol.appendChild(photoFrame);
+
+        var copyCol = document.createElement('div');
+        copyCol.className = 'product-copy reveal';
+        if (sec.badge) {
+          var cBadge = document.createElement('span');
+          cBadge.className = 'case-tag';
+          cBadge.textContent = sec.badge;
+          copyCol.appendChild(cBadge);
+        }
+        var cH2 = document.createElement('h2');
+        cH2.textContent = sec.title || 'Product Lineup';
+        copyCol.appendChild(cH2);
+        if (sec.intro) {
+          var cDesc = document.createElement('p');
+          cDesc.textContent = sec.intro;
+          copyCol.appendChild(cDesc);
+        }
+
+        var secProds = Array.isArray(sec.products) ? sec.products.filter(function(p){ return p.published !== false; }) : [];
+        if (secProds.length > 0) {
+          var modelLine = document.createElement('div');
+          modelLine.className = 'model-line';
+          var mLbl = document.createElement('span');
+          mLbl.className = 'model-line__label';
+          mLbl.textContent = 'Model';
+          var mVal = document.createElement('b');
+          mVal.className = 'model-line__value';
+          mVal.textContent = secProds[0].name || '';
+          modelLine.appendChild(mLbl);
+          modelLine.appendChild(mVal);
+          copyCol.appendChild(modelLine);
+
+          var pickerDiv = document.createElement('div');
+          pickerDiv.className = 'hp-picker';
+          secProds.forEach(function(p, pIdx){
+            var pBtn = document.createElement('button');
+            pBtn.type = 'button';
+            pBtn.className = 'hp-btn' + (pIdx === 0 ? ' is-active' : '');
+            pBtn.setAttribute('data-prod-idx', pIdx);
+            pBtn.setAttribute('aria-pressed', pIdx === 0 ? 'true' : 'false');
+            pBtn.textContent = p.key || (pIdx + 1);
+            pickerDiv.appendChild(pBtn);
+          });
+          if (sec.unit) {
+            var uSpan = document.createElement('span');
+            uSpan.className = 'hp-picker__unit';
+            uSpan.textContent = sec.unit;
+            pickerDiv.appendChild(uSpan);
+          }
+          copyCol.appendChild(pickerDiv);
+
+          var specGrid = document.createElement('div');
+          specGrid.className = 'spec-grid';
+          function renderCustomSpecs(pObj) {
+            specGrid.innerHTML = '';
+            if (pObj.specs && typeof pObj.specs === 'object') {
+              Object.keys(pObj.specs).forEach(function(sk){
+                var spItem = document.createElement('div');
+                spItem.className = 'spec-item';
+                var spLbl = document.createElement('span');
+                spLbl.textContent = sk;
+                var spVal = document.createElement('b');
+                spVal.textContent = pObj.specs[sk];
+                spItem.appendChild(spLbl);
+                spItem.appendChild(spVal);
+                specGrid.appendChild(spItem);
+              });
+            }
+          }
+          renderCustomSpecs(secProds[0]);
+          copyCol.appendChild(specGrid);
+
+          var pActions = document.createElement('div');
+          pActions.className = 'product-actions';
+          var quoteA = document.createElement('a');
+          quoteA.className = 'btn btn-primary magnetic';
+          quoteA.href = secProds[0].quote_url || ('contact.html?product=' + encodeURIComponent(secProds[0].name || ''));
+          quoteA.setAttribute('data-quote-open', '');
+          quoteA.textContent = 'Request a Quote';
+          pActions.appendChild(quoteA);
+          copyCol.appendChild(pActions);
+
+          // Picker switcher
+          pickerDiv.addEventListener('click', function(e){
+            var b = e.target.closest('.hp-btn');
+            if (!b) return;
+            var idx = parseInt(b.getAttribute('data-prod-idx'), 10);
+            var prod = secProds[idx];
+            if (!prod) return;
+            pickerDiv.querySelectorAll('.hp-btn').forEach(function(btn){
+              var on = btn === b;
+              btn.classList.toggle('is-active', on);
+              btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+            });
+            mVal.textContent = prod.name || '';
+            if (prod.image_url) secImg.src = prod.image_url;
+            renderCustomSpecs(prod);
+            quoteA.href = prod.quote_url || ('contact.html?product=' + encodeURIComponent(prod.name || ''));
+          });
+        }
+
+        wrapRow.appendChild(mediaCol);
+        wrapRow.appendChild(copyCol);
+        secEl.appendChild(wrapRow);
+      }
+
+      catalogWrap.appendChild(secEl);
+    });
+  }
+  initDynamicProductCatalog();
+
 
   /* ---------- desktop-only motion: magnetic buttons, hero parallax, cursor glow, card tilt ---------- */
   if(window.matchMedia('(hover:hover)').matches){

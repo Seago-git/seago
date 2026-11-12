@@ -911,7 +911,471 @@
         capabilities: ["Direct Message Sync", "Public Mention Ingestion"]
       }
     ],
-    crm_events: []
+    crm_events: [],
+    product_sections: [
+      {
+        id: "sec-outboard",
+        slug: "outboard",
+        title: "Outboard Motors",
+        badge: "3–50 HP · 8 models",
+        intro: "Compact, near-silent electric outboards built for fishing boats, small ferries, and tourism craft. Instant torque from a standstill, no fuel, no oil changes, and far fewer moving parts than a combustion outboard — so your crew spends less time on maintenance and more time on the water.",
+        layout: "selector",
+        unit: "HP",
+        image_url: "assets/photos/outboard-motor-cutout.webp",
+        chip: "01 · Outboard Motors",
+        reverse: false,
+        sort_order: 1,
+        published: true,
+        products: [
+          {
+            id: "prod-ob-3",
+            key: "3",
+            name: "SEAGÖ 3 HP",
+            tag: "3 HP · 2.2 kW · 51.2 V",
+            chip: "01 · Outboard Motors",
+            description: "Compact, near-silent electric outboard built for dinghies, tenders, and small inland fishing craft.",
+            image_url: "assets/photos/outboard-motor-cutout.webp",
+            photos: [{ url: "assets/photos/outboard-motor-cutout.webp", caption: "Seagö 3 HP Electric Outboard Motor" }],
+            datasheet: "catalog/SEAGO 3 HP Technical Specifications.pdf",
+            quote_url: "contact.html?motor=outboard-3hp",
+            specs: {
+              rated: "2.2 kW",
+              voltage: "51.2 V",
+              battery: "51.2V 50 AH LiFePO4 – Lithium Ferrous Phosphate",
+              motor: "Permanent Magnet Synchronous Motor (PMSM)",
+              sensor: "Magnetic Encoder",
+              control: "Tiller Control",
+              rpm: "4500 - 5000 RPM",
+              gear: "2.08",
+              transom: "417mm",
+              weight: "13.5 Kg",
+              cooling: "Air Cooled",
+              gearpos: "Forward",
+              propeller: "—",
+              display: "—",
+              boatlength: "2-4 metres"
+            },
+            published: true,
+            sort_order: 1
+          },
+          {
+            id: "prod-ob-7",
+            key: "7",
+            name: "SEAGÖ 7 HP",
+            tag: "7 HP · 5.1 kW · 51.2 V",
+            chip: "01 · Outboard Motors",
+            description: "Water-cooled electric outboard for workboats, tenders, and fishing craft requiring reliable duty cycles.",
+            image_url: "assets/photos/outboard-motor-cutout.webp",
+            photos: [{ url: "assets/photos/outboard-motor-cutout.webp", caption: "Seagö 7 HP Electric Outboard Motor" }],
+            datasheet: "catalog/SEAGO 7 HP Technical Specifications.pdf",
+            quote_url: "contact.html?motor=outboard-7hp",
+            specs: {
+              rated: "5.1 kW",
+              voltage: "51.2 V",
+              battery: "51.2V - 105 AH LiFePO4 – Lithium Ferrous Phosphate",
+              motor: "Permanent Magnet Synchronous Motor (PMSM)",
+              sensor: "Magnetic Encoder",
+              control: "Tiller Control",
+              rpm: "5000 - 5500 RPM",
+              gear: "2.08",
+              transom: "S:440mm / L:568mm",
+              weight: "S:30 Kg / L:31 Kg",
+              cooling: "Water Cooled",
+              gearpos: "Forward/Neutral/Reverse",
+              propeller: "—",
+              display: "—",
+              boatlength: "2-4 metres"
+            },
+            published: true,
+            sort_order: 2
+          },
+          {
+            id: "prod-ob-10",
+            key: "10",
+            name: "SEAGÖ 10 HP",
+            tag: "10 HP · 7.3 kW · 73.6 V",
+            chip: "01 · Outboard Motors",
+            description: "High-thrust 73.6V electric outboard with remote and tiller steering options.",
+            image_url: "assets/photos/outboard-motor-cutout.webp",
+            photos: [{ url: "assets/photos/outboard-motor-cutout.webp", caption: "Seagö 10 HP Electric Outboard Motor" }],
+            datasheet: "catalog/SEAGO 10 HP Technical Specifications.pdf",
+            quote_url: "contact.html?motor=outboard-10hp",
+            specs: {
+              rated: "7.3 kW",
+              voltage: "73.6 V",
+              battery: "73.6V - 150 AH LiFePO4 – Lithium Ferrous Phosphate",
+              motor: "Permanent Magnet Synchronous Motor (PMSM)",
+              sensor: "Magnetic Encoder",
+              control: "Tiller / Remote Control",
+              rpm: "4250 RPM",
+              gear: "2.08 (27/13)",
+              transom: "S:440mm / L:567mm",
+              weight: "S:37.5 Kg / L:38 Kg",
+              cooling: "Water Cooled",
+              gearpos: "Forward/Neutral/Reverse",
+              propeller: "—",
+              display: "—",
+              boatlength: "3.0-6.0 metres"
+            },
+            published: true,
+            sort_order: 3
+          },
+          {
+            id: "prod-ob-15",
+            key: "15",
+            name: "SEAGÖ 15 HP",
+            tag: "15 HP · 11 kW · 73.6 V",
+            chip: "01 · Outboard Motors",
+            description: "Commercial-grade 11 kW motor suited for passenger skiffs and medium fishing boats.",
+            image_url: "assets/photos/outboard-motor-cutout.webp",
+            photos: [{ url: "assets/photos/outboard-motor-cutout.webp", caption: "Seagö 15 HP Electric Outboard Motor" }],
+            datasheet: "catalog/SEAGO 15 HP Technical Specifications.pdf",
+            quote_url: "contact.html?motor=outboard-15hp",
+            specs: {
+              rated: "11 kW",
+              voltage: "73.6 V",
+              battery: "73.6V - 210 AH LiFePO4 – Lithium Ferrous Phosphate",
+              motor: "Permanent Magnet Synchronous Motor (PMSM)",
+              sensor: "Magnetic Encoder",
+              control: "Tiller / Remote Control",
+              rpm: "4650-4700 RPM",
+              gear: "2.08 (27/13)",
+              transom: "S:440mm / L:567mm",
+              weight: "S:38 Kg / L:39.5 Kg",
+              cooling: "Water Cooled",
+              gearpos: "Forward/Neutral/Reverse",
+              propeller: "—",
+              display: "—",
+              boatlength: "3.6-7.0 metres"
+            },
+            published: true,
+            sort_order: 4
+          },
+          {
+            id: "prod-ob-20",
+            key: "20",
+            name: "SEAGÖ 20 HP",
+            tag: "20 HP · 15 kW · 96 V",
+            chip: "01 · Outboard Motors",
+            description: "High-torque 96V electric outboard engineered for heavy commercial passenger routes.",
+            image_url: "assets/photos/outboard-motor-cutout.webp",
+            photos: [{ url: "assets/photos/outboard-motor-cutout.webp", caption: "Seagö 20 HP Electric Outboard Motor" }],
+            datasheet: "catalog/SEAGO 20 HP Technical Specifications.pdf",
+            quote_url: "contact.html?motor=outboard-20hp",
+            specs: {
+              rated: "15 kW",
+              voltage: "96 V",
+              battery: "96V - 210 AH LiFePO4 – Lithium Ferrous Phosphate",
+              motor: "Permanent Magnet Synchronous Motor (PMSM)",
+              sensor: "Magnetic Encoder",
+              control: "Tiller / Remote Control",
+              rpm: "5800 RPM",
+              gear: "2.08",
+              transom: "S:440mm / L:570mm",
+              weight: "S:45 Kg / L:48 Kg",
+              cooling: "Water Cooled",
+              gearpos: "Forward/Neutral/Reverse",
+              propeller: "—",
+              display: "—",
+              boatlength: "3.6-7.0 metres"
+            },
+            published: true,
+            sort_order: 5
+          },
+          {
+            id: "prod-ob-30",
+            key: "30",
+            name: "SEAGÖ 30 HP",
+            tag: "30 HP · 22 kW · 96 V",
+            chip: "01 · Outboard Motors",
+            description: "22 kW continuous-duty electric propulsion with infinitely variable throttle and digital display.",
+            image_url: "assets/photos/outboard-motor-cutout.webp",
+            photos: [{ url: "assets/photos/outboard-motor-cutout.webp", caption: "Seagö 30 HP Electric Outboard Motor" }],
+            datasheet: "catalog/SEAGO 30 HP Technical Specifications.pdf",
+            quote_url: "contact.html?motor=outboard-30hp",
+            specs: {
+              rated: "22 kW",
+              voltage: "96 V",
+              battery: "96V 230 AH LiFePO4 – Lithium Ferrous Phosphate",
+              motor: "Water Cooled Permanent Magnet Synchronous Motor (PMSM)",
+              sensor: "—",
+              control: "Infinitely variable speed",
+              rpm: "5800 RPM",
+              gear: "—",
+              transom: "550mm",
+              weight: "52.7 Kgs",
+              cooling: "Water Cooling",
+              gearpos: "Forward / Reverse (Switch)",
+              propeller: "9 7/8 × 12",
+              display: "Available",
+              boatlength: "4 metres and above"
+            },
+            published: true,
+            sort_order: 6
+          },
+          {
+            id: "prod-ob-40",
+            key: "40",
+            name: "SEAGÖ 40 HP",
+            tag: "40 HP · 29.4 kW · 144 V",
+            chip: "01 · Outboard Motors",
+            description: "High-voltage 144V powertrain delivering 29.4 kW for fast ferries, transport launches, and commercial hulls.",
+            image_url: "assets/photos/outboard-motor-cutout.webp",
+            photos: [{ url: "assets/photos/outboard-motor-cutout.webp", caption: "Seagö 40 HP Electric Outboard Motor" }],
+            datasheet: "catalog/SEAGO 40 HP Technical Specifications.pdf",
+            quote_url: "contact.html?motor=outboard-40hp",
+            specs: {
+              rated: "29.4 kW",
+              voltage: "144 V",
+              battery: "144V 200 AH LiFePO4 – Lithium Ferrous Phosphate",
+              motor: "Permanent Magnet Synchronous Motor (PMSM)",
+              sensor: "Magnetic Encoder",
+              control: "Steering Grip / Steering Wheel Controls",
+              rpm: "5000-6000 RPM",
+              gear: "2.0",
+              transom: "508mm (max)",
+              weight: "89 Kg",
+              cooling: "Water Cooled",
+              gearpos: "Forward / Neutral / Reverse",
+              propeller: "—",
+              display: "—",
+              boatlength: "4 metres and above"
+            },
+            published: true,
+            sort_order: 7
+          },
+          {
+            id: "prod-ob-50",
+            key: "50",
+            name: "SEAGÖ 50 HP",
+            tag: "50 HP · 37.2 kW · 144 V",
+            chip: "01 · Outboard Motors",
+            description: "Top-of-the-line 37.2 kW brushless propulsion powerhouse with dual gear reduction for heavy displacement hulls.",
+            image_url: "assets/photos/outboard-motor-cutout.webp",
+            photos: [{ url: "assets/photos/outboard-motor-cutout.webp", caption: "Seagö 50 HP Electric Outboard Motor" }],
+            datasheet: "catalog/SEAGO 50 HP Technical Specifications.pdf",
+            quote_url: "contact.html?motor=outboard-50hp",
+            specs: {
+              rated: "37.2 kW",
+              voltage: "144 V",
+              battery: "144V 300 AH LiFePO4 – Lithium Ferrous Phosphate",
+              motor: "Brushless motor",
+              sensor: "Magnetic Encoder",
+              control: "Steering Grip / Steering Wheel Controls",
+              rpm: "5500 RPM",
+              gear: "1.8 (24/13)",
+              transom: "S:440mm / L:570mm",
+              weight: "105 Kg",
+              cooling: "Water Cooled",
+              gearpos: "R/D",
+              propeller: "11 3/8 × 12",
+              display: "Available",
+              boatlength: "4 metres and above"
+            },
+            published: true,
+            sort_order: 8
+          }
+        ]
+      },
+      {
+        id: "sec-battery",
+        slug: "battery",
+        title: "Battery Packs",
+        badge: "LiFePO4",
+        intro: "Marine-grade Lithium Iron Phosphate (LiFePO4) packs, chosen for their stability and long cycle life over other lithium chemistries. Every pack ships with an integrated Battery Management System and a sealed, marine-rated enclosure built to handle humidity, vibration, and salt air.",
+        layout: "grid",
+        unit: "Pack",
+        image_url: "assets/photos/Battery%20Box.webp",
+        chip: "02 · Battery Packs",
+        reverse: false,
+        sort_order: 2,
+        published: true,
+        products: [
+          {
+            id: "prod-bat-51",
+            key: "51.2V",
+            name: "51.2V Marine LiFePO4 Pack",
+            tag: "50 – 105 AH · Outboard Class",
+            description: "Optimized for 3 HP and 7 HP electric outboards with integrated smart BMS and cell-level balancing.",
+            image_url: "assets/photos/Battery%20Box.webp",
+            quote_url: "contact.html?product=battery-51v",
+            specs: {
+              "Voltage Options": "51.2V Nominal",
+              "Capacity Range": "50 – 105 AH",
+              "Chemistry": "LiFePO4 (Lithium Iron Phosphate)",
+              "Protection": "Integrated Smart BMS",
+              "Enclosure": "Marine-Grade IP67 Aluminum",
+              "Best For": "3 HP & 7 HP Motors, Small Craft"
+            },
+            published: true,
+            sort_order: 1
+          },
+          {
+            id: "prod-bat-73",
+            key: "73.6V",
+            name: "73.6V High-Discharge Pack",
+            tag: "150 – 210 AH · Mid-Range Fleet",
+            description: "Continuous high discharge rate engineered specifically for 10 HP and 15 HP motors on all-day routes.",
+            image_url: "assets/photos/Battery%20Box.webp",
+            quote_url: "contact.html?product=battery-73v",
+            specs: {
+              "Voltage Options": "73.6V Nominal",
+              "Capacity Range": "150 – 210 AH",
+              "Chemistry": "LiFePO4 (Lithium Iron Phosphate)",
+              "Protection": "Integrated Smart BMS",
+              "Enclosure": "Marine-Grade IP67 Aluminum",
+              "Best For": "10 HP & 15 HP Outboards, Commercial Skiffs"
+            },
+            published: true,
+            sort_order: 2
+          },
+          {
+            id: "prod-bat-96",
+            key: "96V",
+            name: "96V Heavy-Duty Marine Pack",
+            tag: "210 – 230 AH · High-Torque Class",
+            description: "Engineered for 20 HP & 30 HP outboards and mid-sized passenger catamarans requiring high duty cycle.",
+            image_url: "assets/photos/Battery%20Box.webp",
+            quote_url: "contact.html?product=battery-96v",
+            specs: {
+              "Voltage Options": "96V Nominal",
+              "Capacity Range": "210 – 230 AH",
+              "Chemistry": "LiFePO4 (Lithium Iron Phosphate)",
+              "Protection": "Integrated Smart BMS & CANBus",
+              "Enclosure": "Marine-Grade IP67 Aluminum",
+              "Best For": "20 HP & 30 HP Motors, Passenger Craft"
+            },
+            published: true,
+            sort_order: 3
+          },
+          {
+            id: "prod-bat-144",
+            key: "144V",
+            name: "144V Flagship Commercial Bank",
+            tag: "200 – 400 AH · High-Voltage Fleet",
+            description: "High-voltage continuous discharge pack for 40 HP & 50 HP motors and multi-passenger solar ferries.",
+            image_url: "assets/photos/Battery%20Box.webp",
+            quote_url: "contact.html?product=battery-144v",
+            specs: {
+              "Voltage Options": "144V Nominal",
+              "Capacity Range": "200 – 400 AH",
+              "Chemistry": "LiFePO4 (Lithium Iron Phosphate)",
+              "Protection": "Advanced BMS with CAN/RS485 Telemetry",
+              "Enclosure": "IP67 Salt-Resistant Aluminum Casing",
+              "Best For": "40 HP & 50 HP Motors, Solar Hybrid Vessels"
+            },
+            published: true,
+            sort_order: 4
+          }
+        ]
+      },
+      {
+        id: "sec-boats",
+        slug: "boats",
+        title: "Electric & Solar Boats",
+        badge: "Custom Build",
+        intro: "Full custom boats built on FRP (fibre-reinforced plastic) hulls, fitted with fully electric or solar-hybrid propulsion. We configure the hull, seating, canopy, and power system to your exact use case — fishing, tourism, or public transport — and it leaves our Chennai facility ready to launch.",
+        layout: "selector",
+        unit: "Seats",
+        image_url: "assets/photos/boat-freedom-8seater.webp",
+        chip: "03 · Custom Vessels",
+        reverse: true,
+        sort_order: 3,
+        published: true,
+        products: [
+          {
+            id: "prod-boat-8",
+            key: "8",
+            name: "FREEDOM — 8 Seater Electric Craft",
+            tag: "8 Seater · Freedom",
+            chip: "03 · 8 Seater · Freedom",
+            description: "Custom FRP passenger craft engineered for peaceful backwater cruises, resort passenger shuttles, and inland waterways.",
+            image_url: "assets/photos/boat-freedom-8seater.webp",
+            photos: [
+              { url: "assets/photos/boat-freedom-8seater.webp", caption: "Seagö Freedom 8 Seater Electric Boat on the water" }
+            ],
+            quote_url: "contact.html?boat=freedom",
+            specs: {
+              length: "5.48 m",
+              beam: "1.72 m",
+              depth: "0.75 m",
+              draft: "0.25 m",
+              seating: "8 Persons",
+              power: "50 HP Maximum",
+              hull: "High Impact Composite FRP",
+              weight: "350 – 500 Kg",
+              propulsion: "100% Electric / Solar Hybrid",
+              customization: "Seating layout, solar canopy & deck trim",
+              origin: "Chennai, Tamil Nadu",
+              status: "In Production · Built to Order"
+            },
+            published: true,
+            sort_order: 1
+          },
+          {
+            id: "prod-boat-12",
+            key: "12",
+            name: "ECSTASY — 12 Seater Solar Ferry",
+            tag: "12 Seater · Ecstasy",
+            chip: "03 · 12 Seater · Ecstasy",
+            description: "Mid-size commercial ferry with full solar canopy option, purpose-built for tourism, heritage circuits, and scheduled routes.",
+            image_url: "assets/photos/boat-ecstacy-12seater.webp",
+            photos: [
+              { url: "assets/photos/boat-ecstacy-12seater.webp", caption: "Seagö Ecstasy 12 Seater Solar Ferry on calm water" }
+            ],
+            quote_url: "contact.html?boat=ecstasy",
+            specs: {
+              length: "12.7 m",
+              beam: "2.2 m",
+              depth: "1.1 m",
+              draft: "0.33 - 0.45 m",
+              seating: "12 Persons",
+              power: "50 HP",
+              hull: "High Impact Composite FRP",
+              weight: "600 – 750 Kg",
+              propulsion: "100% Electric / Solar Hybrid",
+              customization: "Full solar canopy, bench / lounge seating, steering console",
+              origin: "Chennai, Tamil Nadu",
+              status: "In Production · Built to Order"
+            },
+            published: true,
+            sort_order: 2
+          },
+          {
+            id: "prod-boat-30",
+            key: "30",
+            name: "SUNDECK — 30 Seater Pontoon Boat",
+            tag: "30 Seater · SUNDECK Pontoon",
+            chip: "03 · 30 Seater · SUNDECK Pontoon",
+            description: "Large-capacity twin-hull pontoon vessel with upper sun deck, perimeter safety railing, and high passenger stability. Ideal for heritage tourism, sunset river cruises, and eco-tours across Indian waterways.",
+            image_url: "assets/photos/sundeck/sundeck-1.webp",
+            photos: [
+              { url: "assets/photos/sundeck/sundeck-1.webp", caption: "SUNDECK 30-Seater Pontoon Boat with passengers on tranquil waterway" },
+              { url: "assets/photos/sundeck/sundeck-2.webp", caption: "SUNDECK 30-Seater Pontoon with upper observation deck and canopy" },
+              { url: "assets/photos/sundeck/sundeck-3.webp", caption: "SUNDECK 30-Seater Pontoon cruising calm river against lush mountains" },
+              { url: "assets/photos/sundeck/sundeck-4.webp", caption: "SUNDECK 30-Seater Pontoon Boat scenic river tour view" }
+            ],
+            quote_url: "contact.html?boat=sundeck",
+            specs: {
+              length: "8.50 m",
+              beam: "4.57 m",
+              depth: "0.90 m",
+              draft: "0.35 m",
+              seating: "30 Persons",
+              power: "Twin Outboard (Up to 2x 50 HP)",
+              hull: "Marine-Grade Aluminum / High Impact Composite FRP Pontoon",
+              weight: "Commercial Tourism Specification",
+              propulsion: "Commercial 100% Electric / Solar Hybrid System",
+              customization: "Perimeter railings, luxury lounge seating, sun canopy & solar roof",
+              origin: "Chennai, Tamil Nadu",
+              status: "In Production · Built to Order"
+            },
+            published: true,
+            sort_order: 3
+          }
+        ]
+      }
+    ]
   };
 
   if (window.SeagoStore && typeof window.SeagoStore._seedIfEmpty === "function") {
@@ -930,6 +1394,29 @@
       var sundeck = SEED_DATA.boats.find(function (b) { return b.id === "boat-30"; });
       if (sundeck) bList.push(sundeck);
       localStorage.setItem("seago_admin_v1:boats", JSON.stringify(bList));
+    }
+  } catch (e) {}
+
+  // Automatic migration & self-healing for dynamic product_sections
+  try {
+    var rawSections = localStorage.getItem("seago_admin_v1:product_sections");
+    if (!rawSections || rawSections === "[]") {
+      localStorage.setItem("seago_admin_v1:product_sections", JSON.stringify(SEED_DATA.product_sections));
+    } else {
+      var secList = JSON.parse(rawSections);
+      var bSec = secList.find(function(s) { return s.id === "sec-boats" || s.slug === "boats"; });
+      if (bSec && Array.isArray(bSec.products)) {
+        var hasSundeck = bSec.products.some(function(p) { return p.key === "30" || p.id === "prod-boat-30"; });
+        var hasLegacy20 = bSec.products.some(function(p) { return p.key === "20"; });
+        if (!hasSundeck || hasLegacy20) {
+          bSec.products = bSec.products.filter(function(p) { return p.key !== "20"; });
+          var sundeckProd = SEED_DATA.product_sections.find(function(s) { return s.id === "sec-boats"; }).products.find(function(p) { return p.key === "30"; });
+          if (sundeckProd && !bSec.products.some(function(p) { return p.key === "30"; })) {
+            bSec.products.push(sundeckProd);
+          }
+          localStorage.setItem("seago_admin_v1:product_sections", JSON.stringify(secList));
+        }
+      }
     }
   } catch (e) {}
 })();
