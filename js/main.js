@@ -541,4 +541,27 @@
       wrap.addEventListener('mouseleave', function(){ card.style.transform = 'translateY(0) rotateX(0) rotateY(0)'; });
     });
   }
+
+  /* ---------- Centralized WhatsApp Float Layer (Single Source of Truth) ---------- */
+  function mountWhatsAppWidget() {
+    if (document.getElementById('seagoWhatsAppFloat')) return;
+    var a = document.createElement('a');
+    a.id = 'seagoWhatsAppFloat';
+    a.className = 'wa-float';
+    a.href = 'https://wa.me/918606366633?text=' + encodeURIComponent("Hi Seagö, I'd like to know more about your electric boats and outboards.");
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.setAttribute('aria-label', 'Chat on WhatsApp');
+    a.innerHTML = [
+      '<img src="assets/Whatsapp%20logo.png" alt="WhatsApp" class="wa-img">',
+      '<span class="wa-tip">Chat on WhatsApp</span>'
+    ].join('');
+    document.body.appendChild(a);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', mountWhatsAppWidget);
+  } else {
+    mountWhatsAppWidget();
+  }
 })();
