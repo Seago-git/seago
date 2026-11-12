@@ -1331,7 +1331,7 @@
       '        <option value="Seagö 30 HP (22 kW) PMSM Outboard">Seagö 30 HP PMSM Outboard</option>',
       '        <option value="FREEDOM — 8 Seater Electric FRP Craft">Freedom 8-Seater FRP Boat</option>',
       '        <option value="ECSTASY — 12 Seater Luxury Tourism Craft">Ecstasy 12-Seater Solar Boat</option>',
-      '        <option value="CUSTOM 20 — 20 Seater Passenger Ferry">Custom 20-Seater Passenger Ferry</option>',
+      '        <option value="SUNDECK — 30 Seater Pontoon Boat">Sundeck 30-Seater Pontoon Boat</option>',
       '      </select>',
       '    </div>',
       '    <div class="form-group"><label>Channel Source</label>',

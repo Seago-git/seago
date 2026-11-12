@@ -263,7 +263,7 @@
       <div class="hp-picker boat-picker" id="boatPicker" role="group" aria-label="Select custom boat seating capacity">
         <button type="button" class="hp-btn is-active" data-boat="8" aria-pressed="true">8</button>
         <button type="button" class="hp-btn" data-boat="12" aria-pressed="false">12</button>
-        <button type="button" class="hp-btn" data-boat="20" aria-pressed="false">20</button>
+        <button type="button" class="hp-btn" data-boat="30" aria-pressed="false">30</button>
         <span class="hp-picker__unit">Seats</span>
       </div>
 
@@ -286,8 +286,15 @@
       </div>
     </div>
     <div class="product-media reveal">
-      <div class="ph photo-frame">
+      <div class="ph photo-frame boat-slide-frame" id="boatSlideFrame">
         <img id="boatImage" class="boat-image" src="assets/photos/boat-freedom-8seater.webp" alt="Seagö Freedom 8 Seater Electric Boat on the water">
+        <button type="button" class="boat-slide-nav prev" id="boatSlidePrev" aria-label="Previous photo">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <button type="button" class="boat-slide-nav next" id="boatSlideNext" aria-label="Next photo">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+        <div class="boat-slide-counter" id="boatSlideCounter">1 / 4</div>
         <span class="ph__chip" id="boatChip">03 · 8 Seater · Freedom</span>
       </div>
       <div class="boat-thumbs" id="boatThumbs" role="group" aria-label="Boat photo gallery"></div>

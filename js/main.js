@@ -395,30 +395,31 @@
         status: 'In Production · Built to Order'
       }
     },
-    '20': {
-      seater: '20',
-      name: 'CUSTOM 20',
-      tag: '20 Seater · Commercial Vessel',
-      modelDisplay: '20 Seater Custom Passenger / Tourism Vessel',
-      chip: '03 · 20 Seater · Commercial Vessel',
+    '30': {
+      seater: '30',
+      name: 'SUNDECK',
+      tag: '30 Seater · Sundeck',
+      modelDisplay: 'SUNDECK — 30 Seater Pontoon Boat',
+      chip: '03 · 30 Seater · Sundeck',
       photos: [
-        { url: 'assets/photos/boat-20seater-blueprint.webp', caption: '20-Seater General Arrangement Profile' },
-        { url: 'assets/photos/boat-20seater-deckplan.webp', caption: '20-Seater Deck & Seating Plan' },
-        { url: 'assets/photos/boat-20seater-transom.webp', caption: 'Twin Outboard Propulsion Architecture' }
+        { url: 'assets/photos/sundeck/sundeck-30seater-1.webp', caption: 'Sundeck 30-Seater Pontoon Boat Profile & Canopy' },
+        { url: 'assets/photos/sundeck/sundeck-30seater-2.webp', caption: 'Sundeck 30-Seater Passenger Lounge & Deck Space' },
+        { url: 'assets/photos/sundeck/sundeck-30seater-3.webp', caption: 'Sundeck 30-Seater Sunset Water Trials' },
+        { url: 'assets/photos/sundeck/sundeck-30seater-4.webp', caption: 'Sundeck 30-Seater Commercial Tourism Cruise' }
       ],
       specs: {
-        length: 'Custom Commission (14 – 16 m)',
-        beam: 'Custom (~3.2 – 3.8 m)',
-        depth: '1.2 – 1.4 m',
-        draft: 'Shallow water draft to route spec',
-        seating: '20 Persons',
+        length: '8.50 m',
+        beam: '4.57 m',
+        depth: '0.90 m',
+        draft: '0.35 m',
+        seating: '30 Persons',
         power: 'Twin Outboard (Up to 2x 50 HP)',
-        hull: 'High Impact Composite FRP',
-        weight: 'Built to passenger payload requirements',
-        propulsion: 'Commercial Electric / Solar Ferry System',
-        customization: 'Custom passenger tiers, solar canopy & ramps',
+        hull: 'Marine-Grade Aluminum / High Impact Composite FRP Pontoon',
+        weight: 'Commercial Tourism Specification',
+        propulsion: 'Commercial 100% Electric / Solar Hybrid System',
+        customization: 'Perimeter railings, luxury lounge seating, sun canopy & solar roof',
         origin: 'Chennai, Tamil Nadu',
-        status: 'Custom Commission · Engineering to Spec'
+        status: 'In Production · Built to Order'
       }
     }
   };
@@ -431,19 +432,55 @@
   var boatChip = document.getElementById('boatChip');
   var boatThumbs = document.getElementById('boatThumbs');
   var boatQuoteBtn = document.getElementById('boatQuoteBtn');
+  var boatSlidePrev = document.getElementById('boatSlidePrev');
+  var boatSlideNext = document.getElementById('boatSlideNext');
+  var boatSlideCounter = document.getElementById('boatSlideCounter');
+  var boatSlideFrame = document.getElementById('boatSlideFrame');
   var activeBoat = '8';
+  var currentPhotoIdx = 0;
+  var boatSlideTimer = null;
+
+  function setBoatSlide(idx){
+    var d = BOAT_DATA[activeBoat];
+    if(!d || !d.photos || d.photos.length === 0) return;
+    currentPhotoIdx = (idx + d.photos.length) % d.photos.length;
+    var photo = d.photos[currentPhotoIdx];
+
+    if(boatImage){
+      boatImage.style.opacity = '0.35';
+      boatImage.setAttribute('src', photo.url);
+      boatImage.setAttribute('alt', photo.caption);
+      setTimeout(function(){ boatImage.style.opacity = '1'; }, 100);
+    }
+    if(boatSlideCounter){
+      boatSlideCounter.textContent = (currentPhotoIdx + 1) + ' / ' + d.photos.length;
+    }
+    if(boatThumbs){
+      boatThumbs.querySelectorAll('.boat-thumb').forEach(function(b, bIdx){
+        b.classList.toggle('is-active', bIdx === currentPhotoIdx);
+      });
+    }
+  }
+
+  function startBoatSlideTimer(){
+    stopBoatSlideTimer();
+    boatSlideTimer = setInterval(function(){
+      setBoatSlide(currentPhotoIdx + 1);
+    }, 4500);
+  }
+
+  function stopBoatSlideTimer(){
+    if(boatSlideTimer){
+      clearInterval(boatSlideTimer);
+      boatSlideTimer = null;
+    }
+  }
 
   function renderBoat(seater){
     var d = BOAT_DATA[seater];
     if(!d) return;
     if(boatTag) boatTag.textContent = d.tag;
     if(boatModel) boatModel.textContent = d.modelDisplay;
-    if(boatImage && d.photos && d.photos.length > 0){
-      boatImage.style.opacity = '0.3';
-      boatImage.setAttribute('src', d.photos[0].url);
-      boatImage.setAttribute('alt', d.photos[0].caption);
-      setTimeout(function(){ boatImage.style.opacity = '1'; }, 100);
-    }
     if(boatChip) boatChip.textContent = d.chip;
     if(boatSpecs){
       Object.keys(d.specs).forEach(function(k){
@@ -466,19 +503,16 @@
         tImg.alt = p.caption;
         thumb.appendChild(tImg);
         thumb.addEventListener('click', function(){
-          if(boatImage){
-            boatImage.style.opacity = '0.3';
-            boatImage.src = p.url;
-            boatImage.alt = p.caption;
-            setTimeout(function(){ boatImage.style.opacity = '1'; }, 100);
-          }
-          boatThumbs.querySelectorAll('.boat-thumb').forEach(function(b, bIdx){
-            b.classList.toggle('is-active', bIdx === idx);
-          });
+          setBoatSlide(idx);
+          startBoatSlideTimer();
         });
         boatThumbs.appendChild(thumb);
       });
     }
+
+    currentPhotoIdx = 0;
+    setBoatSlide(0);
+    startBoatSlideTimer();
   }
 
   function selectBoat(seater){
@@ -500,6 +534,47 @@
       var btn = e.target.closest('.hp-btn');
       if(btn && btn.getAttribute('data-boat')) selectBoat(btn.getAttribute('data-boat'));
     });
+  }
+
+  if(boatSlidePrev){
+    boatSlidePrev.addEventListener('click', function(e){
+      e.preventDefault();
+      setBoatSlide(currentPhotoIdx - 1);
+      startBoatSlideTimer();
+    });
+  }
+
+  if(boatSlideNext){
+    boatSlideNext.addEventListener('click', function(e){
+      e.preventDefault();
+      setBoatSlide(currentPhotoIdx + 1);
+      startBoatSlideTimer();
+    });
+  }
+
+  if(boatSlideFrame){
+    boatSlideFrame.addEventListener('mouseenter', stopBoatSlideTimer);
+    boatSlideFrame.addEventListener('mouseleave', startBoatSlideTimer);
+
+    // Touch swipe support for mobile
+    var touchStartX = 0;
+    boatSlideFrame.addEventListener('touchstart', function(e){
+      if(e.touches && e.touches[0]) touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+
+    boatSlideFrame.addEventListener('touchend', function(e){
+      if(e.changedTouches && e.changedTouches[0]){
+        var diffX = e.changedTouches[0].clientX - touchStartX;
+        if(Math.abs(diffX) > 40){
+          if(diffX < 0){
+            setBoatSlide(currentPhotoIdx + 1);
+          } else {
+            setBoatSlide(currentPhotoIdx - 1);
+          }
+          startBoatSlideTimer();
+        }
+      }
+    }, { passive: true });
   }
 
 

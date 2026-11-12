@@ -321,23 +321,31 @@
         updated_at: "2026-11-11T00:00:00.000Z"
       },
       {
-        id: "boat-20",
-        name: "Custom Commercial (20 Seater)",
-        type: "electric",
-        description: "Commercial 20-passenger catamaran / transport ferry built to specification for high-volume waterways, eco-resorts, and scheduled ferry lines.",
+        id: "boat-30",
+        name: "Sundeck (30 Seater)",
+        type: "solar-electric",
+        description: "Commercial 30-passenger pontoon boat engineered for high-volume waterways, luxury eco-resorts, and passenger tourism fleets.",
         specs: [
-          { key: "Seating Capacity", value: "20 Persons" },
-          { key: "Length", value: "Custom Commission (14 - 16 m)" },
-          { key: "Beam", value: "Custom (~3.2 - 3.8 m)" },
+          { key: "Seating Capacity", value: "30 Persons" },
+          { key: "Length", value: "8.50 m" },
+          { key: "Beam", value: "4.57 m" },
+          { key: "Depth", value: "0.90 m" },
+          { key: "Draft", value: "0.35 m" },
           { key: "Power", value: "Twin Outboards (Up to 2x 50 HP)" },
-          { key: "Hull Material", value: "High Impact Composite FRP" },
-          { key: "Status", value: "Custom Commission · Engineering to Spec" }
+          { key: "Hull Material", value: "Marine-Grade Aluminum / High Impact Composite FRP Pontoon" },
+          { key: "Status", value: "In Production · Built to Order" }
         ],
         image_ids: [],
-        image_urls: ["assets/photos/boat-20seater-blueprint.webp", "assets/photos/boat-20seater-deckplan.webp", "assets/photos/boat-20seater-transom.webp"],
+        image_urls: [
+          "assets/photos/boat-sundeck-30seater.webp",
+          "assets/photos/sundeck/sundeck-30seater-1.webp",
+          "assets/photos/sundeck/sundeck-30seater-2.webp",
+          "assets/photos/sundeck/sundeck-30seater-3.webp",
+          "assets/photos/sundeck/sundeck-30seater-4.webp"
+        ],
         published: true,
         sort_order: 3,
-        updated_at: "2026-11-11T00:00:00.000Z"
+        updated_at: "2026-11-12T00:00:00.000Z"
       }
     ],
     case_studies: [
@@ -912,5 +920,17 @@
     // If store is loaded later or in different order, save reference
     window._SEAGO_SEED_DATA = SEED_DATA;
   }
+
+  // Automatic migration: Replace legacy 20-seater with 30-seater Sundeck
+  try {
+    var rawBoats = localStorage.getItem("seago_admin_v1:boats");
+    if (rawBoats && rawBoats.indexOf("boat-20") !== -1) {
+      var bList = JSON.parse(rawBoats);
+      bList = bList.filter(function (b) { return b.id !== "boat-20"; });
+      var sundeck = SEED_DATA.boats.find(function (b) { return b.id === "boat-30"; });
+      if (sundeck) bList.push(sundeck);
+      localStorage.setItem("seago_admin_v1:boats", JSON.stringify(bList));
+    }
+  } catch (e) {}
 })();
 
