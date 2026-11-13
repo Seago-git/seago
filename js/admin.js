@@ -4363,11 +4363,11 @@
 
     // Gallery / Slideshow photos
     var gGallery = createEl("div", { className: "form-group" });
-    gGallery.appendChild(createEl("label", null, "Slideshow Photos (enter additional image URLs, one per line)"));
+    gGallery.appendChild(createEl("label", null, "Slideshow Photos (enter image URLs, one per line)"));
     var initialPhotoLines = (Array.isArray(item.photos) && item.photos.length > 0)
       ? item.photos.map(function(p){ return typeof p === 'string' ? p : (p.url || ''); }).filter(Boolean).join('\n')
-      : "";
-    var inpPhotos = createEl("textarea", { rows: "2", placeholder: "assets/photos/sundeck/sundeck-1.webp\nassets/photos/sundeck/sundeck-2.webp" }, initialPhotoLines);
+      : (item.image_url || "");
+    var inpPhotos = createEl("textarea", { rows: "4", placeholder: "assets/photos/sundeck/sundeck-30seater-1.webp\nassets/photos/sundeck/sundeck-30seater-2.webp" }, initialPhotoLines);
     gGallery.appendChild(inpPhotos);
     wrap.appendChild(gGallery);
 
@@ -4450,14 +4450,21 @@
         item.image_url = mediaProd.input.value.trim() || section.image_url;
 
         // Collect gallery photos
-        var extraLines = inpPhotos.value.split("\n").map(function(l){ return l.trim(); }).filter(Boolean);
+        var photoLines = inpPhotos.value.split("\n").map(function(l){ return l.trim(); }).filter(Boolean);
         var photosArr = [];
-        if (item.image_url) photosArr.push({ url: item.image_url, caption: item.name });
-        extraLines.forEach(function(url, idx){
-          if (url !== item.image_url) {
+        if (photoLines.length > 0) {
+          photoLines.forEach(function(url, idx){
             photosArr.push({ url: url, caption: item.name + " (" + (idx + 1) + ")" });
+          });
+          // Ensure primary image is aligned if specified
+          if (item.image_url && !photoLines.includes(item.image_url)) {
+            photosArr.unshift({ url: item.image_url, caption: item.name });
+          } else if (!item.image_url && photoLines.length > 0) {
+            item.image_url = photoLines[0];
           }
-        });
+        } else if (item.image_url) {
+          photosArr.push({ url: item.image_url, caption: item.name });
+        }
         item.photos = photosArr;
 
         // Collect specs

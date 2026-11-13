@@ -660,15 +660,17 @@
       if (bProds.length > 0) {
         bProds.forEach(function(p){
           var k = String(p.key || p.id);
-          var photos = (Array.isArray(p.photos) && p.photos.length > 0) ? p.photos : [{ url: p.image_url || 'assets/photos/boat-freedom-8seater.webp', caption: p.name || 'Custom Boat' }];
+          var defaultBoat = BOAT_DATA[k];
+          var defaultPhotos = (defaultBoat && Array.isArray(defaultBoat.photos) && defaultBoat.photos.length >= 4) ? defaultBoat.photos : null;
+          var photos = (Array.isArray(p.photos) && p.photos.length >= 4) ? p.photos : (defaultPhotos || (Array.isArray(p.photos) && p.photos.length > 0 ? p.photos : [{ url: p.image_url || 'assets/photos/boat-freedom-8seater.webp', caption: p.name || 'Custom Boat' }]));
           BOAT_DATA[k] = {
             seater: k,
             name: p.name || (k + ' Seater'),
-            tag: p.tag || (k + ' Seater'),
-            modelDisplay: p.name || (k + ' Seater Craft'),
-            chip: p.chip || ('03 · ' + k + ' Seater'),
+            tag: p.tag || (defaultBoat ? defaultBoat.tag : (k + ' Seater')),
+            modelDisplay: p.name || (defaultBoat ? defaultBoat.modelDisplay : (k + ' Seater Craft')),
+            chip: p.chip || (defaultBoat ? defaultBoat.chip : ('03 · ' + k + ' Seater')),
             photos: photos,
-            specs: p.specs || {}
+            specs: (p.specs && Object.keys(p.specs).length > 0) ? p.specs : (defaultBoat ? defaultBoat.specs : {})
           };
         });
 

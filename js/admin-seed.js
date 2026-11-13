@@ -295,7 +295,12 @@
           { key: "Weight", value: "350 - 500 Kg" }
         ],
         image_ids: [],
-        image_urls: ["assets/photos/boat-freedom-8seater.webp"],
+        image_urls: [
+          "assets/photos/boat-freedom-8seater.webp",
+          "assets/photos/Freedom boat/freedom 8 seater.webp",
+          "assets/photos/Freedom boat/freedom 8seater 1.webp",
+          "assets/photos/Freedom boat/freedome 8 seater.webp"
+        ],
         published: true,
         sort_order: 1,
         updated_at: "2026-11-11T00:00:00.000Z"
@@ -315,7 +320,12 @@
           { key: "Hull Material", value: "High Impact Composite FRP" }
         ],
         image_ids: [],
-        image_urls: ["assets/photos/boat-ecstacy-12seater.webp"],
+        image_urls: [
+          "assets/photos/boat-ecstacy-12seater.webp",
+          "assets/photos/Ecstacy/Ecstacy 12 seater.webp",
+          "assets/photos/Ecstacy/Ecstacy 12 seater 1.webp",
+          "assets/photos/Ecstacy/Ecstacy 12 seater 3.webp"
+        ],
         published: true,
         sort_order: 2,
         updated_at: "2026-11-11T00:00:00.000Z"
@@ -1292,7 +1302,10 @@
             description: "Custom FRP passenger craft engineered for peaceful backwater cruises, resort passenger shuttles, and inland waterways.",
             image_url: "assets/photos/boat-freedom-8seater.webp",
             photos: [
-              { url: "assets/photos/boat-freedom-8seater.webp", caption: "Seagö Freedom 8 Seater Electric Boat on the water" }
+              { url: "assets/photos/boat-freedom-8seater.webp", caption: "Freedom 8-Seater Running Profile" },
+              { url: "assets/photos/Freedom boat/freedom 8 seater.webp", caption: "Freedom 8-Seater Water Cruise" },
+              { url: "assets/photos/Freedom boat/freedom 8seater 1.webp", caption: "Freedom Cockpit & Seating Layout" },
+              { url: "assets/photos/Freedom boat/freedome 8 seater.webp", caption: "Freedom Bow & Waterline" }
             ],
             quote_url: "contact.html?boat=freedom",
             specs: {
@@ -1321,7 +1334,10 @@
             description: "Mid-size commercial ferry with full solar canopy option, purpose-built for tourism, heritage circuits, and scheduled routes.",
             image_url: "assets/photos/boat-ecstacy-12seater.webp",
             photos: [
-              { url: "assets/photos/boat-ecstacy-12seater.webp", caption: "Seagö Ecstasy 12 Seater Solar Ferry on calm water" }
+              { url: "assets/photos/boat-ecstacy-12seater.webp", caption: "Ecstasy 12-Seater Cruising Profile" },
+              { url: "assets/photos/Ecstacy/Ecstacy 12 seater.webp", caption: "Ecstasy Passenger Seating Deck" },
+              { url: "assets/photos/Ecstacy/Ecstacy 12 seater 1.webp", caption: "Ecstasy Cockpit View" },
+              { url: "assets/photos/Ecstacy/Ecstacy 12 seater 3.webp", caption: "Ecstasy Water Trials & Maneuvers" }
             ],
             quote_url: "contact.html?boat=ecstasy",
             specs: {
@@ -1348,12 +1364,12 @@
             tag: "30 Seater · SUNDECK Pontoon",
             chip: "03 · 30 Seater · SUNDECK Pontoon",
             description: "Large-capacity twin-hull pontoon vessel with upper sun deck, perimeter safety railing, and high passenger stability. Ideal for heritage tourism, sunset river cruises, and eco-tours across Indian waterways.",
-            image_url: "assets/photos/sundeck/sundeck-1.webp",
+            image_url: "assets/photos/sundeck/sundeck-30seater-1.webp",
             photos: [
-              { url: "assets/photos/sundeck/sundeck-1.webp", caption: "SUNDECK 30-Seater Pontoon Boat with passengers on tranquil waterway" },
-              { url: "assets/photos/sundeck/sundeck-2.webp", caption: "SUNDECK 30-Seater Pontoon with upper observation deck and canopy" },
-              { url: "assets/photos/sundeck/sundeck-3.webp", caption: "SUNDECK 30-Seater Pontoon cruising calm river against lush mountains" },
-              { url: "assets/photos/sundeck/sundeck-4.webp", caption: "SUNDECK 30-Seater Pontoon Boat scenic river tour view" }
+              { url: "assets/photos/sundeck/sundeck-30seater-1.webp", caption: "Sundeck 30-Seater Pontoon Boat Profile & Canopy" },
+              { url: "assets/photos/sundeck/sundeck-30seater-2.webp", caption: "Sundeck 30-Seater Passenger Lounge & Deck Space" },
+              { url: "assets/photos/sundeck/sundeck-30seater-3.webp", caption: "Sundeck 30-Seater Sunset Water Trials" },
+              { url: "assets/photos/sundeck/sundeck-30seater-4.webp", caption: "Sundeck 30-Seater Commercial Tourism Cruise" }
             ],
             quote_url: "contact.html?boat=sundeck",
             specs: {
@@ -1406,16 +1422,28 @@
       var secList = JSON.parse(rawSections);
       var bSec = secList.find(function(s) { return s.id === "sec-boats" || s.slug === "boats"; });
       if (bSec && Array.isArray(bSec.products)) {
+        var canonicalBoatSec = SEED_DATA.product_sections.find(function(s) { return s.id === "sec-boats"; });
         var hasSundeck = bSec.products.some(function(p) { return p.key === "30" || p.id === "prod-boat-30"; });
         var hasLegacy20 = bSec.products.some(function(p) { return p.key === "20"; });
         if (!hasSundeck || hasLegacy20) {
           bSec.products = bSec.products.filter(function(p) { return p.key !== "20"; });
-          var sundeckProd = SEED_DATA.product_sections.find(function(s) { return s.id === "sec-boats"; }).products.find(function(p) { return p.key === "30"; });
+          var sundeckProd = canonicalBoatSec.products.find(function(p) { return p.key === "30"; });
           if (sundeckProd && !bSec.products.some(function(p) { return p.key === "30"; })) {
             bSec.products.push(sundeckProd);
           }
-          localStorage.setItem("seago_admin_v1:product_sections", JSON.stringify(secList));
         }
+        // Ensure all 3 seater models have all 4 respective photos
+        ["8", "12", "30"].forEach(function(seaterKey){
+          var pItem = bSec.products.find(function(p){ return p.key === seaterKey; });
+          var cItem = canonicalBoatSec.products.find(function(p){ return p.key === seaterKey; });
+          if (pItem && cItem) {
+            if (!Array.isArray(pItem.photos) || pItem.photos.length < 4 || (pItem.photos[0] && pItem.photos[0].url.indexOf('sundeck-1.webp') !== -1)) {
+              pItem.photos = cItem.photos;
+              pItem.image_url = cItem.image_url;
+            }
+          }
+        });
+        localStorage.setItem("seago_admin_v1:product_sections", JSON.stringify(secList));
       }
     }
   } catch (e) {}
