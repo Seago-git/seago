@@ -702,9 +702,9 @@
         priority2_desc: "We design and build in-house at our Chennai facility, which means direct control over quality, lead times, and after-sales support.",
         priority3_title: "Field-Tested With Real Institutions",
         priority3_desc: "From ICAR-CIFT to the Indian Maritime University, we work with research and government institutions to prove new technology before it reaches your fleet.",
-        founder_name: "Gopish Kumar.G",
+        founder_name: "Gopish Kumar G",
         founder_title: "Founder & CEO, Seagö",
-        founder_bio: "Gopish Kumar.G founded Seagö to bring zero-emission electric propulsion to Indian waterways — engineering reliable outboard systems tailored for commercial fishermen, tourism operators, and public maritime agencies.",
+        founder_bio: "Gopish Kumar G founded Seagö to bring zero-emission electric propulsion to Indian waterways — engineering reliable outboard systems tailored for commercial fishermen, tourism operators, and public maritime agencies.",
         founder_quote: "We build exactly what India's waterways need.",
         founder_image: "assets/photos/founder.webp",
         founder_email: "sales@seago.in",
@@ -1444,6 +1444,26 @@
           }
         });
         localStorage.setItem("seago_admin_v1:product_sections", JSON.stringify(secList));
+      }
+    }
+
+    // Automatic migration: Standardize founder name to 'Gopish Kumar G' (space instead of dot)
+    var rawPages = localStorage.getItem("seago_admin_v1:pages");
+    if (rawPages) {
+      var pagesList = JSON.parse(rawPages);
+      var aboutPage = pagesList.find(function(p){ return p.id === "about" || p.slug === "about"; });
+      if (aboutPage && (aboutPage.founder_name === "Gopish Kumar.G" || (aboutPage.founder_bio && aboutPage.founder_bio.indexOf("Gopish Kumar.G") !== -1))) {
+        aboutPage.founder_name = "Gopish Kumar G";
+        if (aboutPage.founder_bio) aboutPage.founder_bio = aboutPage.founder_bio.replace(/Gopish Kumar\.G/g, "Gopish Kumar G");
+        localStorage.setItem("seago_admin_v1:pages", JSON.stringify(pagesList));
+      }
+    }
+    var rawSettings = localStorage.getItem("seago_admin_v1:settings");
+    if (rawSettings) {
+      var setObj = JSON.parse(rawSettings);
+      if (setObj.founder_name === "Gopish Kumar.G") {
+        setObj.founder_name = "Gopish Kumar G";
+        localStorage.setItem("seago_admin_v1:settings", JSON.stringify(setObj));
       }
     }
   } catch (e) {}

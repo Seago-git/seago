@@ -5170,7 +5170,7 @@
       var rLead = createEl("div", { className: "form-row" });
       var gFName = createEl("div", { className: "form-group" });
       gFName.appendChild(createEl("label", null, "Founder Full Name"));
-      var inpFName = createEl("input", { type: "text", value: page.founder_name || "Gopish Kumar.G" });
+      var inpFName = createEl("input", { type: "text", value: page.founder_name || "Gopish Kumar G" });
       gFName.appendChild(inpFName);
       var gFTitle = createEl("div", { className: "form-group" });
       gFTitle.appendChild(createEl("label", null, "Official Title"));

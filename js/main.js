@@ -1041,7 +1041,7 @@
     a.rel = 'noopener';
     a.setAttribute('aria-label', 'Chat on WhatsApp');
     a.innerHTML = [
-      '<img src="assets/Whatsapp%20logo.png" alt="WhatsApp" class="wa-img">',
+      '<img src="assets/Whatsapplogo.webp" alt="WhatsApp" class="wa-img" onerror="this.onerror=null;this.src=\'assets/Whatsapplogo.png\';">',
       '<span class="wa-tip">Chat on WhatsApp</span>'
     ].join('');
     document.body.appendChild(a);

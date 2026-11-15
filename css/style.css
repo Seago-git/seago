@@ -338,7 +338,6 @@ footer{ background:var(--navy); color:#B9C3D4; padding:76px 0 30px; margin-top:4
   text-decoration: none;
   background: transparent;
   cursor: pointer;
-  border-radius: 50%;
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease;
 }
 
@@ -352,7 +351,6 @@ footer{ background:var(--navy); color:#B9C3D4; padding:76px 0 30px; margin-top:4
   height: 100%;
   object-fit: contain;
   display: block;
-  border-radius: 50%;
   filter: drop-shadow(0 10px 26px rgba(0, 0, 0, 0.45));
   transition: transform 0.2s ease;
 }
