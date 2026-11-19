@@ -423,6 +423,12 @@
       }
     }
   };
+  BOAT_DATA['prod-boat-30'] = BOAT_DATA['30'];
+  BOAT_DATA['sundeck'] = BOAT_DATA['30'];
+  BOAT_DATA['prod-boat-12'] = BOAT_DATA['12'];
+  BOAT_DATA['ecstasy'] = BOAT_DATA['12'];
+  BOAT_DATA['prod-boat-8'] = BOAT_DATA['8'];
+  BOAT_DATA['freedom'] = BOAT_DATA['8'];
 
   var boatPicker = document.getElementById('boatPicker');
   var boatModel = document.getElementById('boatModel');
@@ -441,13 +447,21 @@
   var boatSlideTimer = null;
 
   function setBoatSlide(idx){
-    var d = BOAT_DATA[activeBoat];
+    var d = BOAT_DATA[activeBoat] || BOAT_DATA['8'];
     if(!d || !d.photos || d.photos.length === 0) return;
     currentPhotoIdx = (idx + d.photos.length) % d.photos.length;
     var photo = d.photos[currentPhotoIdx];
 
     if(boatImage){
       boatImage.style.opacity = '0.35';
+      boatImage.onerror = function(){
+        this.onerror = null;
+        if (photo.url && photo.url.indexOf('sundeck') !== -1) {
+          this.src = 'assets/photos/sundeck/sundeck-30seater-1.webp';
+        } else {
+          this.src = 'assets/photos/boat-freedom-8seater.webp';
+        }
+      };
       boatImage.setAttribute('src', photo.url);
       boatImage.setAttribute('alt', photo.caption);
       setTimeout(function(){ boatImage.style.opacity = '1'; }, 100);
@@ -477,8 +491,10 @@
   }
 
   function renderBoat(seater){
-    var d = BOAT_DATA[seater];
+    var cleanSeater = String(seater || '8').replace(/^prod-boat-/, '');
+    var d = BOAT_DATA[cleanSeater] || BOAT_DATA[seater] || BOAT_DATA['30'] || BOAT_DATA['8'];
     if(!d) return;
+    activeBoat = cleanSeater;
     if(boatTag) boatTag.textContent = d.tag;
     if(boatModel) boatModel.textContent = d.modelDisplay;
     if(boatChip) boatChip.textContent = d.chip;
@@ -501,6 +517,12 @@
         var tImg = document.createElement('img');
         tImg.src = p.url;
         tImg.alt = p.caption;
+        tImg.onerror = function(){
+          this.onerror = null;
+          if (p.url && p.url.indexOf('sundeck') !== -1) {
+            this.src = 'assets/photos/sundeck/sundeck-30seater-1.webp';
+          }
+        };
         thumb.appendChild(tImg);
         thumb.addEventListener('click', function(){
           setBoatSlide(idx);
@@ -516,19 +538,29 @@
   }
 
   function selectBoat(seater){
-    if(!BOAT_DATA[seater]) return;
-    activeBoat = seater;
+    var cleanSeater = String(seater || '8').replace(/^prod-boat-/, '');
+    if(!BOAT_DATA[cleanSeater] && !BOAT_DATA[seater]) return;
+    activeBoat = BOAT_DATA[cleanSeater] ? cleanSeater : seater;
     if(boatPicker){
       boatPicker.querySelectorAll('.hp-btn').forEach(function(btn){
-        var on = btn.getAttribute('data-boat') === seater;
+        var bVal = btn.getAttribute('data-boat');
+        var on = (bVal === activeBoat || bVal === seater || bVal === cleanSeater);
         btn.classList.toggle('is-active', on);
         btn.setAttribute('aria-pressed', on ? 'true' : 'false');
       });
     }
-    renderBoat(seater);
+    renderBoat(activeBoat);
   }
 
   if(boatPicker){
+    // Auto-detect URL parameter or hash for boat selection
+    var urlParams = new URLSearchParams(window.location.search);
+    var qBoat = urlParams.get('boat');
+    if (qBoat && (BOAT_DATA[qBoat] || BOAT_DATA[qBoat.toLowerCase()])) {
+      activeBoat = String(qBoat).replace(/^prod-boat-/, '');
+    } else if (window.location.hash.indexOf('30') !== -1 || window.location.hash.indexOf('sundeck') !== -1) {
+      activeBoat = '30';
+    }
     selectBoat(activeBoat);
     boatPicker.addEventListener('click', function(e){
       var btn = e.target.closest('.hp-btn');
@@ -656,14 +688,58 @@
     // 2. Update Boats section from CMS
     var bSec = pubSections.find(function(s) { return s.id === 'sec-boats' || s.slug === 'boats'; });
     if (bSec && Array.isArray(bSec.products)) {
+      // Self-heal: ensure legacy 20 is eliminated and 30 (Sundeck) is always present
+      var hasSundeck = bSec.products.some(function(p) { return String(p.key) === '30' || p.id === 'prod-boat-30'; });
+      var hasLegacy20 = bSec.products.some(function(p) { return String(p.key) === '20'; });
+      if (!hasSundeck || hasLegacy20) {
+        bSec.products = bSec.products.filter(function(p) { return String(p.key) !== '20'; });
+        if (!hasSundeck) {
+          bSec.products.push({
+            id: 'prod-boat-30',
+            key: '30',
+            name: 'SUNDECK — 30 Seater Pontoon Boat',
+            tag: '30 Seater · SUNDECK Pontoon',
+            chip: '03 · 30 Seater · SUNDECK Pontoon',
+            description: 'Large-capacity twin-hull pontoon vessel with upper sun deck, perimeter safety railing, and high passenger stability. Ideal for heritage tourism, sunset river cruises, and eco-tours across Indian waterways.',
+            image_url: 'assets/photos/sundeck/sundeck-30seater-1.webp',
+            photos: BOAT_DATA['30'].photos,
+            specs: BOAT_DATA['30'].specs,
+            quote_url: 'contact.html?boat=sundeck',
+            published: true,
+            sort_order: 3
+          });
+        }
+        try {
+          var allSecs = JSON.parse(localStorage.getItem('seago_admin_v1:product_sections') || '[]');
+          var targetSec = allSecs.find(function(s) { return s.id === 'sec-boats' || s.slug === 'boats'; });
+          if (targetSec) {
+            targetSec.products = bSec.products;
+            localStorage.setItem('seago_admin_v1:product_sections', JSON.stringify(allSecs));
+          }
+        } catch(e){}
+      }
+
       var bProds = bSec.products.filter(function(p){ return p.published !== false; });
       if (bProds.length > 0) {
         bProds.forEach(function(p){
-          var k = String(p.key || p.id);
-          var defaultBoat = BOAT_DATA[k];
+          var k = String(p.key || '').replace(/^prod-boat-/, '') || (p.id === 'prod-boat-30' ? '30' : String(p.id));
+          p.key = k;
+          var defaultBoat = BOAT_DATA[k] || (k === '30' ? BOAT_DATA['30'] : null);
           var defaultPhotos = (defaultBoat && Array.isArray(defaultBoat.photos) && defaultBoat.photos.length >= 4) ? defaultBoat.photos : null;
-          var photos = (Array.isArray(p.photos) && p.photos.length >= 4) ? p.photos : (defaultPhotos || (Array.isArray(p.photos) && p.photos.length > 0 ? p.photos : [{ url: p.image_url || 'assets/photos/boat-freedom-8seater.webp', caption: p.name || 'Custom Boat' }]));
-          BOAT_DATA[k] = {
+          var photos = (Array.isArray(p.photos) && p.photos.length >= 4) ? p.photos : (defaultPhotos || [{ url: p.image_url || 'assets/photos/boat-freedom-8seater.webp', caption: p.name || 'Custom Boat' }]);
+          
+          // Replace any broken legacy URLs in photos
+          photos = photos.map(function(item){
+            var u = typeof item === 'string' ? item : (item.url || '');
+            var c = typeof item === 'object' ? item.caption : (p.name || 'Boat');
+            if (u.indexOf('sundeck-1.webp') !== -1) u = 'assets/photos/sundeck/sundeck-30seater-1.webp';
+            if (u.indexOf('sundeck-2.webp') !== -1) u = 'assets/photos/sundeck/sundeck-30seater-2.webp';
+            if (u.indexOf('sundeck-3.webp') !== -1) u = 'assets/photos/sundeck/sundeck-30seater-3.webp';
+            if (u.indexOf('sundeck-4.webp') !== -1) u = 'assets/photos/sundeck/sundeck-30seater-4.webp';
+            return { url: u, caption: c };
+          });
+
+          var boatEntry = {
             seater: k,
             name: p.name || (k + ' Seater'),
             tag: p.tag || (defaultBoat ? defaultBoat.tag : (k + ' Seater')),
@@ -672,6 +748,11 @@
             photos: photos,
             specs: (p.specs && Object.keys(p.specs).length > 0) ? p.specs : (defaultBoat ? defaultBoat.specs : {})
           };
+          BOAT_DATA[k] = boatEntry;
+          if (k === '30') {
+            BOAT_DATA['prod-boat-30'] = boatEntry;
+            BOAT_DATA['sundeck'] = boatEntry;
+          }
         });
 
         if (boatPicker) {
