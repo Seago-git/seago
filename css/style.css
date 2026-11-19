@@ -327,10 +327,10 @@ footer{ background:var(--navy); color:#B9C3D4; padding:76px 0 30px; margin-top:4
 /* ================= WHATSAPP FLOAT (CENTRALIZED LAYER) ================= */
 .wa-float {
   position: fixed;
-  right: 28px;
-  bottom: 28px;
-  width: 120px;
-  height: 120px;
+  right: 24px;
+  bottom: 24px;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -342,8 +342,8 @@ footer{ background:var(--navy); color:#B9C3D4; padding:76px 0 30px; margin-top:4
 }
 
 .wa-float:hover {
-  transform: translateY(-5px) scale(1.06);
-  filter: drop-shadow(0 16px 36px rgba(37, 211, 102, 0.6));
+  transform: translateY(-4px) scale(1.08);
+  filter: drop-shadow(0 8px 20px rgba(37, 211, 102, 0.55));
 }
 
 .wa-float .wa-img {
@@ -351,14 +351,14 @@ footer{ background:var(--navy); color:#B9C3D4; padding:76px 0 30px; margin-top:4
   height: 100%;
   object-fit: contain;
   display: block;
-  filter: drop-shadow(0 10px 26px rgba(0, 0, 0, 0.45));
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.35));
   transition: transform 0.2s ease;
 }
 
 /* Tooltip */
 .wa-tip {
   position: absolute;
-  right: 132px;
+  right: calc(100% + 12px);
   top: 50%;
   transform: translateY(-50%) translateX(6px);
   background: rgba(7, 18, 38, 0.94);
@@ -367,10 +367,10 @@ footer{ background:var(--navy); color:#B9C3D4; padding:76px 0 30px; margin-top:4
   border: 1px solid rgba(40, 212, 200, 0.35);
   color: #FFFFFF;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 600;
   letter-spacing: 0.3px;
-  padding: 9px 20px;
+  padding: 8px 16px;
   border-radius: 999px;
   white-space: nowrap;
   pointer-events: none;
@@ -402,10 +402,10 @@ footer{ background:var(--navy); color:#B9C3D4; padding:76px 0 30px; margin-top:4
 
 @media (max-width: 600px) {
   .wa-float {
-    right: 20px;
-    bottom: 20px;
-    width: 90px;
-    height: 90px;
+    right: 16px;
+    bottom: 16px;
+    width: 50px;
+    height: 50px;
   }
   .wa-tip {
     display: none;
