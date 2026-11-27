@@ -42,7 +42,7 @@ Seagö engineers 8 electric outboard models utilizing high-torque Permanent Magn
 
 ## Field Case Studies & Institutional Provenance
 
-- [Vikalpika Electric Fishing Vessel](https://seago.in/case-studies.html#vikalpika): India's first electric fishing vessel, developed in partnership with ICAR-CIFT Mumbai (launched May 2025 in Maharashtra), demonstrating heavy-duty commercial duty cycles without diesel exhaust or fuel expense.
+- [Vikalpika Electric Fishing Vessel](https://seago.in/case-studies.html#vikalpika): India's first electric fishing vessel, supported by Seagö and channel partner Innovegic India for ICAR-CIFT Mumbai (launched May 2025 in Maharashtra), demonstrating heavy-duty commercial duty cycles without diesel exhaust or fuel expense.
 - [Public Water Transport Ferries](https://seago.in/case-studies.html#public-transport): Clean, near-silent passenger ferry propulsion operating on daily commuter routes across Kerala waterways.
 - [Karnataka Eco-Tourism Fleets](https://seago.in/case-studies.html#tourism): Electric passenger craft operating in eco-sensitive and heritage locations including Hampi, Hubli, Gadag, Bagalkot, and Honnavar.
 - [Hydrogen Fuel-Cell Research Vessel](https://seago.in/case-studies.html#hydrogen): Completed pioneering marine R&D programme in collaboration with Indian Maritime University (IMU) evaluating next-generation alternative marine energy carriers.
