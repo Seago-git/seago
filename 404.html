@@ -158,13 +158,13 @@
       align-items: center;
     }
 
-    /* Right Visual: Interactive Marine Sonar + 404 Dial */
-    .sonar-card {
+    /* Right Visual: Electric Outboard Engine + Propeller Stage */
+    .engine-card {
       position: relative;
       border-radius: 28px;
-      padding: 36px 28px 28px;
-      background: linear-gradient(160deg, rgba(16, 38, 78, 0.65) 0%, rgba(7, 15, 36, 0.88) 100%);
-      border: 1px solid rgba(95, 166, 255, 0.2);
+      padding: 44px 28px 24px;
+      background: linear-gradient(160deg, rgba(16, 38, 78, 0.68) 0%, rgba(7, 15, 36, 0.92) 100%);
+      border: 1px solid rgba(95, 166, 255, 0.22);
       box-shadow:
         0 32px 70px -20px rgba(0, 0, 0, 0.75),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -174,11 +174,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      min-height: 370px;
+      justify-content: space-between;
+      min-height: 390px;
     }
 
-    .sonar-meta-bar {
+    .engine-meta-bar {
       position: absolute;
       top: 18px;
       left: 22px;
@@ -190,106 +190,158 @@
       font-size: 10.5px;
       letter-spacing: 1.2px;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.5);
-      z-index: 3;
+      color: rgba(255, 255, 255, 0.55);
+      z-index: 4;
     }
 
-    .sonar-meta-bar span:last-child {
+    .engine-meta-bar span:last-child {
       color: var(--cyan);
     }
 
-    .sonar-visual {
+    .engine-stage {
       position: relative;
-      width: 280px;
-      height: 280px;
+      width: 100%;
+      height: 265px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: 12px;
+      margin-top: 8px;
     }
 
-    .sonar-ring {
-      position: absolute;
-      border-radius: 50%;
-      border: 1px solid rgba(95, 166, 255, 0.22);
-      pointer-events: none;
-    }
-
-    .sonar-ring.r1 { width: 100%; height: 100%; border-style: dashed; opacity: 0.55; }
-    .sonar-ring.r2 { width: 74%; height: 74%; border-color: rgba(40, 212, 200, 0.24); }
-    .sonar-ring.r3 { width: 48%; height: 48%; border-color: rgba(95, 166, 255, 0.3); }
-
-    .sonar-sweep {
+    .engine-404-bg {
       position: absolute;
       inset: 0;
-      border-radius: 50%;
-      background: conic-gradient(from 0deg, rgba(40, 212, 200, 0.28) 0deg, rgba(40, 212, 200, 0.04) 55deg, transparent 85deg);
-      animation: radarSweep 5.5s linear infinite;
-      pointer-events: none;
-    }
-
-    @keyframes radarSweep {
-      to { transform: rotate(360deg); }
-    }
-
-    .sonar-crosshair-h,
-    .sonar-crosshair-v {
-      position: absolute;
-      background: rgba(95, 166, 255, 0.16);
-      pointer-events: none;
-    }
-    .sonar-crosshair-h { left: 0; right: 0; height: 1px; top: 50%; }
-    .sonar-crosshair-v { top: 0; bottom: 0; width: 1px; left: 50%; }
-
-    .sonar-404 {
-      position: relative;
-      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(82px, 8vw, 108px);
+      font-size: clamp(112px, 12vw, 152px);
       font-weight: 800;
       line-height: 1;
-      letter-spacing: -0.05em;
-      background: linear-gradient(180deg, #ffffff 20%, #86BFFF 70%, #28D4C8 100%);
+      letter-spacing: -0.06em;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(95, 166, 255, 0.08) 70%, rgba(40, 212, 200, 0.03) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.55));
       user-select: none;
+      pointer-events: none;
+      z-index: 1;
     }
 
-    .sonar-blip {
-      position: absolute;
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: var(--cyan);
-      box-shadow: 0 0 14px var(--cyan);
-      top: 24%;
-      right: 22%;
-      animation: blipBlink 2.8s ease-in-out infinite;
+    .engine-svg-wrap {
+      position: relative;
+      z-index: 3;
+      width: 240px;
+      height: 240px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.55));
+      animation: engineBob 4.2s ease-in-out infinite;
     }
 
-    @keyframes blipBlink {
-      0%, 100% { opacity: 0.25; transform: scale(0.85); }
-      45% { opacity: 1; transform: scale(1.2); }
+    @keyframes engineBob {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-5px) rotate(-0.8deg); }
     }
 
-    /* Animated ocean waves at bottom of sonar card */
-    .sonar-waves {
+    .prop-blades {
+      transform-origin: 148px 186px;
+      animation: propSpin var(--prop-speed, 0.9s) linear infinite;
+    }
+
+    @keyframes propSpin {
+      0% { transform: scaleY(1); }
+      25% { transform: scaleY(0.28); }
+      50% { transform: scaleY(-1); }
+      75% { transform: scaleY(0.28); }
+      100% { transform: scaleY(1); }
+    }
+
+    .wake-line {
+      stroke-dasharray: 14 10;
+      animation: wakeFlow var(--wake-speed, 0.9s) linear infinite;
+    }
+
+    @keyframes wakeFlow {
+      from { stroke-dashoffset: 0; }
+      to { stroke-dashoffset: -48; }
+    }
+
+    /* Interactive Throttle Controls */
+    .engine-controls {
+      position: relative;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: rgba(5, 11, 26, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .throttle-pills {
+      display: flex;
+      gap: 6px;
+    }
+
+    .throttle-btn {
+      padding: 5px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: transparent;
+      color: rgba(255, 255, 255, 0.68);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.9px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+
+    .throttle-btn:hover {
+      color: #fff;
+      border-color: rgba(95, 166, 255, 0.45);
+    }
+
+    .throttle-btn.is-active {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(44, 123, 229, 0.45);
+    }
+
+    .rpm-readout {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 11.5px;
+      color: var(--cyan);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* Animated ocean waves at bottom of engine card */
+    .engine-waves {
       position: absolute;
       left: 0;
       right: 0;
       bottom: 0;
-      height: 54px;
+      height: 82px;
       pointer-events: none;
-      opacity: 0.72;
+      opacity: 0.85;
+      z-index: 2;
     }
 
-    .sonar-waves svg {
+    .engine-waves svg {
       width: 200%;
       height: 100%;
       display: block;
-      animation: waveDrift 11s linear infinite;
+      animation: waveDrift 10s linear infinite;
     }
 
     @keyframes waveDrift {
@@ -439,13 +491,16 @@
       .lost-hero {
         padding: 96px 0 64px;
       }
-      .sonar-card {
-        min-height: 310px;
-        padding: 32px 18px 24px;
+      .engine-card {
+        min-height: 340px;
+        padding: 40px 16px 20px;
       }
-      .sonar-visual {
-        width: 230px;
-        height: 230px;
+      .engine-stage {
+        height: 220px;
+      }
+      .engine-controls {
+        flex-direction: column;
+        gap: 8px;
       }
       .lost-actions {
         flex-direction: column;
@@ -538,28 +593,92 @@
           </div>
         </div>
 
-        <!-- Right Interactive Sonar + 404 Dial -->
-        <div class="sonar-card" aria-label="Marine sonar 404 indicator">
-          <div class="sonar-meta-bar">
-            <span>LAT 9.8974&deg; N // LON 76.2711&deg; E</span>
-            <span>PROPULSION: STANDBY</span>
+        <!-- Right Visual: Electric Outboard Engine + Propeller Stage -->
+        <div class="engine-card" id="engineCard" aria-label="Seagö electric outboard motor propulsion visual">
+          <div class="engine-meta-bar">
+            <span>PMSM ELECTRIC OUTBOARD</span>
+            <span>EXHAUST: 0.0 G/KM</span>
           </div>
 
-          <div class="sonar-visual">
-            <div class="sonar-ring r1"></div>
-            <div class="sonar-ring r2"></div>
-            <div class="sonar-ring r3"></div>
-            <div class="sonar-crosshair-h"></div>
-            <div class="sonar-crosshair-v"></div>
-            <div class="sonar-sweep"></div>
-            <div class="sonar-blip"></div>
-            <div class="sonar-404">404</div>
+          <div class="engine-stage">
+            <div class="engine-404-bg" aria-hidden="true">404</div>
+
+            <div class="engine-svg-wrap">
+              <svg viewBox="0 0 240 230" width="240" height="230" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                  <linearGradient id="cowlGrad" x1="65" y1="22" x2="145" y2="96" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#223B6B"/>
+                    <stop offset="55%" stop-color="#0E2247"/>
+                    <stop offset="100%" stop-color="#071229"/>
+                  </linearGradient>
+                  <linearGradient id="shaftGrad" x1="100" y1="90" x2="128" y2="195" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#4A6FA5"/>
+                    <stop offset="100%" stop-color="#19325C"/>
+                  </linearGradient>
+                  <linearGradient id="propGrad" x1="138" y1="158" x2="160" y2="212" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#5FA6FF"/>
+                    <stop offset="100%" stop-color="#28D4C8"/>
+                  </linearGradient>
+                </defs>
+
+                <!-- Transom Clamp & Mounting Bracket -->
+                <path d="M72 78 H54 C48 78 45 82 45 87 V112 C45 117 48 121 54 121 H64 V106 H76" stroke="#5FA6FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.75"/>
+                <rect x="64" y="84" width="22" height="32" rx="4" fill="#17305A" stroke="#5FA6FF" stroke-opacity="0.45" stroke-width="1.5"/>
+
+                <!-- Tiller Handle -->
+                <path d="M78 66 L36 48 C31 46 28 48 26 52 C24 56 27 60 31 62 L72 76" fill="#14294F" stroke="#5FA6FF" stroke-width="2" stroke-linejoin="round"/>
+                <circle cx="31" cy="54" r="4" fill="#28D4C8"/>
+
+                <!-- Top Electric Motor Cowling -->
+                <path d="M74 62 C74 36 94 22 126 22 C152 22 164 36 164 56 C164 74 152 84 134 86 H82 C76 86 74 78 74 62 Z" fill="url(#cowlGrad)" stroke="#5FA6FF" stroke-width="2" stroke-opacity="0.85"/>
+
+                <!-- Cyan LED Accent Strip on Cowling -->
+                <path d="M84 52 H152" stroke="#28D4C8" stroke-width="3.5" stroke-linecap="round"/>
+                <path d="M84 52 H152" stroke="#28D4C8" stroke-width="7" stroke-linecap="round" opacity="0.25"/>
+
+                <!-- Motor Label -->
+                <text x="118" y="42" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.9" font-family="'Space Grotesk', sans-serif" font-size="10" font-weight="700" letter-spacing="2.5">SEAGÖ</text>
+
+                <!-- Vertical Shaft & Mid-Section -->
+                <path d="M96 86 H124 L120 172 H102 L96 86 Z" fill="url(#shaftGrad)" stroke="#5FA6FF" stroke-opacity="0.55" stroke-width="1.5"/>
+
+                <!-- Anti-Ventilation / Cavitation Plate -->
+                <path d="M86 164 H136 C139 164 140 169 136 169 H86 C82 169 83 164 86 164 Z" fill="#2C7BE5"/>
+
+                <!-- Lower Unit Gearcase / Torpedo -->
+                <path d="M96 174 C96 170 128 170 136 176 L146 183 C149 185 149 187 146 189 L136 196 C128 202 98 201 94 195 C90 190 92 178 96 174 Z" fill="#142C57" stroke="#5FA6FF" stroke-width="1.8"/>
+
+                <!-- Skeg Fin -->
+                <path d="M104 197 L96 222 L116 222 L120 198 Z" fill="#0E2247" stroke="#5FA6FF" stroke-opacity="0.6" stroke-width="1.5" stroke-linejoin="round"/>
+
+                <!-- Spinning 3-Blade Propeller -->
+                <g class="prop-blades">
+                  <path d="M148 186 C144 166 154 155 158 164 C161 171 154 182 148 186 Z" fill="url(#propGrad)"/>
+                  <path d="M148 186 C144 206 154 217 158 208 C161 201 154 190 148 186 Z" fill="url(#propGrad)"/>
+                  <ellipse cx="148" cy="186" rx="5.5" ry="7" fill="#FFFFFF" fill-opacity="0.9"/>
+                </g>
+
+                <!-- Propulsion Wake Streams -->
+                <path class="wake-line" d="M164 176 H224" stroke="#28D4C8" stroke-width="2" stroke-linecap="round" opacity="0.75"/>
+                <path class="wake-line" d="M168 186 H232" stroke="#5FA6FF" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+                <path class="wake-line" d="M164 196 H220" stroke="#28D4C8" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+              </svg>
+            </div>
           </div>
 
-          <div class="sonar-waves" aria-hidden="true">
-            <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
-              <path d="M0,30 C150,55 300,5 450,30 C600,55 750,5 900,30 C1050,55 1125,18 1200,30 L1200,60 L0,60 Z" fill="rgba(44, 123, 229, 0.22)"></path>
-              <path d="M0,38 C180,15 360,55 540,35 C720,15 900,55 1200,35 L1200,60 L0,60 Z" fill="rgba(40, 212, 200, 0.14)"></path>
+          <div class="engine-controls">
+            <div class="throttle-pills" role="group" aria-label="Engine throttle speed">
+              <button type="button" class="throttle-btn" data-rpm="650 RPM" data-prop="2.2s" data-wake="1.8s">Idle</button>
+              <button type="button" class="throttle-btn is-active" data-rpm="1,850 RPM" data-prop="0.9s" data-wake="0.9s">Cruise</button>
+              <button type="button" class="throttle-btn" data-rpm="3,200 RPM" data-prop="0.32s" data-wake="0.35s">Full Thrust</button>
+            </div>
+            <div class="rpm-readout" id="rpmReadout">1,850 RPM</div>
+          </div>
+
+          <div class="engine-waves" aria-hidden="true">
+            <svg viewBox="0 0 1200 80" preserveAspectRatio="none">
+              <path d="M0,36 C150,62 300,10 450,36 C600,62 750,10 900,36 C1050,62 1125,22 1200,36 L1200,80 L0,80 Z" fill="rgba(44, 123, 229, 0.22)"></path>
+              <path d="M0,48 C180,22 360,68 540,44 C720,20 900,66 1200,44 L1200,80 L0,80 Z" fill="rgba(40, 212, 200, 0.16)"></path>
             </svg>
           </div>
         </div>
@@ -740,6 +859,21 @@
       var el = document.getElementById('lostPathReadout');
       if (el && window.location && window.location.pathname) {
         el.textContent = window.location.pathname;
+      }
+
+      var card = document.getElementById('engineCard');
+      var rpmEl = document.getElementById('rpmReadout');
+      if (card && rpmEl) {
+        var btns = card.querySelectorAll('.throttle-btn');
+        btns.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            btns.forEach(function (b) { b.classList.remove('is-active'); });
+            btn.classList.add('is-active');
+            card.style.setProperty('--prop-speed', btn.getAttribute('data-prop'));
+            card.style.setProperty('--wake-speed', btn.getAttribute('data-wake'));
+            rpmEl.textContent = btn.getAttribute('data-rpm');
+          });
+        });
       }
     })();
   </script>
